@@ -1,43 +1,74 @@
-import kivy
-kivy.require('2.1.0') # replace with your current kivy version !
-
+import kivy.properties
 from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.graphics import Color, Rectangle
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
-class MyGrid(GridLayout):
+from kivy.config import Config
+from kivy.uix.image import Image, AsyncImage
+fullscreen = kivy.properties.OptionProperty('auto')
+
+
+class RootWidget(FloatLayout):
+
     def __init__(self, **kwargs):
-        super(MyGrid, self).__init__(**kwargs)
-        self.cols = 2
-        self.rows = 3
+        # make sure we aren't overriding any important functionality
+        super(RootWidget, self).__init__(**kwargs)
 
+        # Background Poker Image
+        self.add_widget(
+            AsyncImage(
+                source='https://thumbs.dreamstime.com/b/cards-green-felt-casino-table-background-cards-green-felt-casino-table-background-template-copy-space-center-138053426.jpg')
+        )
+        # Buttons to get to games
+        self.add_widget(
+            Button(
+                text="Blackjack",
+                size_hint=(.30, .20),
+                pos_hint={'left_x': .5, 'left_y': .10}))
+        self.add_widget(
+            Button(
+                text="Roulette",
+                size_hint=(.30, .20),
+                pos_hint={'left_x': .5, 'center_y': .30}))
+        self.add_widget(
+            Button(
+                text="Slots",
+                size_hint=(.30, .20),
+                pos_hint={'left_x': .5, 'center_y': .50}))
+        self.add_widget(
+            Button(
+                text="Solitaire",
+                size_hint=(.30, .20),
+                pos_hint={'left_x': .5, 'center_y': .70}))
+        self.add_widget(
+            Button(
+                text="Bacarratt",
+                size_hint=(.30, .20),
+                pos_hint={'left_x': .5, 'center_y': .90}))
+        self.add_widget(
+            Button(
+                text="Financials",
+                size_hint=(.30, .20),
+                pos_hint={'x': .7,'y': .8}))
 
-        self.add_widget(Label(text="Username: "))
-        self.username = TextInput(multiline=False)
-        self.add_widget(self.username)
-
-        self.password = TextInput(multiline=False)
-        self.add_widget(Label(text="Password: "))
-        self.add_widget(self.password)
-
-        button = Button()
-        button.text = 'Log in'
-        self.add_widget(button)
-
-class MyApp(App):
+class MainApp(App):
 
     def build(self):
-        box = BoxLayout(orientation='vertical')
-        grid = MyGrid()
+        self.root = root = RootWidget()
 
+        root.bind(size=self._update_rect, pos=self._update_rect)
 
-        box.add_widget(grid)
+        with root.canvas.before:
+            Color(0, 0, 0, 1)
+            self.rect = Rectangle(size=root.size, pos=root.pos)
+        return root
 
-        return box
+    def _update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
 
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    MainApp().run()
