@@ -2,23 +2,23 @@ from tkinter import *
 import tkinter as tk
 
 import sqlite3 
-#con = sqlite3.connect("assignment3.db")
-#cur = con.cursor()
+con = sqlite3.connect("Casino.db")
+cur = con.cursor()
 #cur.execute("INSERT INTO STUDENT VALUES(101,'Kaleb','Pelletier','COMP_ENG','pelletierk3@wit.edu',2024);")
-#con.commit()
-#con.close()
+
 
 
 window = Tk()
 
-#mainWindow = Toplevel()
-#mainWindow.withdraw() #Hides window
-
 input1= tk.Entry(window)
 input2 = tk.Entry(window)
 
+
+
+
+
 def createNew():
-    mainWindow = Toplevel()
+    mainWindow = Tk()
     mainWindow.geometry("500x500")
     tk.Label(mainWindow, text="Create New User").grid(row=0)
     tk.Label(mainWindow, text="First Name").grid(row=1)
@@ -33,9 +33,19 @@ def createNew():
     inLastName.grid(row=2,column=1)
     inUserName.grid(row=3,column=1)
 
+    FirstN = inFirstName.get() #Input for create new 
+    LastN = inLastName.get()
+    UserN = inUserName.get()
+    exit_button = Button(mainWindow, text="Exit", command=mainWindow.destroy)
+    exit_button.grid(row=4,column=1)
+
+    #Check data base for existing 
+
+
+
 
 def getLoginInfo():
-    mainWindow = Toplevel()
+    mainWindow = Tk()
     mainWindow.geometry("800x800")
 
     #loop through the data tables to check if they exist 
@@ -68,16 +78,16 @@ def main():
 
     
 
-    # username = input1.get()
-    # password = input2.get()
-    # if(username != "" ):
-    #     mainWindow = Tk()
+    
 
     input1.grid(row=1, column=1)
     input2.grid(row=2, column=1)
     Loginbtn.grid(row=3)
     createNewUser.grid(row=3,column=1)
     window.mainloop()
+
+    con.commit()
+    con.close()
 
     
 
