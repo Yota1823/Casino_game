@@ -9,16 +9,20 @@ cur = con.cursor()
 
 
 window = Tk()
+mainWindow = Tk()
+mainWindow.withdraw()
 
 input1= tk.Entry(window)
 input2 = tk.Entry(window)
 
 
-
+def createAndDestory():
+    mainWindow.destroy()
+     
 
 
 def createNew():
-    mainWindow = Tk()
+    #mainWindow = Tk()
     mainWindow.geometry("500x500")
     tk.Label(mainWindow, text="Create New User").grid(row=0)
     tk.Label(mainWindow, text="First Name").grid(row=1)
@@ -28,6 +32,7 @@ def createNew():
     inFirstName = tk.Entry(mainWindow)
     inLastName = tk.Entry(mainWindow)
     inUserName = tk.Entry(mainWindow)
+    mainWindow.deiconify()
 
     inFirstName.grid(row=1,column=1)
     inLastName.grid(row=2,column=1)
@@ -36,7 +41,11 @@ def createNew():
     FirstN = inFirstName.get() #Input for create new 
     LastN = inLastName.get()
     UserN = inUserName.get()
-    exit_button = Button(mainWindow, text="Exit", command=mainWindow.destroy)
+
+
+
+
+    exit_button = Button(mainWindow, text="Exit", command=createAndDestory)
     exit_button.grid(row=4,column=1)
 
     #Check data base for existing 
@@ -56,12 +65,7 @@ def getLoginInfo():
         mainWindow.title("Manager")
     
     userN = ""
-    mainWindow.deiconify() #Shows window
-    #mainWindow.mainloop()
     
-
-
-    #tk.Label(window, text=userN).grid(row=4)
     
 
 
