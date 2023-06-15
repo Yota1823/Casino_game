@@ -7,6 +7,9 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+
+
+
 class MyGrid(GridLayout):
     def __init__(self, **kwargs):
         super(MyGrid, self).__init__(**kwargs)
@@ -23,7 +26,9 @@ class MyGrid(GridLayout):
         self.add_widget(self.password)
 
         button = Button()
+
         button.text = 'Log in'
+        button.bind(on_press = self.remove_widget(self.layout))
         self.add_widget(button)
 
 class MyApp(App):
