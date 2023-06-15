@@ -25,6 +25,14 @@ def createNew():
     tk.Label(mainWindow, text="Last Name").grid(row=2)
     tk.Label(mainWindow,text= "UserName").grid(row = 3)
 
+    inFirstName = tk.Entry(mainWindow)
+    inLastName = tk.Entry(mainWindow)
+    inUserName = tk.Entry(mainWindow)
+
+    inFirstName.grid(row=1,column=1)
+    inLastName.grid(row=2,column=1)
+    inUserName.grid(row=3,column=1)
+
 
 def getLoginInfo():
     mainWindow = Toplevel()
