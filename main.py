@@ -5,6 +5,48 @@ import sqlite3
 con = sqlite3.connect("Casino.db")
 cur = con.cursor()
 #cur.execute("INSERT INTO STUDENT VALUES(101,'Kaleb','Pelletier','COMP_ENG','pelletierk3@wit.edu',2024);")
+class User:
+    def __init__(self,fName,lName,uName):
+        self.name = fName
+        self.last = lName
+        self.user = uName
+
+    def getFirst(self):
+        return self.name
+    def getLast(self):
+        return self.last
+    def getUser(self):
+        return self.user
+    
+
+    def __del__(self):
+        print(self.name + " is deleted")
+        #del obj
+
+class Player(User):
+    def __init__(self,pMoneyMade,pMoneyLost,currGame,pWin,pLoss,pCredit):
+        self.moneyMade = pMoneyMade
+        self.moneyLost = pMoneyLost
+        self.currentGame = currGame
+        self.winCount = pWin
+        self.lossCount = pLoss
+        self.creditAmount = pCredit
+
+    def getMoneyMade(self):
+        return self.moneyMade
+    def getMoneyLost(self):
+        return self.moneyLost
+    def getCurrGame(self):
+        return self.currentGame
+    def getpWin(self):
+        return self.winCount
+    def getpLoss(self):
+        return self.lossCount
+    def getCredit(self):
+        return self.creditAmount
+    
+class Manager(User):
+    def __init__(self,)
 
 
 
@@ -17,6 +59,10 @@ input2 = tk.Entry(window)
 
 
 def createAndDestory():
+    #Check data base for existing 
+    print(firstN)
+    print(lastN)
+    print(userN)
     mainWindow.destroy()
      
 
@@ -38,17 +84,14 @@ def createNew():
     inLastName.grid(row=2,column=1)
     inUserName.grid(row=3,column=1)
 
-    FirstN = inFirstName.get() #Input for create new 
-    LastN = inLastName.get()
-    UserN = inUserName.get()
+    firstN = inFirstName.get() #Input for create new 
+    lastN = inLastName.get()
+    userN = inUserName.get()
 
-
-
-
-    exit_button = Button(mainWindow, text="Exit", command=createAndDestory)
+    exit_button = Button(mainWindow, text="Create", command=createAndDestory)
     exit_button.grid(row=4,column=1)
 
-    #Check data base for existing 
+    
 
 
 
