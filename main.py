@@ -35,7 +35,7 @@ class Player(User):
                     self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
                     self.lossCount+","+self.creditAmount+");")
 
-    
+
 
     def getMoneyMade(self):
         return self.moneyMade
@@ -55,20 +55,46 @@ class Manager(User):
         pass
     def removePlayer(userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
-    
+
     def getPlayerTable():
         cur.execute("SELECT * FROM Player")
         playerTable = cur.fetchall()
         return playerTable
-    
+
     def getStatTable():
         cur.execute("SELECT * FROM Statistics")
         statTable = cur.fetchall()
         return statTable
 
-        
 
 
+my_w = tk.Tk()
+my_w.geometry("200x200")  # Size of the window
+my_w.title("WIT CASINO")  # Adding a title
+
+# create one lebel
+my_str = tk.StringVar()
+l1 = tk.Label(my_w,  textvariable=my_str )
+l1.grid(row=1,column=1)
+my_str.set("Welcome to the WIT Casino")
+tk.Label(my_w, text="Username").grid(row=2, column=2)
+tk.Label(my_w, text="Password").grid(row=3, column=2)
+
+
+input1 = tk.Entry(my_w)
+input2 = tk.Entry(my_w)
+
+input1.grid(row=2, column=1)
+input2.grid(row=3, column=1)
+
+# add one button
+b1 = tk.Button(my_w, text='Create New User',
+               command=lambda:my_open())
+b1.grid(row=4,column=1)
+
+b2 = tk.Button(my_w, text='Login',
+               command=lambda:my_login())
+b2.grid(row=5,column=1)
 
 window = Tk()
 mainWindow = Tk()
@@ -77,85 +103,50 @@ mainWindow.withdraw()
 input1= tk.Entry(window)
 input2 = tk.Entry(window)
 
+def my_login():
+    print("doing the login stuff")
 
-def createAndDestory():
-    #Check data base for existing 
-    print(firstN)
-    print(lastN)
-    print(userN)
-    mainWindow.destroy()
-    
-     
+def create(first,last,user):
+    print("database creating things")
+    print(first)
+    print(last)
+    print(user)
+def my_open():
+    my_w_child=Toplevel(my_w) # Child window
+    my_w_child.geometry("200x200")  # Size of the window
+    my_w_child.title("www.plus2net.com")
 
+    inFirstName = tk.Entry(my_w_child)
+    inLastName = tk.Entry(my_w_child)
+    inUserName = tk.Entry(my_w_child)
 
-def createNew():
-    #mainWindow = Tk()
-    mainWindow.geometry("500x500")
-    tk.Label(mainWindow, text="Create New User").grid(row=0)
-    tk.Label(mainWindow, text="First Name").grid(row=1)
-    tk.Label(mainWindow, text="Last Name").grid(row=2)
-    tk.Label(mainWindow,text= "UserName").grid(row = 3)
+    inFirstName.grid(row=1, column=1)
+    inLastName.grid(row=2, column=1)
+    inUserName.grid(row=3, column=1)
 
-    inFirstName = tk.Entry(mainWindow)
-    inLastName = tk.Entry(mainWindow)
-    inUserName = tk.Entry(mainWindow)
-    mainWindow.deiconify()
-
-    inFirstName.grid(row=1,column=1)
-    inLastName.grid(row=2,column=1)
-    inUserName.grid(row=3,column=1)
-
-    firstN = inFirstName.get() #Input for create new 
+    firstN = inFirstName.get()  # Input for create new
     lastN = inLastName.get()
     userN = inUserName.get()
+    my_str1 = tk.StringVar()
 
-    exit_button = Button(mainWindow, text="Create", command=createAndDestory)
-    exit_button.grid(row=4,column=1)
+    l1 = tk.Label(my_w_child,  textvariable=my_str1 )
+    l1.grid(row=1,column=2)
+    my_str1.set("USERNAME")
+    l2 = tk.Label(my_w_child, text="PASSWORD")
+    l2.grid(row=2,column=2)
+    l3 = tk.Label(my_w_child, text= "USERNAME")
+    l3.grid(row=3,column=2)
+    b3 = tk.Button(my_w_child, text=' Create ',
+                   command= lambda:[my_w_child.destroy(),create(firstN,lastN,userN)])
+    b3.grid(row=4,column=1)
 
-    
 
 
 
-
-def getLoginInfo():
-    mainWindow = Tk()
-    mainWindow.geometry("800x800")
-
-    #loop through the data tables to check if they exist 
-    userN = input1.get()
-    if(userN == "1"):
-        mainWindow.title("Player")
-    if(userN == "2"):
-        mainWindow.title("Manager")
-    
-    userN = ""
-    
-    
 
 
 def main():
-    window.title("WIT Casino")
-    window.geometry("500x500")
-
-    tk.Label(window, text="WIT Casino").grid(row=0)
-    tk.Label(window, text="Username").grid(row=1)
-    tk.Label(window, text="Password").grid(row=2)
-
-    Loginbtn = Button(window,text="Log In",command = getLoginInfo)
-    createNewUser = Button(window,text ="Create New",command = createNew)
-
-    
-
-    
-
-    input1.grid(row=1, column=1)
-    input2.grid(row=2, column=1)
-    Loginbtn.grid(row=3)
-    createNewUser.grid(row=3,column=1)
-    window.mainloop()
-
-    con.commit()
-    con.close()
+    my_w.mainloop()
 
     
 
