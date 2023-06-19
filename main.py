@@ -37,7 +37,7 @@ class Player(User):
         self.winCount = pWin
         self.lossCount = pLoss
         #self.creditAmount = pCredit
-        
+
         cur.execute("INSERT INTO Player VALUES('"+self.user+"','"+self.name+"','"+self.last+"',"+
                     self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
                     self.lossCount+");")#","+self.creditAmount+");")
@@ -115,8 +115,13 @@ def my_login():
 
 def create(first,last,user):
     print("database creating things")
-    table = cur.fetchall()
-    print(table)
+    cur.execute("SELECT playerUserName\nFROM Player;")
+    userNameList = cur.fetchall()
+    for i in userNameList:
+        if(user == userNameList(i)):
+            print("USERNAME TAKEN")
+            return
+        
     p = Player(first,last,user,"0","0","0","0","0")
     con.commit()
     
