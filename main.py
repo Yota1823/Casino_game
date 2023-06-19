@@ -100,7 +100,7 @@ b1 = tk.Button(my_w, text='Create New User',
 b1.grid(row=4,column=1)
 
 b2 = tk.Button(my_w, text='Login',
-               command=lambda:my_login())
+               command=lambda:my_login(input1.get()))
 b2.grid(row=5,column=1)
 
 #window = Tk()
@@ -110,20 +110,27 @@ b2.grid(row=5,column=1)
 # input1= tk.Entry(window)
 # input2 = tk.Entry(window)
 
-def my_login():
+def my_login(first):
     print("doing the login stuff")
+
+    statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+    cur.execute(statement)
+    if not cur.fetchone():  # An empty result evaluates to False.
+         print("Login failed")
+    else:
+        print("Welcome")
 
 def create(first,last,user):
     print("database creating things")
-    cur.execute("SELECT playerUserName\nFROM Player;")
-    userNameList = cur.fetchall()
-    for i in userNameList:
-        if(user == userNameList(i)):
-            print("USERNAME TAKEN")
-            return
+    statement = f"SELECT playerUserName from Player WHERE playerUserName='{user}';"
+    cur.execute(statement)
+    if cur.fetchone():  # An empty result evaluates to False.
+        print("User Name Taken")
         
-    p = Player(first,last,user,"0","0","0","0","0")
-    con.commit()
+    else:
+        print("Welcome")
+        p = Player(first,last,user,"0","0","0","0","0")
+        con.commit()
     
 
 def my_open():
