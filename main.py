@@ -31,6 +31,11 @@ class Player(User):
         self.winCount = pWin
         self.lossCount = pLoss
         self.creditAmount = pCredit
+        cur.execute("INSERT INTO Player VALUES('"+self.user+"','"+self.name+"','"+self.last+"',"+
+                    self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
+                    self.lossCount+","+self.creditAmount+");")
+
+    
 
     def getMoneyMade(self):
         return self.moneyMade
@@ -46,7 +51,22 @@ class Player(User):
         return self.creditAmount
     
 class Manager(User):
-    def __init__(self,)
+    def __init__(self):
+        pass
+    def removePlayer(userName):
+        cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
+    
+    def getPlayerTable():
+        cur.execute("SELECT * FROM Player")
+        playerTable = cur.fetchall()
+        return playerTable
+    
+    def getStatTable():
+        cur.execute("SELECT * FROM Statistics")
+        statTable = cur.fetchall()
+        return statTable
+
+        
 
 
 
@@ -64,6 +84,7 @@ def createAndDestory():
     print(lastN)
     print(userN)
     mainWindow.destroy()
+    
      
 
 
