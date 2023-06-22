@@ -119,6 +119,8 @@ def my_login(first):
          print("Login failed")
     else:
         print("Welcome")
+        #p = Player(first,last,user,"0","0","0","0","0")
+        gameScreen()
 
 def create(first,last,user):
     print("database creating things")
@@ -132,6 +134,33 @@ def create(first,last,user):
         p = Player(first,last,user,"0","0","0","0","0")
         con.commit()
     
+def gameScreen(): #Pass player
+    game_window = Toplevel(my_w)
+    game_window.geometry("250x250")
+    game_window.title("Main Game Menu")
+    b1 = tk.Button(game_window, text=' Blackjack ',command= blackJack).grid(row=0,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
+    b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
+    b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+
+def blackJack():
+    #Create Window 
+    blackj_win = Toplevel(my_w)
+    blackj_win.geometry("700x500")
+    blackj_win.title("Blackjack")
+
+    #Create Text box and run games through textbox
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+
+
+
+
+
+
+
+
+
 
 def my_open():
     my_w_child=Toplevel(my_w) # Child window
