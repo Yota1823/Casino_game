@@ -3,7 +3,9 @@ import tkinter as tk
 
 import sqlite3 
 import os.path
+# from Games.Blackack import blackjack as bj
 
+import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
@@ -113,6 +115,15 @@ b2.grid(row=5,column=1)
 def my_login(first):
     print("doing the login stuff")
 
+    statement = f"SELECT managerUserName from Manager WHERE managerUserName='{first}';"
+    cur.execute(statement)
+    if not cur.fetchone():  # An empty result evaluates to False.
+         print("Login failed")
+    else:
+        print("Welcome Manager")
+        #p = Player(first,last,user,"0","0","0","0","0")
+        gameScreen('Y')
+
     statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
     cur.execute(statement)
     if not cur.fetchone():  # An empty result evaluates to False.
@@ -120,7 +131,7 @@ def my_login(first):
     else:
         print("Welcome")
         #p = Player(first,last,user,"0","0","0","0","0")
-        gameScreen()
+        gameScreen('N')
 
 def create(first,last,user):
     print("database creating things")
@@ -134,15 +145,21 @@ def create(first,last,user):
         p = Player(first,last,user,"0","0","0","0","0")
         con.commit()
     
-def gameScreen(): #Pass player
+def gameScreen(status): #Pass player
     game_window = Toplevel(my_w)
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
-    b1 = tk.Button(game_window, text=' Blackjack ',command= blackJack).grid(row=0,column=0)
+    b1 = tk.Button(game_window, text=' Blackjack ',command= blackJack()).grid(row=0,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+
+    if status == 'Y':
+        b6 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+
+
+    b7 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
 def blackJack():
     #Create Window 
@@ -152,7 +169,6 @@ def blackJack():
 
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-
 
 
 
