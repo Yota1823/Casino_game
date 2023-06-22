@@ -1,205 +1,251 @@
-import asyncio
+
 import os
-import random
-from typing import List, Tuple, Union
-
-import discord
-from discord.ext import commands
-from modules.card import Card
-from modules.economy import Economy
-from modules.helpers import *
-from PIL import Image
+import time
 
 
-class Blackjack(commands.Cog):
-    def __init__(self, client: commands.Bot):
-        self.client = client
-        self.economy = Economy()
-    
-    def check_bet(
-        self,
-        ctx: commands.Context,
-        bet: int=DEFAULT_BET,
-    ):
-        bet = int(bet)
-        if bet <= 0:
-            raise commands.errors.BadArgument()
-        current = self.economy.get_entry(ctx.author.id)[1]
-        if bet > current:
-            raise InsufficientFundsException(current, bet)
+class Deck():
+    """
+    Class that defines a deck to be used in the game
+    """
+    def __init__(self):
+        """
+        Initialization of a full ordered deck with suits and cards
+        """
+        self.suits = ['C', 'H', 'D', 'S'] #C = club, H = heart, D = diamond, S = spades
+        self.cards = [
+            '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'
+        ]
+        self.full_deck = []
+        for suit in self.suits:
+            for card in self.cards:
+                self.full_deck.append(suit + card)
 
-    @staticmethod
-    def hand_to_images(hand: List[Card]) -> List[Image.Image]:
-        return ([
-            Image.open(os.path.join(ABS_PATH, 'modules/cards/', card.image))
-            for card in hand
-        ])
+    def __str__(self):
+        """
+        String representation that returns the whole deck in a list format
+        """
+        clubs = []
+        hearts = []
+        diamonds = []
+        spades = []
+        for suit in self.suits:
+            for card in self.cards:
+                if suit == "C":
+                    clubs.append(suit + card)
+                elif suit == "H":
+                    hearts.append(suit + card)
+                elif suit == "D":
+                    diamonds.append(suit + card)
+                else:
+                    spades.append(suit + card)
+        return ("Here is the full deck: \n\n"
+                f"Clubs: {clubs}\n"
+                f"Hearts: {hearts}\n"
+                f"Diamonds: {diamonds}\n"
+                f"Spades: {spades}")
 
-    @staticmethod
-    def center(*hands: Tuple[Image.Image]) -> Image.Image:
-        """Creates blackjack table with cards placed"""
-        bg: Image.Image = Image.open(
-            os.path.join(ABS_PATH, 'modules/', 'table.png')
-        )
-        bg_center_x = bg.size[0] // 2
-        bg_center_y = bg.size[1] // 2
-
-        img_w = hands[0][0].size[0]
-        img_h = hands[0][0].size[1]
-
-        start_y = bg_center_y - (((len(hands)*img_h) + \
-            ((len(hands) - 1) * 15)) // 2)
-        for hand in hands:
-            start_x = bg_center_x - (((len(hand)*img_w) + \
-                ((len(hand) - 1) * 10)) // 2)
-            for card in hand:
-                bg.alpha_composite(card, (start_x, start_y))
-                start_x += img_w + 10
-            start_y += img_h + 15
-        return bg
-
-    def output(self, name, *hands: Tuple[List[Card]]) -> None:
-        self.center(*map(self.hand_to_images, hands)).save(f'{name}.png')
-
-    @staticmethod
-    def calc_hand(hand: List[List[Card]]) -> int:
-        """Calculates the sum of the card values and accounts for aces"""
-        non_aces = [c for c in hand if c.symbol != 'A']
-        aces = [c for c in hand if c.symbol == 'A']
-        sum = 0
-        for card in non_aces:
-            if not card.down:
-                if card.symbol in 'JQK': sum += 10
-                else: sum += card.value
-        for card in aces:
-            if not card.down:
-                if sum <= 10: sum += 11
-                else: sum += 1
-        return sum
+    def shuffle(self):
+        """
+        Function that shuffles the deck
+        """
+        deck_as_set = set(self.full_deck)
+        return list(deck_as_set)
 
 
-    @commands.command(
-        aliases=['bj'],
-        brief="Play a simple game of blackjack.\nBet must be greater than $0",
-        usage=f"blackjack [bet- default=${DEFAULT_BET}]"
-    )
-    async def blackjack(self, ctx: commands.Context, bet: int=DEFAULT_BET):
-        self.check_bet(ctx, bet)
-        deck = [Card(suit, num) for num in range(2,15) for suit in Card.suits]
-        random.shuffle(deck) # Generate deck and shuffle it
+class Player():
+    """
+    Class that defines a Player that starts with $100 to bet
+    """
+    def __init__(self, hand=[], bet=0, score=0, money=100):
+        # Hand should be a list of the cards taken from the deck
+        self.hand = hand
+        self.bet = bet
+        self.score = score
+        self.money = money
 
-        player_hand: List[Card] = []
-        dealer_hand: List[Card] = []
-
-        player_hand.append(deck.pop())
-        dealer_hand.append(deck.pop())
-        player_hand.append(deck.pop())
-        dealer_hand.append(deck.pop().flip())
-
-        player_score = self.calc_hand(player_hand)
-        dealer_score = self.calc_hand(dealer_hand)
-
-        async def out_table(**kwargs) -> discord.Message:
-            """Sends a picture of the current table"""
-            self.output(ctx.author.id, dealer_hand, player_hand)
-            embed = make_embed(**kwargs)
-            file = discord.File(
-                f"{ctx.author.id}.png", filename=f"{ctx.author.id}.png"
-            )
-            embed.set_image(url=f"attachment://{ctx.author.id}.png")
-            msg: discord.Message = await ctx.send(file=file, embed=embed)
-            return msg
-        
-        def check(
-            reaction: discord.Reaction,
-            user: Union[discord.Member, discord.User]
-        ) -> bool:
-            return all((
-                str(reaction.emoji) in ("🇸", "🇭"),  # correct emoji
-                user == ctx.author,                  # correct user
-                user != self.client.user,           # isn't the bot
-                reaction.message == msg            # correct message
-            ))
-
-        standing = False
-
+    def set_betting_amount(self):
         while True:
-            player_score = self.calc_hand(player_hand)
-            dealer_score = self.calc_hand(dealer_hand)
-            if player_score == 21:  # win condition
-                bet = int(bet*1.5)
-                self.economy.add_money(ctx.author.id, bet)
-                result = ("Blackjack!", 'won')
-                break
-            elif player_score > 21:  # losing condition
-                self.economy.add_money(ctx.author.id, bet*-1)
-                result = ("Player busts", 'lost')
-                break
-            msg = await out_table(
-                title="Your Turn",
-                description=f"Your hand: {player_score}\n" \
-                    f"Dealer's hand: {dealer_score}"
-            )
-            await msg.add_reaction("🇭")
-            await msg.add_reaction("🇸")
-            
-            try:  # reaction command
-                reaction, _ = await self.client.wait_for(
-                    'reaction_add', timeout=60, check=check
+            try:
+                self.bet = int(
+                    input(f"How much is your bet? (1-{self.money}): ")
                 )
-            except asyncio.TimeoutError:
-                await msg.delete()
-
-            if str(reaction.emoji) == "🇭":
-                player_hand.append(deck.pop())
-                await msg.delete()
+                if self.bet > self.money:
+                    print("You don't have enough funds!")
+                    continue
+            except ValueError:
+                print("You need to enter a valid number!")
                 continue
-            elif str(reaction.emoji) == "🇸":
-                standing = True
+            else:
                 break
 
-        if standing:
-            dealer_hand[1].flip()
-            player_score = self.calc_hand(player_hand)
-            dealer_score = self.calc_hand(dealer_hand)
+    def calculate_hand_score(self, hand):
+        """
+        Function that calculates the total on a player's hand
+        """
+        # Min and max values in case there is an Ace on the hand. Min will be
+        # calculated with Ace value as 1 and Max with Ace value as 11. At the
+        # end the closest value to 21 without exceeding it, will be returned.
+        # Otherwise, if there was no Ace, min and max are equals and any can
+        # be returned.
+        min = 0
+        max = 0
+        ace_flag = False
+        for card in hand:
+            if card[1] == "A" and ace_flag is True:
+                min += 1
+                max += 1
+            elif card[1] == "A" and ace_flag is False:
+                ace_flag = True
+                min += 1
+                max += 11
+            elif card[1] == "J" or card[1] == "Q" or card[1] == "K":
+                min += 10
+                max += 10
+            elif int(card[1:]) in range(2, 11):
+                min += int(card[1:])
+                max += int(card[1:])
+        if max == min:
+            score = min
+        elif max <= 21:
+            score = max
+        elif max > 21:
+            score = min
+        return score
 
-            while dealer_score < 17:  # dealer draws until 17 or greater
-                dealer_hand.append(deck.pop())
-                dealer_score = self.calc_hand(dealer_hand)
+    def calculate_win(self, win_amount):
+        """
+        Function that calculates the total amount of money after a win
+        """
+        self.money += win_amount
 
-            if dealer_score == 21:  # winning/losing conditions
-                self.economy.add_money(ctx.author.id, bet*-1)
-                result = ('Dealer blackjack', 'lost')
-            elif dealer_score > 21:
-                self.economy.add_money(ctx.author.id, bet)
-                result = ("Dealer busts", 'won')
-            elif dealer_score == player_score:
-                result = ("Tie!", 'kept')
-            elif dealer_score > player_score:
-                self.economy.add_money(ctx.author.id, bet*-1)
-                result = ("You lose!", 'lost')
-            elif dealer_score < player_score:
-                self.economy.add_money(ctx.author.id, bet)
-                result = ("You win!", 'won')
+    def calculate_loss(self, lost_amount):
+        """
+        Function that calculates the total amount of money after a loss
+        """
+        self.money -= lost_amount
 
-        color = (
-            discord.Color.red() if result[1] == 'lost'
-            else discord.Color.green() if result[1] == 'won'
-            else discord.Color.blue()
-        )
-        try:
-            await msg.delete()
-        except:
-            pass
-        msg = await out_table(
-            title=result[0],
-            color=color,
-            description=(
-                f"**You {result[1]} ${bet}**\nYour hand: {player_score}\n" +
-                f"Dealer's hand: {dealer_score}"
-            )
-        )
-        os.remove(f'./{ctx.author.id}.png')
 
-def setup(client: commands.Bot):
-    client.add_cog(Blackjack(client))
+# ###################### Game's main functions ######################
+
+def create_and_suffle_deck():
+    """ Function that creates an instance of a Deck and then shuffles it
+    """
+    deck = Deck()
+    print(deck)
+    time.sleep(1)
+    print("\nShuffling deck...")
+    # Variable that will store the list containing the full deck after shuffle
+    shuffled_deck = deck.shuffle()
+    time.sleep(1)
+    print("\nDone!\n")
+    return shuffled_deck
+
+
+def initial_deal(player1, shuffled_deck):
+    """
+    Function that will deal cards to players
+    """
+    # Creating an instance of a player for Dealer, assigning 2 cards from the
+    # deck
+    dealer = Player([shuffled_deck.pop(), shuffled_deck.pop()])
+    time.sleep(1)
+    # Will only print the first card and the second "face down" (X)
+    print(f"\n\nDealer: ['{dealer.hand[0]}', 'XX']\n\n")
+    # Adding two cards to the Player's hand
+    player1.hand = [shuffled_deck.pop(), shuffled_deck.pop()]
+    player1.score = player1.calculate_hand_score(player1.hand)
+    time.sleep(1)
+    print(f"Player 1 Hand: {player1.hand}")
+    print(f"Player 1 Score: {player1.score}\n")
+    if player1.score == 21:
+        print("Blackjack!\n\n")
+    return player1, dealer
+
+
+def deal_dealers_hand():
+    """Function that will simulate the dealers play once the player stands
+    """
+    print("[" + "'" + dealer.hand[0] + "'" + ", XX ]")
+    time.sleep(1)
+    print(dealer.hand)
+    dealer.score = dealer.calculate_hand_score(dealer.hand)
+    while dealer.score < player1.score:
+        time.sleep(1)
+        new_dealer_card = shuffled_deck.pop()
+        dealer.hand.append(new_dealer_card)
+        print(dealer.hand)
+        dealer.score = dealer.calculate_hand_score(dealer.hand)
+    print(f"Score: {dealer.score}\n\n")
+
+
+# ###################### Main piece of code ######################
+
+game_on = "Y"
+while game_on == "Y":
+    os.system('cls')
+    print("\n\t\tWelcome to Blackjack!\n")
+    time.sleep(1)
+    # Creating an instance of a deck and shuffling it in case player is playing
+    # for the first time or if there are less than 10 cards available
+    if 'shuffled_deck' not in globals():
+        shuffled_deck = create_and_suffle_deck()
+    elif len(shuffled_deck) < 10:
+        print("Deck is almost over. We need to shuffle again!\n")
+        shuffled_deck = create_and_suffle_deck()
+    # Setting the default betting amount if player hasn't played before
+    if 'money' not in globals():
+        money = 100
+    # Check if user has enough money to bet (in case he has kept playing)
+    if money == 0:
+        print("You don't have any money left!\nGoodbye!")
+        game_on = "N"
+        break
+    # Ask for the betting amount
+    player1 = Player(money=money)
+    player1.set_betting_amount()
+    time.sleep(1)
+    # Deal cards and assign each hand to the player and dealer
+    player1, dealer = initial_deal(player1, shuffled_deck)
+    # Variable that will contain the response from the user to hit or stand
+    move = ""
+    while move != "S":
+        move = input("Press enter to hit, enter 'S' to stand: ").upper()
+        if move == "":  # User chose to hit
+            print("User chose to hit")
+            # A card is then removed from the shuffled deck,
+            # appended to the player's hand and then printed
+            player1.hand.append(shuffled_deck.pop())
+            print(f"Player 1: {player1.hand}\n")
+            # Now the score needs to be calculated and printed as well
+            player1.score = player1.calculate_hand_score(player1.hand)
+            print(f"Score: {player1.score}")
+            # Validates if player exceeded 21 (Busted)
+            if player1.score > 21:
+                print("Busted!")
+                print(f"Bet was: {player1.bet}")
+                player1.calculate_loss(player1.bet)
+                print(f"Money: {player1.money}")
+                break
+            elif player1.score == 21:
+                print("Blackjack!")
+        elif move == "S":
+            # Add a call to a function that will play the dealer's hand and
+            # then checks who wins or if there is a tie
+            print("User chose to stand")
+            deal_dealers_hand()
+            if dealer.score > player1.score and dealer.score <= 21:
+                print("Player 1 loses!")
+                player1.calculate_loss(player1.bet)
+            elif dealer.score == player1.score:
+                print("It's a tie!")
+            else:
+                print("Player 1 wins!")
+                player1.calculate_win(player1.bet)
+    # Ask to the player if he would like to contine playing
+    while True:
+        game_on = input("\nYou want to play again? (Y/N): ").upper()
+        if game_on == "Y" or game_on == "N":
+            money = player1.money
+            break
+        else:
+            continue
