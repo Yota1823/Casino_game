@@ -1,5 +1,5 @@
 import time
-from rules import Table
+from rules import Table, GameError
 
 class Cli:
     """Command line interface of the game. Only interacts with Table object in
@@ -37,8 +37,7 @@ Options:
             else:
                 print('Selection not recognized.')
 
-    def status(self):
-        """Prints the players status and other in game information."""
+    def status(self):          #option 1 Prints the players status and other in game information.
         print(f'Shoe with {self._game.num_decks} deck(s).')
         if self._game.available_players:
             print(f'{len(self._game.available_players)} player(s) in game:')
@@ -83,16 +82,16 @@ Options:
     def bet(self, player_i):
         """Places an individual bet for player_i."""
         hands = {
-            'p': 'punto',
-            'punto': 'punto',
-            'b': 'banco',
-            'banco': 'banco',
+            'p': 'player',
+            'player': 'player',
+            'b': 'banker',
+            'banker': 'banker',
             't': 'tie',
             'tie': 'tie'
             }
         action = 'Replacing' if player_i in self._game.valid_bets else 'New'
         print(f'{action} bet for Player {player_i + 1}. Press <s> to skip.')
-        hand_input = input('The hand to bet. <p> punto, <b> banco, <t> tie: ')
+        hand_input = input('The hand to bet. <p> player, <b> banker, <t> tie: ')
         if hand_input.lower() in ['s', 'skip']:
             print()
             return
@@ -127,12 +126,12 @@ Options:
                 return self._game.game_result().title()
 
         def print_hands():
-            print(f'Punto hand: {self._game.punto_cards}.')
+            print(f'Player hand: {self._game.punto_cards}.')
             punto_values = ', '.join([str(value) for value in self._game.punto_values])
             print(f'Cards values: {punto_values}.')
             print(f'Total hand value: value: {self._game.punto_value}.')
             time.sleep(0.5)
-            print(f'Banco hand: {self._game.banco_cards}.')
+            print(f'Banker hand: {self._game.banco_cards}.')
             banco_values = ', '.join([str(value) for value in self._game.banco_values])
             print(f'Cards values: {banco_values}.')
             print(f'Total hand value: value: {self._game.banco_value}.')
