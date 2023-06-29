@@ -3,17 +3,15 @@ import random
 import sys
 
 
-balance = 1000
-balance == int(balance)
-winnings = 0
-winnings == int(winnings)
+balance = int(1000)
+winnings = int(0)
 
 Symbols = ["Leopard", "wit shield", "W lines", "Big W", "7"]
 
 # Subroutines:  Checking the Bet input and amount
 def betcheck(betamount):
     if betamount.isdigit() == True:
-        betamount == int(betamount)
+        betamount = int(betamount)
         rightbet = True
     else: 
         rightbet = False
@@ -42,21 +40,29 @@ def askinputcheck(answerinput):
 def spinning(reels):
     global balance
     if reelone == "Leopard" and reeltwo == "Leopard" and reelthree == "Leopard":
-        winnings = int(betamount) + int(balance) * 100
-        "You won the jackpot! Congragulations! This is how much your account contains $", winnings
-    elif reelone == "Goldbar" and reeltwo == "Goldbar" and reelthree == "Goldbar":
-        winnings = int(betamount) + int(balance) * 500
-        "You won a considerable return! Awesome! Your balance and wins are $", winnings
-    elif reelone == "Pyramid" and reeltwo == "Pyramid" and reelthree == "Pyramid":
-        winnings = int(betamount) + int(balance) * 250
-        "You won a good return! Its a conspiracy! This is all of your money total $", winnings
-    elif reelone == "Blackcat" and reeltwo == "Blackcat" and reelthree == "Blackcat":
-        winnings = int(balance) - int(betamount)
-        "Unfortunately you didn't win anything, bad luck! You rewards are $", winnings
+        winnings = int(betamount) + int(balance) * 10
+        "You won 10 times your money! Congragulations! This is how much your account contains $", winnings
+    elif reelone == "wit shield" and reeltwo == "wit shield" and reelthree == "wit shield":
+        winnings = int(betamount) + int(balance) * 25
+        "You won 25 times your money! Awesome! Your balance and wins are $", winnings
+    elif reelone == "W lines" and reeltwo == "W lines" and reelthree == "W lines":
+        winnings = int(betamount) + int(balance) * 50
+        "You won 50 times your money! This is all of your money total $", winnings
+    elif reelone == "Big W" and reeltwo == "Big W" and reelthree == "Big W":
+        winnings = int(balance) + int(betamount) * 75
+        "You won 75 times your money! You rewards are $", winnings
+    elif reelone == "7" and reeltwo == "7" and reelthree == "7":
+        winnings = int(balance) + 100000
+        "You  the ulimate Jackpot! You rewards are $", winnings
+    elif reelone == "7" and (reeltwo == "7" or reelthree == "7"):
+        winnings = int(balance) + int(betamount) * 2
+        "You won 2 times your money! You rewards are $", winnings
+    elif (reelone == "7" or reeltwo == "7") and reelthree == "7":
+        winnings = int(balance) + int(betamount) * 2
+        "You won 2 times your money! You rewards are $", winnings
     else:
         winnings = int(balance) - int(betamount)
         "Bad luck! Maybe next time you'll win! Your remaining cash is $", winnings
-        winnings
     return reels
 
 # If you have no money
@@ -76,15 +82,15 @@ while Validbet == False:
     betamount = input("Please enter amount you wish to bet: ")
     Validbet = betcheck(betamount)
 
-betamount == int(betamount)
+betamount = int(betamount)
 
 # Leads to betlimit
 appropriatelimit = betlimit(betamount)
 
 # RandomSymbolGen + 3 reels
-reelone = random.sample(["Leprachaun", "Goldbar", "Goldbar", "Pyramid", "Pyramid", "Pyramid", "Blackcat", "Blackcat", "Blackcat", "Blackcat"],1)
-reeltwo = random.sample(["Leprachaun", "Goldbar", "Goldbar", "Pyramid", "Pyramid", "Pyramid", "Blackcat", "Blackcat", "Blackcat", "Blackcat"],1)
-reelthree = random.sample(["Leprachaun", "Goldbar", "Goldbar", "Pyramid", "Pyramid", "Pyramid", "Blackcat", "Blackcat", "Blackcat", "Blackcat"],1)
+reelone = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
+reeltwo = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
+reelthree = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
 
 reels = [reelone, reeltwo, reelthree]
 
@@ -95,7 +101,7 @@ reels
 # Leads to Ask input check. (At the bottom due to program order)
 validask = False
 while validask == False:
-    answerinput = raw_input("Would you like to play again?: ")
+    answerinput = input("Would you like to play again?: ")
     validask = askinputcheck(answerinput)
 
 # Leads to restart    
