@@ -3,6 +3,13 @@ import tkinter as tk
 
 import sqlite3 
 import os.path
+import sys
+
+sys.path.append("Games/Blackack")
+#import blackjack as bj
+
+
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
@@ -29,18 +36,22 @@ class User:
 
 class Player(User):
     
-    def __init__(self,fName,lName,uName,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
+    def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
         User.__init__(self,fName,lName,uName)
+        
+        self.creditAmount = pCredit
         self.moneyMade = pMoneyMade
         self.moneyLost = pMoneyLost
         self.currentGame = currGame
         self.winCount = pWin
         self.lossCount = pLoss
-        #self.creditAmount = pCredit
 
+
+
+    def createPlayer(self):
         cur.execute("INSERT INTO Player VALUES('"+self.user+"','"+self.name+"','"+self.last+"',"+
-                    self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
-                    self.lossCount+");")#","+self.creditAmount+");")
+                self.creditAmount+","+self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
+                self.lossCount+");")#","+self.creditAmount+");")
 
 
 
@@ -115,12 +126,19 @@ def my_login(first):
 
     statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
     cur.execute(statement)
+
     if not cur.fetchone():  # An empty result evaluates to False.
          print("Login failed")
     else:
         print("Welcome")
-        #p = Player(first,last,user,"0","0","0","0","0")
-        gameScreen()
+
+        cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+        playerData = cur.fetchall()
+        p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+                   playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
+        
+        
+        gameScreen(p)
 
 def create(first,last,user):
     print("database creating things")
@@ -132,9 +150,10 @@ def create(first,last,user):
     else:
         print("Welcome")
         p = Player(first,last,user,"0","0","0","0","0")
+        p.createPlayer()
         con.commit()
     
-def gameScreen(): #Pass player
+def gameScreen(player): #Pass player
     game_window = Toplevel(my_w)
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
@@ -143,6 +162,7 @@ def gameScreen(): #Pass player
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    balance = tk.Text(game_window,text = str(player.getCredit())).grid(row=0,column=3) #GET THIS WORKING
 
 def blackJack():
     #Create Window 
@@ -152,6 +172,7 @@ def blackJack():
 
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    
 
 
 
