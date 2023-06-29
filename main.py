@@ -2,92 +2,269 @@ from tkinter import *
 import tkinter as tk
 
 import sqlite3 
-con = sqlite3.connect("Casino.db")
+import os.path
+import sys
+
+#from Games.Blackack import blackjack as bj
+
+
+
+
+import subprocess
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "Casino.db")
+con = sqlite3.connect(db_path)
 cur = con.cursor()
 #cur.execute("INSERT INTO STUDENT VALUES(101,'Kaleb','Pelletier','COMP_ENG','pelletierk3@wit.edu',2024);")
+class User:
+    def __init__(self,fName,lName,uName):
+        self.name = fName
+        self.last = lName
+        self.user = uName
 
-
-
-window = Tk()
-
-input1= tk.Entry(window)
-input2 = tk.Entry(window)
-
-
-
-
-
-def createNew():
-    mainWindow = Tk()
-    mainWindow.geometry("500x500")
-    tk.Label(mainWindow, text="Create New User").grid(row=0)
-    tk.Label(mainWindow, text="First Name").grid(row=1)
-    tk.Label(mainWindow, text="Last Name").grid(row=2)
-    tk.Label(mainWindow,text= "UserName").grid(row = 3)
-
-    inFirstName = tk.Entry(mainWindow)
-    inLastName = tk.Entry(mainWindow)
-    inUserName = tk.Entry(mainWindow)
-
-    inFirstName.grid(row=1,column=1)
-    inLastName.grid(row=2,column=1)
-    inUserName.grid(row=3,column=1)
-
-    FirstN = inFirstName.get() #Input for create new 
-    LastN = inLastName.get()
-    UserN = inUserName.get()
-    exit_button = Button(mainWindow, text="Exit", command=mainWindow.destroy)
-    exit_button.grid(row=4,column=1)
-
-    #Check data base for existing 
-
-
-
-
-def getLoginInfo():
-    mainWindow = Tk()
-    mainWindow.geometry("800x800")
-
-    #loop through the data tables to check if they exist 
-    userN = input1.get()
-    if(userN == "1"):
-        mainWindow.title("Player")
-    if(userN == "2"):
-        mainWindow.title("Manager")
-    
-    userN = ""
-    mainWindow.deiconify() #Shows window
-    #mainWindow.mainloop()
+    def getFirst(self):
+        return self.name
+    def getLast(self):
+        return self.last
+    def getUser(self):
+        return self.user
     
 
+    # def __del__(self):
+    #     print(self.name + " is deleted")
+        #del obj
 
-    #tk.Label(window, text=userN).grid(row=4)
+class Player(User):
     
+    def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
+        User.__init__(self,fName,lName,uName)
+        
+        self.creditAmount = pCredit
+        self.moneyMade = pMoneyMade
+        self.moneyLost = pMoneyLost
+        self.currentGame = currGame
+        self.winCount = pWin
+        self.lossCount = pLoss
+
+
+
+    def createPlayer(self):
+        cur.execute("INSERT INTO Player VALUES('"+self.user+"','"+self.name+"','"+self.last+"',"+
+                self.creditAmount+","+self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
+                self.lossCount+");")#","+self.creditAmount+");")
+
+
+
+    def getMoneyMade(self):
+        return self.moneyMade
+    def getMoneyLost(self):
+        return self.moneyLost
+    def getCurrGame(self):
+        return self.currentGame
+    def getpWin(self):
+        return self.winCount
+    def getpLoss(self):
+        return self.lossCount
+    def getCredit(self):
+        return self.creditAmount
+    
+class Manager(User):
+    def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
+                 totalPlayerMoney,currGame,hitListStatus):
+        self.manUN = manUserN
+        self.pUN = pUserN
+        self.pMM = pMoneyMade
+        self.pML = pMoneyLost
+        self.totalCasinoM = totalCasinoMoney
+        self.totalPlayerM = totalPlayerMoney
+        self.currGame = currGame
+        self.hitLS = hitListStatus
+    def removePlayer(userName):
+        cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
+
+    def getPlayerTable():
+        cur.execute("SELECT * FROM Player")
+        playerTable = cur.fetchall()
+        return playerTable
+
+    def getStatTable():
+        cur.execute("SELECT * FROM Statistics")
+        statTable = cur.fetchall()
+        return statTable
+
+
+
+my_w = tk.Tk()
+my_w.geometry("250x250")  # Size of the window
+my_w.title("WIT CASINO")  # Adding a title
+
+# create one lebel
+my_str = tk.StringVar()
+l1 = tk.Label(my_w,  textvariable=my_str )
+l1.grid(row=1,column=1)
+my_str.set("Welcome to the WIT Casino")
+tk.Label(my_w, text="Username").grid(row=2, column=2)
+tk.Label(my_w, text="Password").grid(row=3, column=2)
+
+
+input1 = tk.Entry(my_w)
+input2 = tk.Entry(my_w)
+
+input1.grid(row=2, column=1)
+input2.grid(row=3, column=1)
+
+# add one button
+b1 = tk.Button(my_w, text='Create New User',
+               command=lambda:my_open())
+b1.grid(row=4,column=1)
+
+b2 = tk.Button(my_w, text='Login',
+               command=lambda:my_login(input1.get()))
+b2.grid(row=5,column=1)
+
+#window = Tk()
+#mainWindow = Tk()
+# mainWindow.withdraw()
+
+# input1= tk.Entry(window)
+# input2 = tk.Entry(window)
+
+def my_login(first):
+    print("doing the login stuff")
+
+    statement = f"SELECT managerUserName from Manager WHERE managerUserName='{first}';"
+    output = cur.execute(statement)
+    if not cur.fetchone():  # An empty result evaluates to False.
+         
+         statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+         cur.execute(statement)
+         if not cur.fetchone():  # An empty result evaluates to False.
+            print("Login failed")
+         else:
+            print("Welcome")
+
+            cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+            playerData = cur.fetchall()
+            p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+                   playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
+        
+        
+            gameScreen(p,'N')
+         
+    else:
+        print("Welcome Manager")
+        cur.execute(f"SELECT * from Manager WHERE managerUserName='{first}';")
+        managerData = cur.fetchall()
+        m = Manager(managerData[0][0],managerData[0][1],managerData[0][2],managerData[0][3],managerData[0][4],
+                    managerData[0][5],managerData[0][6],managerData[0][7])
+        gameScreen(m,'Y')
+
+    # statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+    # cur.execute(statement)
+
+    # if not cur.fetchone():  # An empty result evaluates to False.
+    #      print("Login failed")
+    # else:
+    #     print("Welcome")
+
+    #     cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+    #     playerData = cur.fetchall()
+    #     p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+    #                playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
+        
+        
+    #     gameScreen(p)
+
+def create(first,last,user):
+    print("database creating things")
+    statement = f"SELECT playerUserName from Player WHERE playerUserName='{user}';"
+    cur.execute(statement)
+    if cur.fetchone():  # An empty result evaluates to False.
+        print("User Name Taken")
+        
+    else:
+        print("Welcome")
+        p = Player(first,last,user,"0","0","0","0","0")
+        p.createPlayer()
+        con.commit()
+    
+def gameScreen(player,status): #Pass player
+    game_window = Toplevel(my_w)
+    game_window.geometry("250x250")
+    game_window.title("Main Game Menu")
+
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
+    b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
+    b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    #balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    if status == 'Y':
+        b6 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+    else:
+        balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    b7 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+
+    
+
+def blackJack():
+    #Create Window 
+    blackj_win = Toplevel(my_w)
+    blackj_win.geometry("700x500")
+    blackj_win.title("Blackjack")
+
+    #Create Text box and run games through textbox
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    
+
+
+
+
+
+
+
+
+
+def my_open():
+    my_w_child=Toplevel(my_w) # Child window
+    my_w_child.geometry("250x250")  # Size of the window
+    my_w_child.title("New User Screen")
+
+    inFirstName = tk.Entry(my_w_child)
+    inLastName = tk.Entry(my_w_child)
+    inUserName = tk.Entry(my_w_child)
+
+    inFirstName.grid(row=1, column=1)
+    inLastName.grid(row=2, column=1)
+    inUserName.grid(row=3, column=1)
+
+    # firstN = inFirstName.get()  # Input for create new
+    # lastN = inLastName.get()
+    # userN = inUserName.get()
+    
+    my_str1 = tk.StringVar()
+
+    l1 = tk.Label(my_w_child,  textvariable=my_str1 )
+    l1.grid(row=1,column=2)
+    my_str1.set("User Name")
+    l2 = tk.Label(my_w_child, text="Password")
+    l2.grid(row=2,column=2)
+    l3 = tk.Label(my_w_child, text= "User Name")
+    l3.grid(row=3,column=2)
+    b3 = tk.Button(my_w_child, text=' Create ',
+                   command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
+    b3.grid(row=4,column=1)
+
+
+
+
 
 
 def main():
-    window.title("WIT Casino")
-    window.geometry("500x500")
+    my_w.mainloop()
 
-    tk.Label(window, text="WIT Casino").grid(row=0)
-    tk.Label(window, text="Username").grid(row=1)
-    tk.Label(window, text="Password").grid(row=2)
-
-    Loginbtn = Button(window,text="Log In",command = getLoginInfo)
-    createNewUser = Button(window,text ="Create New",command = createNew)
-
-    
-
-    
-
-    input1.grid(row=1, column=1)
-    input2.grid(row=2, column=1)
-    Loginbtn.grid(row=3)
-    createNewUser.grid(row=3,column=1)
-    window.mainloop()
-
-    con.commit()
-    con.close()
 
     
 
