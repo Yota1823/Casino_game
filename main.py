@@ -5,12 +5,12 @@ import sqlite3
 import os.path
 import sys
 
-sys.path.append("Games/Blackack")
-#import blackjack as bj
+#from Games.Blackack import blackjack as bj
 
 
 
 
+import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
@@ -69,8 +69,16 @@ class Player(User):
         return self.creditAmount
     
 class Manager(User):
-    def __init__(self):
-        pass
+    def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
+                 totalPlayerMoney,currGame,hitListStatus):
+        self.manUN = manUserN
+        self.pUN = pUserN
+        self.pMM = pMoneyMade
+        self.pML = pMoneyLost
+        self.totalCasinoM = totalCasinoMoney
+        self.totalPlayerM = totalPlayerMoney
+        self.currGame = currGame
+        self.hitLS = hitListStatus
     def removePlayer(userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
 
@@ -124,21 +132,48 @@ b2.grid(row=5,column=1)
 def my_login(first):
     print("doing the login stuff")
 
-    statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
-    cur.execute(statement)
-
+    statement = f"SELECT managerUserName from Manager WHERE managerUserName='{first}';"
+    output = cur.execute(statement)
     if not cur.fetchone():  # An empty result evaluates to False.
-         print("Login failed")
-    else:
-        print("Welcome")
+         
+         statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+         cur.execute(statement)
+         if not cur.fetchone():  # An empty result evaluates to False.
+            print("Login failed")
+         else:
+            print("Welcome")
 
-        cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
-        playerData = cur.fetchall()
-        p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+            cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+            playerData = cur.fetchall()
+            p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
                    playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
         
         
-        gameScreen(p)
+            gameScreen(p,'N')
+         
+    else:
+        print("Welcome Manager")
+        cur.execute(f"SELECT * from Manager WHERE managerUserName='{first}';")
+        managerData = cur.fetchall()
+        m = Manager(managerData[0][0],managerData[0][1],managerData[0][2],managerData[0][3],managerData[0][4],
+                    managerData[0][5],managerData[0][6],managerData[0][7])
+        gameScreen(m,'Y')
+
+    # statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+    # cur.execute(statement)
+
+    # if not cur.fetchone():  # An empty result evaluates to False.
+    #      print("Login failed")
+    # else:
+    #     print("Welcome")
+
+    #     cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+    #     playerData = cur.fetchall()
+    #     p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+    #                playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
+        
+        
+    #     gameScreen(p)
 
 def create(first,last,user):
     print("database creating things")
@@ -153,16 +188,26 @@ def create(first,last,user):
         p.createPlayer()
         con.commit()
     
-def gameScreen(player): #Pass player
+def gameScreen(player,status): #Pass player
     game_window = Toplevel(my_w)
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
-    b1 = tk.Button(game_window, text=' Blackjack ',command= blackJack).grid(row=0,column=0)
+
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
-    balance = tk.Text(game_window,text = str(player.getCredit())).grid(row=0,column=3) #GET THIS WORKING
+    #balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    if status == 'Y':
+        b6 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+    else:
+        balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    b7 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+
+    
 
 def blackJack():
     #Create Window 
@@ -173,7 +218,6 @@ def blackJack():
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     
-
 
 
 
