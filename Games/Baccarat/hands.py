@@ -106,7 +106,7 @@ class Banco(Hand):
         if len(self._cards) == 2:
             if player_third:
                 if not isinstance(player_third, Card):
-                    raise TypeError('Punto third card not a Card type object.')
+                    raise TypeError('Player third card not a Card type object.')
                 if 0 <= self.value <= 2:
                     return True
                 elif 3 <= self.value <= 6:
