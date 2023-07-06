@@ -1,8 +1,13 @@
 from tkinter import *
 import tkinter as tk
 
+import sys
+import os
 import sqlite3 
 import os.path
+from subprocess import Popen
+import importlib
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
@@ -113,6 +118,7 @@ b2.grid(row=5,column=1)
 def my_login(first):
     print("doing the login stuff")
 
+
     statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
     cur.execute(statement)
     if not cur.fetchone():  # An empty result evaluates to False.
@@ -145,13 +151,22 @@ def gameScreen(): #Pass player
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
 
 def blackJack():
+
     #Create Window 
     blackj_win = Toplevel(my_w)
     blackj_win.geometry("700x500")
     blackj_win.title("Blackjack")
 
     #Create Text box and run games through textbox
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    inputTxt = tk.Text(blackj_win,height=20,width=80)
+    inputTxt.grid(row=1,column=2)
+    
+    current_dir = os.path.dirname(os.path.abspath("blackjack.py"))
+    game_dir = os.path.join(current_dir, 'game')
+    sys.path.append(game_dir)
+    
+    from Games.blackjack import main
+    
 
 
 
@@ -199,11 +214,11 @@ def my_open():
 
 def main():
     my_w.mainloop()
-
+    
+    
 
     
 
 
 if __name__ == "__main__":
-    
     main()
