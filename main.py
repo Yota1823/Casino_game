@@ -1,14 +1,10 @@
 from tkinter import *
 import tkinter as tk
 
+import sys
+import os
 import sqlite3 
 import os.path
-import sys
-
-#from Games.Blackack import blackjack as bj
-
-
-
 
 import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -205,6 +201,7 @@ def removePlayer(manager):
     
 
 def blackJack():
+
     #Create Window 
     blackj_win = Toplevel(my_w)
     blackj_win.geometry("700x500")
@@ -213,6 +210,13 @@ def blackJack():
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     
+    blackjack_dir = os.path.casinoname(os.path.abspath(__file__))
+    game_dir = os.path.join(blackjack_dir, 'Games')
+    sys.path.append(game_dir)
+
+    # Import the specific functions or classes from the blackjack module
+    from Games.blackjack import main
+
 
 
 
@@ -259,11 +263,11 @@ def my_open():
 
 def main():
     my_w.mainloop()
-
+    
+    
 
     
 
 
 if __name__ == "__main__":
-    
     main()
