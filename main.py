@@ -78,12 +78,12 @@ class Manager(User):
     def removePlayer(userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
 
-    def getPlayerTable():
+    def getPlayerTable(self):
         cur.execute("SELECT * FROM Player")
         playerTable = cur.fetchall()
         return playerTable
 
-    def getStatTable():
+    def getStatTable(self):
         cur.execute("SELECT * FROM Statistics")
         statTable = cur.fetchall()
         return statTable
@@ -183,19 +183,27 @@ def gameScreen(player,status): #Pass player
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
-        b8 = tk.Button(game_window,text=' Remove Player ',command= removePlayer(player)).grid(row=6,column=0)
+        b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
     b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
 def removePlayer(manager):
-    blackj_win = Toplevel(my_w)
-    blackj_win.geometry("700x500")
-    blackj_win.title("Blackjack")
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    playerTable = manager.getPlayerTable()
-    
+    remplayer_win = Toplevel(my_w)
+    remplayer_win.geometry("700x500")
+    remplayer_win.title("Remove Player")
+    # inputTxt = tk.Text(remplayer_win,height=20,width=80).grid(row=1,column=2)
+
+    # text = tk.Label(remplayer_win ,manager.getPlayerTable()).grid()
+    print(manager.getPlayerTable())
+    print(len(manager.getPlayerTable()))
+    for x in range(len(manager.getPlayerTable())):
+        print(manager.getPlayerTable()[x])
+        print(type(manager.getPlayerTable()[x]))
+        label = tk.Label(remplayer_win, text=str(manager.getPlayerTable()[x])).grid(row = x, column = 0)
+
+
 
     
 
@@ -209,7 +217,7 @@ def blackJack():
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     print(os.path.abspath(__file__))
-    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
 
