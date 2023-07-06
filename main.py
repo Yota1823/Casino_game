@@ -5,10 +5,8 @@ import sys
 import os
 import sqlite3 
 import os.path
-from subprocess import Popen
-import importlib
 
-
+import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
@@ -34,18 +32,22 @@ class User:
 
 class Player(User):
     
-    def __init__(self,fName,lName,uName,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
+    def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
         User.__init__(self,fName,lName,uName)
+        
+        self.creditAmount = pCredit
         self.moneyMade = pMoneyMade
         self.moneyLost = pMoneyLost
         self.currentGame = currGame
         self.winCount = pWin
         self.lossCount = pLoss
-        #self.creditAmount = pCredit
 
+
+
+    def createPlayer(self):
         cur.execute("INSERT INTO Player VALUES('"+self.user+"','"+self.name+"','"+self.last+"',"+
-                    self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
-                    self.lossCount+");")#","+self.creditAmount+");")
+                self.creditAmount+","+self.moneyMade+","+self.moneyLost+",'"+self.currentGame+"',"+self.winCount+","+
+                self.lossCount+");")#","+self.creditAmount+");")
 
 
 
@@ -63,8 +65,16 @@ class Player(User):
         return self.creditAmount
     
 class Manager(User):
-    def __init__(self):
-        pass
+    def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
+                 totalPlayerMoney,currGame,hitListStatus):
+        self.manUN = manUserN
+        self.pUN = pUserN
+        self.pMM = pMoneyMade
+        self.pML = pMoneyLost
+        self.totalCasinoM = totalCasinoMoney
+        self.totalPlayerM = totalPlayerMoney
+        self.currGame = currGame
+        self.hitLS = hitListStatus
     def removePlayer(userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
 
@@ -118,7 +128,6 @@ b2.grid(row=5,column=1)
 def my_login(first):
     print("doing the login stuff")
 
-
     statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
     cur.execute(statement)
     if not cur.fetchone():  # An empty result evaluates to False.
@@ -138,17 +147,29 @@ def create(first,last,user):
     else:
         print("Welcome")
         p = Player(first,last,user,"0","0","0","0","0")
+        p.createPlayer()
         con.commit()
     
-def gameScreen(): #Pass player
+def gameScreen(player,status): #Pass player
     game_window = Toplevel(my_w)
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
-    b1 = tk.Button(game_window, text=' Blackjack ',command= blackJack).grid(row=0,column=0)
+
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    #balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    if status == 'Y':
+        b6 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+    else:
+        balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+
+    b7 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+
+    
 
 def blackJack():
 
@@ -158,15 +179,7 @@ def blackJack():
     blackj_win.title("Blackjack")
 
     #Create Text box and run games through textbox
-    inputTxt = tk.Text(blackj_win,height=20,width=80)
-    inputTxt.grid(row=1,column=2)
-    
-    current_dir = os.path.dirname(os.path.abspath("blackjack.py"))
-    game_dir = os.path.join(current_dir, 'game')
-    sys.path.append(game_dir)
-    
-    from Games.blackjack import main
-    
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
 
 
 

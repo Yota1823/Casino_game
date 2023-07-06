@@ -158,13 +158,13 @@ class Game:
         third_draws = []
         if self._punto.draw_third():
             self._punto.add_cards(self._shoe.draw_cards(1))
-            third_draws.append(['punto', self._punto.cards[2].__str__()])
+            third_draws.append(['player', self._punto.cards[2].__str__()])
             if self._banco.draw_third(self._punto.cards[2]):
                 self._banco.add_cards(self._shoe.draw_cards(1))
-                third_draws.append(['banco', self._banco.cards[2].__str__()])
+                third_draws.append(['banker', self._banco.cards[2].__str__()])
         elif self._banco.draw_third():
             self._banco.add_cards(self._shoe.draw_cards(1))
-            third_draws.append(['banco', self._banco.cards[2].__str__()])
+            third_draws.append(['banker', self._banco.cards[2].__str__()])
         self._game_running = False
         return third_draws
 
@@ -180,9 +180,9 @@ class Game:
         if self._game_running:
             raise GameError('Game is running.')
         if self._punto.value > self._banco.value:
-            return 'punto'
+            return 'player'
         elif self._punto.value < self._banco.value:
-            return 'banco'
+            return 'banker'
         else:
             return 'tie'
 
@@ -294,4 +294,8 @@ class Table(Game):
         return self._players[player_i].__str__()
 
 class GameError(Exception):
+    pass
+class TypeError(Exception):
+    pass
+class ValueError(Exception):
     pass
