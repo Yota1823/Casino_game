@@ -180,6 +180,13 @@ def blackJack():
 
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    
+    blackjack_dir = os.path.casinoname(os.path.abspath(__file__))
+    game_dir = os.path.join(blackjack_dir, 'Games')
+    sys.path.append(game_dir)
+
+    # Import the specific functions or classes from the blackjack module
+    from Games.blackjack import main
 
 
 
