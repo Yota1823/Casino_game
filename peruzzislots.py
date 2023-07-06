@@ -2,7 +2,7 @@ import sqlite3
 import random
 import sys
 
-pbalance = 0
+# pbalance = 0
 balance = 1000
 balance == int(balance)
 winnings = 0
@@ -68,7 +68,8 @@ def spinning(reels, betamount):
         winnings = int(balance) - int(betamount)
         print("Bad luck! Maybe next time you'll win! Your remaining cash is $", winnings)
         print(winnings)
-    return reels
+    balance = winnings
+    return reels,winnings
 
 # If you have no money
 def rebalance(startagain):        
@@ -84,6 +85,7 @@ def rebalance(startagain):
 # Leads to Bet input check. 
 def my_mainloop():
     global balance
+    
     while True:
         Validbet = False
         while Validbet == False:
@@ -103,7 +105,7 @@ def my_mainloop():
 
             reels = [reelone, reeltwo, reelthree]
             print("\n",reels,"\n")
-            slotspin = spinning(reels, betamount)
+            slotspin,c_win = spinning(reels, betamount)
 
 
 # Leads to Ask input check. (At the bottom due to program order)
@@ -112,19 +114,19 @@ def my_mainloop():
             answerinput = input("Would you like to play again?: ")
             validask = askinputcheck(answerinput)
         if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
-            # startagain = True
-            print("You have $", winnings)
+            startagain = True
+            print("You have $", c_win)
             pass
         elif answerinput == "No" or answerinput == "no" or answerinput == "n":
-            # startagain = False
+            startagain = False
             balance = winnings
-            print("You ended the game with", winnings)
+            print("You ended the game with", c_win)
             break
         else:
             print("This is an incorrect input, please answer yes or no.")
 
         # Leads to rebalance
-        if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance == 0:
+        if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance <= 0:
             break
 
 if __name__ == "__main__":
