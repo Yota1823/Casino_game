@@ -6,7 +6,7 @@ import random
 
 
 class Roulette(tk.Tk):
-    def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin):
+    def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin, casinoMoney):
         self.userMoney = userMoney
         self.pLastName = pLastName
         self.pFirstName = pFirstName
@@ -15,6 +15,8 @@ class Roulette(tk.Tk):
         self.pMoneyLost = pMoneyLost
         self.pLost = pLost
         self.pWin = pWin
+        self.currGame = 'Roulette'
+        self.casinoMoney = casinoMoney
         self.odd = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
         self.even = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
         self.red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36]
@@ -41,7 +43,7 @@ class Roulette(tk.Tk):
         self.roll_number = tkinter.Label(width=2, height=4, bg="white", font="Times 35 bold")
         self.roll_number.place(x=450, y=150)
         # display user bet amount
-        self.bet_amount = Label(text="", bg="gray", fg="white", font="Times 25 bold")
+        self.bet_amount = Label(text="0", bg="gray", fg="white", font="Times 25 bold")
         self.bet_amount.place(x=110, y=100)
 
     # get bet option from user
@@ -148,11 +150,14 @@ class Roulette(tk.Tk):
                                         "\nNew balance: $" + str(self.userMoney))
 
     def end(self):
-        tkinter.messagebox.showinfo("User Summary", "Player username: \t" + self.pUserName +
+        self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
+        tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + self.pUserName +
                                     "\n\nPlayer Name: \t" + self.pLastName + " " + self.pFirstName +
+                                    "\n\nCurrent Game: \t" + self.currGame +
                                     "\n\nPlayer Balance: \t$" + str(self.userMoney) +
                                     "\n\nPlayer Made: \t$" + str(self.pMoneyMade) +
                                     "\n\nPlayer Lost: \t$" + str(self.pMoneyLost) +
+                                    "\n\nCasino Money: \t$" + str(self.casinoMoney) +
                                     "\n\nPlayer Total Win: \t" + str(self.pWin) +
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
         self.destroy()
@@ -287,5 +292,5 @@ class Roulette(tk.Tk):
 
 
 
-p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0)
+p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
 p1.mainloop()
