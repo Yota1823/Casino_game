@@ -100,14 +100,13 @@ l1 = tk.Label(my_w,  textvariable=my_str )
 l1.grid(row=1,column=1)
 my_str.set("Welcome to the WIT Casino")
 tk.Label(my_w, text="Username").grid(row=2, column=2)
-tk.Label(my_w, text="Password").grid(row=3, column=2)
+
 
 
 input1 = tk.Entry(my_w)
-input2 = tk.Entry(my_w)
 
 input1.grid(row=2, column=1)
-input2.grid(row=3, column=1)
+
 
 # add one button
 b1 = tk.Button(my_w, text='Create New User',
@@ -209,18 +208,13 @@ def blackJack():
 
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    
-    blackjack_dir = os.path.casinoname(os.path.abspath(__file__))
-    game_dir = os.path.join(blackjack_dir, 'Games')
-    sys.path.append(game_dir)
+    print(os.path.abspath(__file__))
+    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
 
     # Import the specific functions or classes from the blackjack module
     from Games.blackjack import main
-
-
-
-
-
 
 
 
