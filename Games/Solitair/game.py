@@ -1,41 +1,47 @@
+from card import Solitair_card
+from Deck import Dek
+from Waste_pile import Waste
+from Foundation import foundation
+from Table import Tableau
 
-# class Tableau():
-# 	# Class that keeps track of the seven piles of cards on the Tableau
+Card_Deck=Dek(2)
+Table_Card=Card_Deck.deal_c(28)
+Table_foundation=Tableau(Table_Card)
+Waste_card=Card_Deck.deal_c(28)
+Waste_foundation=Waste(Waste_card)
+Stock_length=Waste_foundation.get_stock()
+Waste_length=Waste_foundation.get_waste()
+print("{}\t{}".format(Stock_length, Waste_length))
+Table_foundation.display_unfipped()
+Table_foundation.display_c()
 
-# 	def __init__(self, card_list):
-# 		self.unflipped = {x: card_list[x] for x in range(7)}
-# 		self.flipped = {x: [self.unflipped[x].pop()] for x in range(7)}
-
-# 	def flip_card(self, col):
-# 		""" Flips a card under column col on the Tableau """
-# 		if len(self.unflipped[col]) > 1:
-# 			self.flipped[col].append(self.unflipped[col].pop())
-
-# 	def pile_length(self):
-# 		""" Returns the length of the longest pile on the Tableau """
-# 		return max([len(self.flipped[x]) + len(self.unflipped[x]) for x in range(7)])
-
-	 
-
-	
+while(1):
     
-# card_list=[
-#     ['4 Heart'],
-#     ['5 Heart'],
-#     ['7 Spade'],
-#     ['10 Club'],
-#     ['4 Spade'],
-#     ['11 Spade'],
-#     ['6 Club'],
-#     ['4 Club']
-# ]
-
-# Test_Table= Tableau(card_list)
-# Test_Table.flip_card(0)
-# Test_Table.flip_card(1)
-# pile = Test_Table.pile_length()
-# print(pile)
-
-
-
-
+    if len(Waste_foundation.waste)==0:
+        Waste_foundation.stock_waste()
+    else:
+        print(f"Waste_card {Waste_foundation.waste[-1]}")
+    command=input("Enter a command: ")
+    if command=="1":
+        value1=input("Enter column 1 : ")
+        val1=int(value1)
+        value2=input("Enter column 2 : ")
+        val2=int(value2)
+        index=input("Enter an index : ")
+        i=int(index)
+        test1=Table_foundation.add_C_T(val1,val2,i)
+        if test1:
+            print(f"Card has been succefully moved from {val1} to {val2}")
+        else:
+            print(" Card couldn't be moved ")
+    elif command=="2":
+        Value=input("Enter a column from 0 to 6 : ")
+        Val=int(Value)
+        test2=Table_foundation.add_W_T(Waste_foundation,Val)
+        if test2:
+            print(f"{Waste_foundation.waste[-1]} has succesfully been moved from waste to {Val} ")
+        else:
+            print(" This move couldn't be made ")
+    print("{}\t{}".format(Stock_length, Waste_length))
+    Table_foundation.display_unfipped()
+    Table_foundation.display_c()

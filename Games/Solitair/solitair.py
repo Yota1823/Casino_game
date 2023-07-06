@@ -231,44 +231,44 @@ if __name__ == "__main__":
     print("Welcome to Danny's Solitaire!\n")
     printValidCommands()
     printTable(t, f, sw)
-
-    while not f.gameWon():
-    	command = input("Enter a command (type 'h' for help): ")
-    	command = command.lower().replace(" ", "")
-    	if command == "h":
-    		printValidCommands()
-    	elif command == "q":
+ 
+while not f.gameWon():
+    command = input("Enter a command (type 'h' for help): ")
+    command = command.lower().replace(" ", "")
+    if command == "h":
+    	 printValidCommands()
+    elif command == "q":
     		print("Game exited.")
     		break
-    	elif command == "mv":
+    elif command == "mv":
     		if sw.stock_to_waste():
     			printTable(t, f, sw)
-    	elif command == "wf":
+    elif command == "wf":
     		if f.addCard(sw.getWaste()):
     			sw.pop_waste_card()
     			printTable(t, f, sw)
     		else:
     			print("Error! No card could be moved from the Waste to the Foundation.")
-    	elif "wt" in command and len(command) == 3:
+    elif "wt" in command and len(command) == 3:
     		col = int(command[-1]) - 1
     		if t.waste_to_tableau(sw, col):
     			printTable(t, f, sw)
     		else:
     			print("Error! No card could be moved from the Waste to the Tableau column.")
-    	elif "tf" in command and len(command) == 3:
+    elif "tf" in command and len(command) == 3:
     		col = int(command[-1]) - 1
     		if t.tableau_to_foundation(f, col):
     			printTable(t, f, sw)
     		else:
     			print("Error! No card could be moved from the Tableau column to the Foundation.")
-    	elif "tt" in command and len(command) == 4:
+    elif "tt" in command and len(command) == 4:
     		c1, c2 = int(command[-2]) - 1, int(command[-1]) - 1
     		if t.tableau_to_tableau(c1, c2):
     			printTable(t, f, sw)
     		else:
     			print("Error! No card could be moved from that Tableau column.")
-    	else:
+    else:
     		print("Sorry, that is not a valid command.")
 
     if f.gameWon():
-    	pri
+    	print("Congratulations! You've won!")

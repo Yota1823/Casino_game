@@ -1,5 +1,5 @@
 from card import Solitair_card
-class Foundation:
+class foundation:
     def __init__(self):
         self.foundation={
             "Club":[],
