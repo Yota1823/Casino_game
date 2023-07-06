@@ -126,16 +126,36 @@ b2.grid(row=5,column=1)
 # input2 = tk.Entry(window)
 
 def my_login(first):
-    print("doing the login stuff")
+    print("doing the login ")
 
-    statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
-    cur.execute(statement)
+    statement = f"SELECT managerUserName from Manager WHERE managerUserName='{first}';"
+    output = cur.execute(statement)
     if not cur.fetchone():  # An empty result evaluates to False.
-         print("Login failed")
+         
+         statement = f"SELECT playerUserName from Player WHERE playerUserName='{first}';"
+         cur.execute(statement)
+         if not cur.fetchone():  # An empty result evaluates to False.
+            print("Login failed")
+         else:
+            print("Welcome")
+
+            cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
+            playerData = cur.fetchall()
+            p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
+                   playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
+        
+        
+            gameScreen(p,'N')
+         
     else:
-        print("Welcome")
-        #p = Player(first,last,user,"0","0","0","0","0")
-        gameScreen()
+        print("Welcome Manager")
+        cur.execute(f"SELECT * from Manager WHERE managerUserName='{first}';")
+        managerData = cur.fetchall()
+        m = Manager(managerData[0][0],managerData[0][1],managerData[0][2],managerData[0][3],managerData[0][4],
+                    managerData[0][5],managerData[0][6],managerData[0][7])
+        gameScreen(m,'Y')
+
+    
 
 def create(first,last,user):
     print("database creating things")
@@ -160,14 +180,23 @@ def gameScreen(player,status): #Pass player
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
-    #balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
+    b6 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
     if status == 'Y':
-        b6 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+        b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+        b8 = tk.Button(game_window,text=' Remove Player ',command= removePlayer(player)).grid(row=6,column=0)
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
-    b7 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+    b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+
+def removePlayer(manager):
+    blackj_win = Toplevel(my_w)
+    blackj_win.geometry("700x500")
+    blackj_win.title("Blackjack")
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    playerTable = manager.getPlayerTable()
+    
 
     
 
