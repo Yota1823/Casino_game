@@ -75,8 +75,9 @@ class Manager(User):
         self.totalPlayerM = totalPlayerMoney
         self.currGame = currGame
         self.hitLS = hitListStatus
-    def removePlayer(userName):
+    def removePlayer(self, userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
+        con.commit()
 
     def getPlayerTable(self):
         cur.execute("SELECT * FROM Player")
@@ -201,11 +202,12 @@ def removePlayer(manager):
     for x in range(len(manager.getPlayerTable())):
         print(manager.getPlayerTable()[x])
         print(type(manager.getPlayerTable()[x]))
+        name = str(manager.getPlayerTable()[x][0])
         label = tk.Label(remplayer_win, text=str(manager.getPlayerTable()[x])).grid(row = x, column = 0)
+        button = tk.Button(remplayer_win, text="Remove " + name, command=lambda:manager.removePlayer(str(manager.getPlayerTable()[x][0]))).grid(row=x, column=1)
+        print((manager.getPlayerTable()[x][0]))
 
 
-
-    
 
 def blackJack():
 
@@ -260,14 +262,8 @@ def my_open():
 
 
 
-
-
-
 def main():
     my_w.mainloop()
-    
-    
-
     
 
 
