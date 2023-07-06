@@ -2,7 +2,7 @@ import sqlite3
 import random
 import sys
 
-
+pbalance = 0
 balance = 1000
 balance == int(balance)
 winnings = 0
@@ -47,22 +47,22 @@ def spinning(reels, betamount):
         winnings = int(balance) + int(betamount) * 10
         print("You won 10 times your money! Congragulations! This is how much your account contains $", winnings)
     elif reelone[0] == "wit shield" and reeltwo[0] == "wit shield" and reelthree[0] == "wit shield":
-        winnings = int(balance) + int(betamount) * 25
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 25
         print("You won 25 times your money! Awesome! Your balance and wins are $", winnings)
     elif reelone[0] == "W lines" and reeltwo[0] == "W lines" and reelthree[0] == "W lines":
-        winnings = int(balance) + int(betamount) * 50
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 50
         print("You won 50 times your money! This is all of your money total $", winnings)
     elif reelone[0] == "Big W" and reeltwo[0] == "Big W" and reelthree[0] == "Big W":
-        winnings = int(balance) + int(betamount) * 75
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 75
         print("You won 75 times your money! You rewards are $", winnings)
     elif reelone[0] == "7" and reeltwo[0] == "7" and reelthree[0] == "7":
-        winnings = int(balance) + 1000000
+        winnings = (int(balance) - int(betamount)) + 1000000
         print("You  the ulimate Jackpot! You rewards are $", winnings)
     elif reelone[0] == "7" and (reeltwo[0] == "7" or reelthree[0] == "7"):
-        winnings = int(balance) - int(betamount) * 2
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 2
         print("You won 2 times your money! You rewards are $", winnings)
     elif (reelone[0] == "7" or reeltwo[0] == "7") and reelthree[0] == "7":
-        winnings = int(balance) - int(betamount) * 2
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 2
         print("You won 2 times your money! You rewards are $", winnings)
     else:
         winnings = int(balance) - int(betamount)
@@ -72,14 +72,14 @@ def spinning(reels, betamount):
 
 # If you have no money
 def rebalance(startagain):        
-    while balance < 1 and startagain == True:
-        unbalance = True
-        balance = winnings
-        print("You ran out of money, go refill at main screen")
-    else:
-        unbalance = False
-        print("You still have money.")
-        return winnings
+     while balance < 1 and startagain == True:
+         unbalance = True
+         print(winnings)
+         print("You ran out of money, go refill at main screen")
+     else:
+         unbalance = False
+         print("You still have money.")
+         return winnings
 
 # Leads to Bet input check. 
 def my_mainloop():
@@ -112,20 +112,20 @@ def my_mainloop():
             answerinput = input("Would you like to play again?: ")
             validask = askinputcheck(answerinput)
         if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
-            startagain = True
-            print("You have $", balance)
+            # startagain = True
+            print("You have $", winnings)
             pass
         elif answerinput == "No" or answerinput == "no" or answerinput == "n":
-            startagain = False
+            # startagain = False
             balance = winnings
-            print("You ended the game with", balance)
+            print("You ended the game with", winnings)
             break
         else:
             print("This is an incorrect input, please answer yes or no.")
 
         # Leads to rebalance
         if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance == 0:
-            balance = rebalance(startagain)
+            break
 
 if __name__ == "__main__":
     my_mainloop()
