@@ -63,7 +63,7 @@ class Player():
     """
     Class that defines a Player that starts with $100 to bet
     """
-
+    
     def __init__(self, hand=[], bet=0, score=0, money=100):
         # Hand should be a list of the cards taken from the deck
         self.hand = hand
@@ -131,6 +131,19 @@ class Player():
         Function that calculates the total amount of money after a loss
         """
         self.money -= lost_amount
+        
+    @staticmethod
+    def get_player_data():
+        """
+        Static method to retrieve player data from the database
+        """
+        conn = sqlite3.connect("Casino.db") 
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Player")
+        player_data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return player_data
 
 
 # ###################### Game's main functions ######################
@@ -173,9 +186,7 @@ def initial_deal(player1, shuffled_deck):
 def deal_dealers_hand():
     """Function that will simulate the dealers play once the player stands
     """
-    cur.execute("SELECT * FROM Player")
-    playerTable = cur.fetchall()
-    print(playerTable[playerUserName])
+
     
     print("[" + "'" + dealer.hand[0] + "'" + ", XX ]")
     time.sleep(1)
