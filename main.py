@@ -210,8 +210,8 @@ def blackJack():
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     print(os.path.abspath(__file__))
     blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
+    game_dir = os.path.join(blackjack_dir, 'Games')
+    sys.path.append(game_dir)
 
     # Import the specific functions or classes from the blackjack module
     from Games.blackjack import main

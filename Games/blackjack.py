@@ -1,7 +1,14 @@
 
 import os
 import time
+import sqlite3
+import os.path
+import subprocess
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "../Casino.db")
+con = sqlite3.connect(db_path)
+cur = con.cursor()
 
 class Deck():
     """
@@ -56,6 +63,7 @@ class Player():
     """
     Class that defines a Player that starts with $100 to bet
     """
+
     def __init__(self, hand=[], bet=0, score=0, money=100):
         # Hand should be a list of the cards taken from the deck
         self.hand = hand
@@ -165,6 +173,10 @@ def initial_deal(player1, shuffled_deck):
 def deal_dealers_hand():
     """Function that will simulate the dealers play once the player stands
     """
+    cur.execute("SELECT * FROM Player")
+    playerTable = cur.fetchall()
+    print(playerTable[playerUserName])
+    
     print("[" + "'" + dealer.hand[0] + "'" + ", XX ]")
     time.sleep(1)
     print(dealer.hand)
