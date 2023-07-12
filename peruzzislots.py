@@ -2,29 +2,31 @@ import sqlite3
 import random
 import sys
 
-
-balance = int(1000)
-winnings = int(0)
+# pbalance = 0
+balance = 1000
+balance == int(balance)
+winnings = 0
+winnings == int(winnings)
 
 Symbols = ["Leopard", "wit shield", "W lines", "Big W", "7"]
 
-# Subroutines:  Checking the Bet input and amount
+# Checking the Bet input and amount
 def betcheck(betamount):
     if betamount.isdigit() == True:
         betamount = int(betamount)
         rightbet = True
     else: 
         rightbet = False
-        "Please enter a whole number, no decimals and a bet on or below the balance."
+        print("Please enter a whole number, no decimals and a bet on or below the balance.")
     return rightbet
 
 # Limiting the bet
 def betlimit(betamount):
-    if betamount > balance == False:
-        goodlimit = False
-        "That bet is too high!"
+    if betamount > balance:
+        goodlimit = balance
+        print("That bet is too high! Bet adjusted to ", goodlimit)
     else:
-        goodlimit = True
+        goodlimit = betamount
     return goodlimit
 
 # Checking the 'Ask' input to play the machine.
@@ -37,98 +39,98 @@ def askinputcheck(answerinput):
     return rightanswerinput
 
 # Printing and sorting symbols.
-def spinning(reels):
+def spinning(reels, betamount):
+    reelone, reeltwo, reelthree = reels[0], reels[1], reels[2]
     global balance
-    if reelone == "Leopard" and reeltwo == "Leopard" and reelthree == "Leopard":
-        winnings = int(betamount) + int(balance) * 10
-        "You won 10 times your money! Congragulations! This is how much your account contains $", winnings
-    elif reelone == "wit shield" and reeltwo == "wit shield" and reelthree == "wit shield":
-        winnings = int(betamount) + int(balance) * 25
-        "You won 25 times your money! Awesome! Your balance and wins are $", winnings
-    elif reelone == "W lines" and reeltwo == "W lines" and reelthree == "W lines":
-        winnings = int(betamount) + int(balance) * 50
-        "You won 50 times your money! This is all of your money total $", winnings
-    elif reelone == "Big W" and reeltwo == "Big W" and reelthree == "Big W":
-        winnings = int(balance) + int(betamount) * 75
-        "You won 75 times your money! You rewards are $", winnings
-    elif reelone == "7" and reeltwo == "7" and reelthree == "7":
-        winnings = int(balance) + 100000
-        "You  the ulimate Jackpot! You rewards are $", winnings
-    elif reelone == "7" and (reeltwo == "7" or reelthree == "7"):
-        winnings = int(balance) + int(betamount) * 2
-        "You won 2 times your money! You rewards are $", winnings
-    elif (reelone == "7" or reeltwo == "7") and reelthree == "7":
-        winnings = int(balance) + int(betamount) * 2
-        "You won 2 times your money! You rewards are $", winnings
+    winnings = 0
+    if reelone[0] == "Leopard" and reeltwo[0] == "Leopard" and reelthree[0] == "Leopard":
+        winnings = int(balance) + int(betamount) * 10
+        print("You won 10 times your money! Congragulations! This is how much your account contains $", winnings)
+    elif reelone[0] == "wit shield" and reeltwo[0] == "wit shield" and reelthree[0] == "wit shield":
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 25
+        print("You won 25 times your money! Awesome! Your balance and wins are $", winnings)
+    elif reelone[0] == "W lines" and reeltwo[0] == "W lines" and reelthree[0] == "W lines":
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 50
+        print("You won 50 times your money! This is all of your money total $", winnings)
+    elif reelone[0] == "Big W" and reeltwo[0] == "Big W" and reelthree[0] == "Big W":
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 75
+        print("You won 75 times your money! You rewards are $", winnings)
+    elif reelone[0] == "7" and reeltwo[0] == "7" and reelthree[0] == "7":
+        winnings = (int(balance) - int(betamount)) + 1000000
+        print("You  the ulimate Jackpot! You rewards are $", winnings)
+    elif reelone[0] == "7" and (reeltwo[0] == "7" or reelthree[0] == "7"):
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 2
+        print("You won 2 times your money! You rewards are $", winnings)
+    elif (reelone[0] == "7" or reeltwo[0] == "7") and reelthree[0] == "7":
+        winnings = (int(balance) - int(betamount)) + int(betamount) * 2
+        print("You won 2 times your money! You rewards are $", winnings)
     else:
         winnings = int(balance) - int(betamount)
-        "Bad luck! Maybe next time you'll win! Your remaining cash is $", winnings
-    return reels
+        print("Bad luck! Maybe next time you'll win! Your remaining cash is $", winnings)
+        print(winnings)
+    balance = winnings
+    return reels,winnings
 
 # If you have no money
-def rebalance(balance):        
-    while balance == 0 == True and startagain == True:
-        unbalance = True
-        balance = 1000
-        "You ran out of money, here is $1000"
-    else:
-        unbalance = False
-        "You still have money."
-        return unbalance
+def rebalance(startagain):        
+     while balance < 1 and startagain == True:
+         unbalance = True
+         print(winnings)
+         print("You ran out of money, go refill at main screen")
+     else:
+         unbalance = False
+         print("You still have money.")
+         return winnings
 
 # Leads to Bet input check. 
-Validbet = False
-while Validbet == False:
-    betamount = input("Please enter amount you wish to bet: ")
-    Validbet = betcheck(betamount)
+def my_mainloop():
+    global balance
+    
+    while True:
+        Validbet = False
+        while Validbet == False:
+            betamount = input("Please enter amount you wish to bet: ")
+            Validbet = betcheck(betamount)
 
-betamount = int(betamount)
+        betamount = int(betamount)
 
-# Leads to betlimit
-appropriatelimit = betlimit(betamount)
+        # Leads to betlimit
+        betamount = betlimit(betamount)
 
-# RandomSymbolGen + 3 reels
-reelone = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
-reeltwo = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
-reelthree = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
+        # RandomSymbolGen + 3 reels
+        if betamount > 0:
+            reelone = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
+            reeltwo = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
+            reelthree = random.sample(["7", "Big W", "Big W", "W lines", "W lines", "W lines", "wit shield", "wit shield", "wit sheild", "leopard", "leopard", "leopard"],1)
 
-reels = [reelone, reeltwo, reelthree]
+            reels = [reelone, reeltwo, reelthree]
+            print("\n",reels,"\n")
+            slotspin,c_win = spinning(reels, betamount)
 
-slotspin = spinning(reels)
-
-reels
 
 # Leads to Ask input check. (At the bottom due to program order)
-validask = False
-while validask == False:
-    answerinput = input("Would you like to play again?: ")
-    validask = askinputcheck(answerinput)
+        validask = False
+        while validask == False:
+            answerinput = input("Would you like to play again?: ")
+            validask = askinputcheck(answerinput)
+        if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
+            startagain = True
+            print("You have $", c_win)
+            pass
+        elif answerinput == "No" or answerinput == "no" or answerinput == "n":
+            startagain = False
+            balance = winnings
+            print("You ended the game with", c_win)
+            break
+        else:
+            print("This is an incorrect input, please answer yes or no.")
 
-# Leads to restart    
-startagain = False
-while startagain == False:
-    startagain = answerinput
+        # Leads to rebalance
+        if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance <= 0:
+            break
 
-while True: 
-    if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
-        startagain = True
-        balance = int(winnings) + int(balance)
-        "You have $", balance
-        pass
-    elif answerinput == "No" or answerinput == "no" or answerinput == "n":
-        startagain = False
-        balance = winnings
-        "You ended the game with", balance
-        break
-    else:
-        "This is an incorrect input, please answer yes or no."
-
-
-# Leads to rebalance
-if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance == 0:
-    balance = rebalance(balance)
-
-
+if __name__ == "__main__":
+    my_mainloop()
 
 
     
