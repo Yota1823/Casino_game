@@ -151,13 +151,13 @@ class Roulette(tk.Tk):
 
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
+        print(f'Casino Money: ${self.casinoMoney}')
         tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + self.pUserName +
                                     "\n\nPlayer Name: \t" + self.pLastName + " " + self.pFirstName +
                                     "\n\nCurrent Game: \t" + self.currGame +
                                     "\n\nPlayer Balance: \t$" + str(self.userMoney) +
                                     "\n\nPlayer Made: \t$" + str(self.pMoneyMade) +
                                     "\n\nPlayer Lost: \t$" + str(self.pMoneyLost) +
-                                    "\n\nCasino Money: \t$" + str(self.casinoMoney) +
                                     "\n\nPlayer Total Win: \t" + str(self.pWin) +
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
         self.destroy()
@@ -291,6 +291,6 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
 
 
-
+# create player for testing
 p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
 p1.mainloop()
