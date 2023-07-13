@@ -7,7 +7,6 @@ import sqlite3
 import os.path
 
 import subprocess
-from Games.Roulette_UI import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
@@ -232,6 +231,9 @@ def blackJack():
 def open_roulette():
     print("Open Roulette Game")
     # (self, pUserName, pFirstName, pLastName, userMoney, pMoneyMade, pMoneyLost, currGame, pWin, pLost)
+    from Games.Roulette_UI import mainloop
+    p.mainloop()
+    
     
 
 
