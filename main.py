@@ -5,6 +5,8 @@ import sys
 import os
 import sqlite3 
 import os.path
+import Games
+
 
 import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -75,15 +77,16 @@ class Manager(User):
         self.totalPlayerM = totalPlayerMoney
         self.currGame = currGame
         self.hitLS = hitListStatus
-    def removePlayer(userName):
+    def removePlayer(self, userName):
         cur.execute("DELETE FROM Player WHERE playerUserName='"+userName+"';")
+        con.commit()
 
-    def getPlayerTable():
+    def getPlayerTable(self):
         cur.execute("SELECT * FROM Player")
         playerTable = cur.fetchall()
         return playerTable
 
-    def getStatTable():
+    def getStatTable(self):
         cur.execute("SELECT * FROM Statistics")
         statTable = cur.fetchall()
         return statTable
@@ -111,11 +114,11 @@ input1.grid(row=2, column=1)
 # add one button
 b1 = tk.Button(my_w, text='Create New User',
                command=lambda:my_open())
-b1.grid(row=4,column=1)
+b1.grid(row=5,column=1)
 
 b2 = tk.Button(my_w, text='Login',
                command=lambda:my_login(input1.get()))
-b2.grid(row=5,column=1)
+b2.grid(row=4,column=1)
 
 #window = Tk()
 #mainWindow = Tk()
@@ -165,7 +168,7 @@ def create(first,last,user):
         
     else:
         print("Welcome")
-        p = Player(first,last,user,"0","0","0","0","0")
+        p = Player(first,last,user,"500","0","0","0","0","0")
         p.createPlayer()
         con.commit()
     
@@ -177,27 +180,36 @@ def gameScreen(player,status): #Pass player
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
-    b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
     b6 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
-        b8 = tk.Button(game_window,text=' Remove Player ',command= removePlayer(player)).grid(row=6,column=0)
+        b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
     b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
 def removePlayer(manager):
-    blackj_win = Toplevel(my_w)
-    blackj_win.geometry("700x500")
-    blackj_win.title("Blackjack")
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    playerTable = manager.getPlayerTable()
-    
+    remplayer_win = Toplevel(my_w)
+    remplayer_win.geometry("700x500")
+    remplayer_win.title("Remove Player")
+    # inputTxt = tk.Text(remplayer_win,height=20,width=80).grid(row=1,column=2)
 
-    
+    # text = tk.Label(remplayer_win ,manager.getPlayerTable()).grid()
+    print(manager.getPlayerTable())
+    print(len(manager.getPlayerTable()))
+    for x in range(len(manager.getPlayerTable())):
+        print(manager.getPlayerTable()[x])
+        print(type(manager.getPlayerTable()[x]))
+        name = str(manager.getPlayerTable()[x][0])
+        label = tk.Label(remplayer_win, text=str(manager.getPlayerTable()[x])).grid(row = x, column = 0)
+        button = tk.Button(remplayer_win, text="Remove " + name, command=lambda:manager.removePlayer(str(manager.getPlayerTable()[x][0]))).grid(row=x, column=1)
+        print((manager.getPlayerTable()[x][0]))
+
+
 
 def blackJack():
 
@@ -215,12 +227,13 @@ def blackJack():
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
+    main()
 
 
 def slots():
     slots = Toplevel(my_w)
     slots.geometry("700x500")
-    slots.title("Blackjack")
+    slots.title("Slots")
 
     #Create Text box and run games through textbox
     #print(os.path.abspath(__file__))
@@ -230,7 +243,8 @@ def slots():
 
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
-    from Games.blackjack import main
+    from peruzzislots import my_mainloop
+    my_mainloop()
 
 
 def my_open():
@@ -255,9 +269,9 @@ def my_open():
     l1 = tk.Label(my_w_child,  textvariable=my_str1 )
     l1.grid(row=1,column=2)
     my_str1.set("User Name")
-    l2 = tk.Label(my_w_child, text="Password")
+    l2 = tk.Label(my_w_child, text="First Name")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "User Name")
+    l3 = tk.Label(my_w_child, text= "Last Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
@@ -265,14 +279,8 @@ def my_open():
 
 
 
-
-
-
 def main():
     my_w.mainloop()
-    
-    
-
     
 
 
