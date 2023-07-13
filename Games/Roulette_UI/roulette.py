@@ -6,17 +6,19 @@ import random
 
 
 class Roulette(tk.Tk):
-    def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin, casinoMoney):
-        self.userMoney = userMoney
-        self.pLastName = pLastName
-        self.pFirstName = pFirstName
+    # parameter to create player object (self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss)
+    def __init__(self, pUserName, pFirstName, pLastName, userMoney, pMoneyMade, pMoneyLost, currGame, pWin, pLost):
         self.pUserName = pUserName
+        self.pFirstName = pFirstName
+        self.pLastName = pLastName
+        self.userMoney = userMoney
         self.pMoneyMade = pMoneyMade
         self.pMoneyLost = pMoneyLost
+        self.currGame = currGame
         self.pLost = pLost
         self.pWin = pWin
-        self.currGame = 'Roulette'
-        self.casinoMoney = casinoMoney
+
+        self.casinoMoney = 1000
         self.odd = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
         self.even = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
         self.red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36]
