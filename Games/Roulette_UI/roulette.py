@@ -32,7 +32,7 @@ class Roulette(tk.Tk):
         self.resizable(width=False, height=False)
 
         # Table image
-        self.photo = PhotoImage(file="table.png")
+        self.photo = PhotoImage(file="Games/Roulette_UI/table.png")
         Label(image=self.photo).place(relx=1, rely=1, anchor=SE)
         # button layout
         self.buttons()
