@@ -132,11 +132,22 @@ class Tableau:
          card6=self.flip[5][i] if i<t6 else ""
          card7=self.flip[6][i] if i<t7 else ""
          print(f"{card1}   {card2}   {card3}   {card4}   {card5}   {card6}   {card7}")
-        # for card in self.flip[col]:
-          
-        #       print(card.suit,card.value)
-        # print("////////////")
-        # print("\n")
+        
+    def table_check(self,t1,t2):
+        T=len(self.unfliped[t1])
+        T2=len(self.unfliped[t2])
+        print(f"Column {t1}")
+        print(f"Length: {T}")
+        for card in self.flip[T]:
+            print(f"{card.value}:{card.suit}")
+        print("\t")
+        print(f"Column {t2}")
+        print(f"Length : {T2}")
+        print("\t")
+        for card in self.flip[T2]:
+            print(f"{card.value}:{card.suit}")
+            
+
         
         
          
