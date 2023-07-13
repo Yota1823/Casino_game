@@ -61,27 +61,27 @@ C2=[card3,card2,card1]
 test3= C[0].Attach(C2[-1])
 # print(test)
 # print(test2)
-print(test3)
-print("\t")
+# print(test3)
+# print("\t")
 
-for i in range (max (len(C),len (C2))):
-    card=C[i] if i<len(C) else ""
-    card3=C2[i] if i<len(C2) else ""
-    card4=C[i] if i<len(C) else ""
-   # print("{}\t{}\t{}\t".format(card1,card3,card4))
+# for i in range (max (len(C),len (C2))):
+#     card=C[i] if i<len(C) else ""
+#     card3=C2[i] if i<len(C2) else ""
+#     card4=C[i] if i<len(C) else ""
+#    # print("{}\t{}\t{}\t".format(card1,card3,card4))
 
-row=["Black","Yellow"]
-row2=["Red","Orange"]
-row3=["Green","Violet"]
-update='\n'.join(row)
-update2='\n'.join(row2)
-update3='\n'.join(row3)
+# row=["Black","Yellow"]
+# row2=["Red","Orange"]
+# row3=["Green","Violet"]
+# update='\n'.join(row)
+# update2='\n'.join(row2)
+# update3='\n'.join(row3)
 
-a="Light,Dark"
-b="Pale,Bright"
+# a="Light,Dark"
+# b="Pale,Bright"
 
-print(f"{update}") 
-print(f"{update}\t{update2}")
+# print(f"{update}") 
+
 
 
 
