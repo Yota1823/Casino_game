@@ -28,11 +28,11 @@ if Start==Player1.user_name:
     Card_cl=int(Player_card)
     Bet_round=input(f"After how many move will the {Table_foundation.flip[Card_cl][-1]} ")
     Round=int(Bet_round)
-    i=0
-    while(i<=Round):
-        i=0
+    j=0
+    while(j<=Round):
+        
         print(f"card bet on:{Table_foundation.flip[Card_cl][-1]}\n")
-        print(f'Round left : {i}')
+        print(f'Round left : {j}')
         if len(Waste_foundation.waste)==0:
             Waste_foundation.stock_waste()
         else:
@@ -48,7 +48,7 @@ if Start==Player1.user_name:
             test1=Table_foundation.add_C_T(val1,val2,i)
             if test1:
                 print(f"Card has been succefully moved from {val1} to {val2}")
-                i=i+1
+                j=j+1
                 Card_cl=val2
                 Table_foundation.table_check(val1,val2)
                 print("\t")
@@ -61,15 +61,16 @@ if Start==Player1.user_name:
             if test2:
                 print(f"{Waste_foundation.waste[-1]} has succesfully been moved from waste to {Val} ")
         elif command=="3":
-              Column=input("Enter a column :")
-              Col=int(Column)
-              card=Table_foundation.flip[Col][-1].suit
-              test3=Table_foundation.add_T_F(Foundation,Col)
+              
+              
+              card=Table_foundation.flip[Card_cl][-1].suit
+              test3=Table_foundation.add_T_F(Foundation,Card_cl)
             
               if test3:
                   card_value= Foundation.get_last_card(card)
                   print(card_value)
-                  i=i+1
+                  j=j+1
+                  
               else:
                  print(" Card couldn't be move to foundation ")
 
