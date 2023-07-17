@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import subprocess
 
 import sys
 import os
@@ -179,9 +180,9 @@ def gameScreen(player,status): #Pass player
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
-    b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
+    b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
-    b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
     b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
 
     if status == 'Y':
@@ -240,6 +241,21 @@ def slots():
     from peruzzislots import my_mainloop
     my_mainloop()
 
+def baccarat():
+    print(os.path.abspath(__file__))
+    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+
+
+def solitaire():
+    dir = os.path.join(BASE_DIR, "Games/Solitair/solitair.py")
+    game_dir = os.path.join(dir, 'Games/Solitair')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Solitair/solitair.py"])
 
 
 def my_open():
