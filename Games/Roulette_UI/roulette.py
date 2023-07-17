@@ -293,6 +293,7 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
 
 
-# create player for testing
-p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
-p1.mainloop()
+if __name__ == "__main__":
+    # create player for testing
+    p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
+    p1.mainloop()

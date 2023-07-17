@@ -142,6 +142,7 @@ def my_login(first):
 
             cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
             playerData = cur.fetchall()
+            global p 
             p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
                    playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
         
@@ -177,7 +178,7 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:open_roulette()).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
@@ -230,8 +231,9 @@ def blackJack():
 
 def open_roulette():
     print("Open Roulette Game")
+    print(os.path.abspath(__file__))
     # (self, pUserName, pFirstName, pLastName, userMoney, pMoneyMade, pMoneyLost, currGame, pWin, pLost)
-    from Games.Roulette_UI import mainloop
+    from Games.Roulette_UI import main_loop
     p.mainloop()
     
     
@@ -266,6 +268,7 @@ def my_open():
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
     b3.grid(row=4,column=1)
+
 
 
 
