@@ -7,7 +7,6 @@ import sqlite3
 import os.path
 
 import subprocess
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
@@ -51,7 +50,9 @@ class Player(User):
                 self.lossCount+");")#","+self.creditAmount+");")
 
 
-
+    def refillMoney(self):
+        self.creditAmount = self.creditAmount + 500
+        cur.execute("INSERT INTO Player pCredit('" +self.creditAmount+ "');")
     def getMoneyMade(self):
         return self.moneyMade
     def getMoneyLost(self):
@@ -142,7 +143,6 @@ def my_login(first):
 
             cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
             playerData = cur.fetchall()
-            global p 
             p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
                    playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
         
@@ -168,7 +168,7 @@ def create(first,last,user):
         
     else:
         print("Welcome")
-        p = Player(first,last,user,"0","0","0","0","0")
+        p = Player(first,last,user,"500","0","0","0","0","0")
         p.createPlayer()
         con.commit()
     
@@ -178,11 +178,11 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:open_roulette()).grid(row=1,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
-    b4 = tk.Button(game_window, text=' Slots ',command= 0).grid(row=3,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
-    b6 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+    b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
@@ -221,22 +221,25 @@ def blackJack():
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     print(os.path.abspath(__file__))
+
+    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    game_dir = os.path.join(blackjack_dir, 'Games')
+    sys.path.append(game_dir)
+
     # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
+
 
     # Import the specific functions or classes from the blackjack module
     from Games.blackjack import main
 
 
-def open_roulette():
-    print("Open Roulette Game")
+def slots():
     print(os.path.abspath(__file__))
-    # (self, pUserName, pFirstName, pLastName, userMoney, pMoneyMade, pMoneyLost, currGame, pWin, pLost)
-    from Games.Roulette_UI import main_loop
-    p.mainloop()
-    
-    
+    from peruzzislots import my_mainloop
+    my_mainloop()
+
 
 
 def my_open():
@@ -260,15 +263,14 @@ def my_open():
 
     l1 = tk.Label(my_w_child,  textvariable=my_str1 )
     l1.grid(row=1,column=2)
-    my_str1.set("User Name")
-    l2 = tk.Label(my_w_child, text="Password")
+    my_str1.set("Username")
+    l2 = tk.Label(my_w_child, text="Firstname")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "User Name")
+    l3 = tk.Label(my_w_child, text= "Lastname")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
     b3.grid(row=4,column=1)
-
 
 
 
