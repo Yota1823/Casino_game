@@ -18,7 +18,7 @@ class Roulette(tk.Tk):
         self.pLost = pLost
         self.pWin = pWin
 
-        self.casinoMoney = 1000
+        self.casinoMoney = 100000
         self.odd = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
         self.even = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
         self.red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36]
@@ -293,7 +293,7 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
 
 
-if __name__ == "__main__":
+def main():
     # create player for testing
     p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
     p1.mainloop()
