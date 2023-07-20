@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Games",
+    "\\Games\\Baccarat",
+    "\\Games\\Roulette_UI"
   ],
-  "SelectedNode": "\\Casino_project_Baccarat_game.sln",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }
