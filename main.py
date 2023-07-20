@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter as tk
 import subprocess
 
@@ -71,6 +72,7 @@ class Player(User):
     def getCredit(self):
         return self.creditAmount
     
+    
 class Manager(User):
     def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
                  totalPlayerMoney,currGame,hitListStatus):
@@ -134,35 +136,46 @@ b2.grid(row=4,column=1)
 
 def stats():
     stat_win = Toplevel(my_w)
-    stat_win.geometry("1000x1000")
+    stat_win.geometry("800x800")
     stat_win.title("Casino Statistics")
-    temp = f"SELECT total(moneyLost) FROM Statistics;" # Prints Sum of Money Lost Column
-    casino_money = cur.execute(temp)
-    casino_money = casino_money.fetchone()
-    temp = f"SELECT total(moneyMade) FROM Statistics;"
-    total_player = cur.execute(temp)
-    total_player = total_player.fetchone()
-    temp = f"SELECT max(moneyMade) FROM Statistics;"
-    biggest_win = cur.execute(temp)
-    biggest_win = biggest_win.fetchone()
-    temp = f"SELECT * FROM Statistics"
-    table = cur.execute(temp)
-    table = table.fetchall()
 
-    print(type(casino_money))
-    print(casino_money)
-    tk.Label(stat_win, text= "~~~Total Casino Money~~~").grid(row=0, column=0)
-    tk.Label(stat_win, text= str(casino_money[0])).grid(row=1,column=0)
-    tk.Label(stat_win, text= "~~~Total Player Winnings~~~").grid(row=0, column=1)
-    tk.Label(stat_win, text = str(total_player[0])).grid(row=1, column=1)
-    tk.Label(stat_win, text="~~~Today's Biggest Win~~~").grid(row=0, column=2)
-    tk.Label(stat_win, text=str(biggest_win[0])).grid(row=1, column=2)
-    # Trying to put into Tree
-    for row in table:
-        print(row)
+    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7","c8"), show='headings')
+    tree.column("#1",anchor=tk.CENTER)
+    tree.heading("#1",text="playerUserName")
 
-        tk.Treeview.insert("", tk.END, values=row)
+    tree.column("#2",anchor=tk.CENTER)
+    tree.heading("#2",text="gamePlayed")
 
+    tree.column("#3", anchor=tk.CENTER)
+    tree.heading("#3", text="buyInAmount")
+
+    tree.column("#4", anchor=tk.CENTER)
+    tree.heading("#4", text="totalMoneyBet")
+
+    tree.column("#5", anchor=tk.CENTER)
+    tree.heading("#5", text="MoneyMade")
+
+    tree.column("#6", anchor=tk.CENTER)
+    tree.heading("#6", text="moneyLost")
+
+    tree.column("#7", anchor=tk.CENTER)
+    tree.heading("#7", text="playerWin")
+
+    tree.column("#8", anchor=tk.CENTER)
+    tree.heading("#8", text="playerLoss")
+
+    tree.column("#8", anchor=tk.CENTER)
+    tree.heading("#8", text="timeStamp")
+
+    tree.pack()
+
+
+    cur.execute(f"SELECT * FROM Statistics;")
+    all_stats = cur.fetchall()
+
+    for stats in all_stats:
+        print(stats)
+        tree.insert("",tk.END,values=stats)
 
     con.commit()
 
@@ -219,7 +232,7 @@ def gameScreen(player,status): #Pass player
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette()).grid(row=1,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
@@ -304,19 +317,13 @@ def solitaire():
 
     subprocess.run(["python", "Games/Solitair/solitair.py"])
 
-def Roulette():
-    roulette_topWIN = tk.Tk()
-    #from Games.Roulette_UI.roulette import main_roulette
-    #main_roulette()
-    #my_w.destroy()
+def Roulette(player):
+    my_w.destroy()
     from Games.Roulette_UI.roulette import Roulette
-    p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000) ## CUSTOMIZE FOR USER 
-    p1.mainloop()
-    #p1.withdraw()
-
+    p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
     
-    #my_w = tk.Tk()
-
+    p1.mainloop()
     main()
 
 
