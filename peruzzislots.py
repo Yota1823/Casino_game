@@ -4,15 +4,15 @@ import sys
 
 @staticmethod
 
-def get_player_data():
-    """Static method to retrieve player data from the database"""
-    conn = sqlite3.connect("Casino.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM Player")
-    player_data = cur.fetchall()
-    cur.close()
-    conn.close()
-    return player_data
+# def get_player_data():
+#     """Static method to retrieve player data from the database"""
+#     conn = sqlite3.connect("Casino.db")
+#     cur = conn.cursor()
+#     cur.execute("SELECT * FROM Player")
+#     player_data = cur.fetchall()
+#     cur.close()
+#     conn.close()
+#     return player_data
 
 class Player:
     def __init__(self, playerUserName, playerFirstName, playerLastName, pCredit, pMadeMoney, pMoneyLost, pWin, pLoss, casinoMoney):
@@ -133,7 +133,7 @@ class Player:
 
                 reels = [reelone, reeltwo, reelthree]
                 print("\n",reels,"\n")
-                slotspin,c_win = spinning(reels, betamount)
+                slotspin,c_win = self.spinning(reels, betamount)
 
 
     # Leads to Ask input check. (At the bottom due to program order)
@@ -157,8 +157,14 @@ class Player:
             if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and pCredit <= 0:
                 break
 
-    if __name__ == "__main__":
-        my_mainloop()
+def main(): 
+    p = Player("scottha", "Scott", "Ha", 1000, 0, 0, 0, 0, 0) 
+
+    p.my_mainloop()
+if __name__ == "__main__":
+        
+
+    main()
 
 
     
