@@ -41,8 +41,8 @@ def start():
     global bet_money
     global pWin, pLost, p_money_lost, p_money_made
     # get random number for roll number
-    #roll_result = random.randint(0, 36)
-    roll_result = 1
+    roll_result = random.randint(0, 36)
+    #roll_result = 1
     # print(roll_result)
     # display the roll number on UI
     rand_num.configure(text=roll_result)
