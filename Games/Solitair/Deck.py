@@ -22,12 +22,12 @@ class Dek:
      def remainer(self):
         return[str(card)for card in self.deck]
 
-deck=Dek(1)
+#deck=Dek(1)
 
-c_distributed= deck.deal_c(1)
+#c_distributed= deck.deal_c(1)
 
-for card in c_distributed:
-    print(card)
+#for card in c_distributed:
+   #print(card)
 # Test_card=Solitair_card(3,"Club")
 # test= c_distributed[0].below(Test_card)
 # print(test)

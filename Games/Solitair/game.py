@@ -24,6 +24,7 @@ while(1):
     print("\t")
     Table_foundation.display_unfipped()
     Table_foundation.display_c()
+    
     Player_card=input("Enter column of card to play:")
     Card_cl=int(Player_card)
     Bet_round=input(f"After how many move will the {Table_foundation.flip[Card_cl][-1]} ")
@@ -66,13 +67,17 @@ while(1):
                 
                 
                 card=Table_foundation.flip[Card_cl][-1].suit
-                test3=Table_foundation.add_T_F(Foundation,Card_cl)
+                V=int(input(" Column : "))
+                test3=Table_foundation.add_T_F(Foundation,V)
                 
                 if test3:
                     card_value= Foundation.get_last_card(card)
                     print(card_value)
                     j=j+1
-                    Player1.game_one=Player1.game_one+1
+                    if j== Round:
+                      Player1.game_one=Player1.game_one+1
+                      print(" Great you won ")
+                      break
                     
                 else:
                     print(" Card couldn't be move to foundation ")

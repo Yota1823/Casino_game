@@ -1,8 +1,11 @@
+import random
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-
+#import randomtimestamp
+#from randomtimestamp import random_time
+#import names
 import sys
 import os
 import sqlite3 
@@ -54,9 +57,10 @@ class Player(User):
                 self.lossCount+");")#","+self.creditAmount+");")
 
 
-    def refillMoney(self):
+    def refillMoney(self, window):
+        window.destroy()
         self.creditAmount = self.creditAmount + 500
-        cur.execute("UPDATE PLayer SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        cur.execute("UPDATE Player SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
         # Refill Gives Player more money, still needs to add the money to the casino profits
         print("refill")
     def getMoneyMade(self):
@@ -121,11 +125,11 @@ input1.grid(row=2, column=1)
 # add one button
 b1 = tk.Button(my_w, text='Create New User',
                command=lambda:my_open())
-b1.grid(row=5,column=1)
+b1.grid(row=4,column=1)
 
 b2 = tk.Button(my_w, text='Login',
                command=lambda:my_login(input1.get()))
-b2.grid(row=4,column=1)
+b2.grid(row=5,column=1)
 
 #window = Tk()
 #mainWindow = Tk()
@@ -136,36 +140,30 @@ b2.grid(row=4,column=1)
 
 def stats():
     stat_win = Toplevel(my_w)
-    stat_win.geometry("800x800")
+    stat_win.geometry("1700x800")
     stat_win.title("Casino Statistics")
 
-    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7","c8"), show='headings')
+    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7",), show='headings')
     tree.column("#1",anchor=tk.CENTER)
     tree.heading("#1",text="playerUserName")
 
     tree.column("#2",anchor=tk.CENTER)
-    tree.heading("#2",text="gamePlayed")
+    tree.heading("#2",text="currGame")
 
     tree.column("#3", anchor=tk.CENTER)
-    tree.heading("#3", text="buyInAmount")
+    tree.heading("#3", text="pMoneyMade")
 
     tree.column("#4", anchor=tk.CENTER)
-    tree.heading("#4", text="totalMoneyBet")
+    tree.heading("#4", text="pMoneyLost")
 
     tree.column("#5", anchor=tk.CENTER)
-    tree.heading("#5", text="MoneyMade")
+    tree.heading("#5", text="pWin")
 
     tree.column("#6", anchor=tk.CENTER)
-    tree.heading("#6", text="moneyLost")
+    tree.heading("#6", text="pLost")
 
     tree.column("#7", anchor=tk.CENTER)
-    tree.heading("#7", text="playerWin")
-
-    tree.column("#8", anchor=tk.CENTER)
-    tree.heading("#8", text="playerLoss")
-
-    tree.column("#8", anchor=tk.CENTER)
-    tree.heading("#8", text="timeStamp")
+    tree.heading("#7", text="timeStamp")
 
     tree.pack()
 
@@ -179,6 +177,31 @@ def stats():
 
     con.commit()
 
+
+def generate():
+    games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
+    x = 0
+
+
+    for x in range(100):
+        fname = names.get_first_name()
+        lname = names.get_last_name()
+        uname = fname[0] + lname
+        game = games[random.randrange(0,4,1)]
+        buyin = random.randrange(10, 2000, 5)
+        made = random.randrange(0, 2000, 5)
+        lost = random.randrange(0, 2000, 5)
+        win = random.randrange(0, 10, 1)
+        losses = random.randrange(0, 10, 1)
+        time = str(random_time(text=True, pattern='%I:%M'))
+        print(type(fname))
+        print(type(losses))
+        print(type(time))
+        print(time)
+
+        cur.execute("INSERT INTO Statistics VALUES ( ?, ?, ?,  ?, ?, ?, ?)",(uname, game,made,lost,win,losses,time) )
+
+        con.commit()
 
 def my_login(first):
     print("doing the login ")
@@ -231,17 +254,16 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette()).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
-    b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
-    b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
+    b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
-
+        b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
@@ -268,50 +290,31 @@ def removePlayer(manager):
 
 def blackJack():
 
-    #Create Window 
-    blackj_win = Toplevel(my_w)
-    blackj_win.geometry("700x500")
-    blackj_win.title("Blackjack")
-
-    #Create Text box and run games through textbox
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    print(os.path.abspath(__file__))
-    # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
-    #print(os.path.abspath(__file__))
-    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
-    # Import the specific functions or classes from the blackjack module
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
     main()
 
 
-def slots():
-    slots = Toplevel(my_w)
-    slots.geometry("700x500")
-    slots.title("Slots")
-
-    #Create Text box and run games through textbox
-    #print(os.path.abspath(__file__))
-    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
+def slots(player):
+    
 
     # Import the specific functions or classes from the blackjack module
-    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
-    from peruzzislots import my_mainloop
-    my_mainloop()
+    #inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
+
+    from peruzzislots import Player
+    p = Player(player.getUser(),player.getFirst(),player.getLast(),
+                  player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),player.getpWin(),player.getpLoss(),1000)
+    
+    p.my_mainloop()
 
 def baccarat():
-    print(os.path.abspath(__file__))
-    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
-    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
-    sys.path.append(game_dir)
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    #game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    #sys.path.append(game_dir)
 
     subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+    from Games.Baccarat.Casino_project_Baccarat_game import Cli
+    Cli.run()
 
 
 def solitaire():
@@ -319,16 +322,15 @@ def solitaire():
     game_dir = os.path.join(dir, 'Games/Solitair')
     sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Solitair/solitair.py"])
+    subprocess.run(["python", "Games/Solitair/game.py"])
 
 def Roulette(player):
-    #my_w.destroy()
-
+    my_w.destroy()
     from Games.Roulette_UI.roulette import Roulette
     p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
                   player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
+    
     p1.mainloop()
-    #from Games.Roulette.roulette_ import mainloop
     main()
 
 
