@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import subprocess
 
 import sys
 import os
@@ -43,7 +44,7 @@ class Player(User):
         self.currentGame = currGame
         self.winCount = pWin
         self.lossCount = pLoss
-
+        self.uName = uName
 
 
     def createPlayer(self):
@@ -54,7 +55,9 @@ class Player(User):
 
     def refillMoney(self):
         self.creditAmount = self.creditAmount + 500
-        cur.execute("INSERT INTO Player pCredit('" +self.creditAmount+ "');")
+        cur.execute("UPDATE PLayer SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        # Refill Gives Player more money, still needs to add the money to the casino profits
+        print("refill")
     def getMoneyMade(self):
         return self.moneyMade
     def getMoneyLost(self):
@@ -129,6 +132,32 @@ b2.grid(row=4,column=1)
 # input1= tk.Entry(window)
 # input2 = tk.Entry(window)
 
+def stats():
+    stat_win = Toplevel(my_w)
+    stat_win.geometry("1000x1000")
+    stat_win.title("Casino Statistics")
+    temp = f"SELECT total(moneyLost) FROM Statistics;" # Prints Sum of Money Lost Column
+    casino_money = cur.execute(temp)
+    casino_money = casino_money.fetchone()
+    temp = f"SELECT total(moneyMade) FROM Statistics;"
+    total_player = cur.execute(temp)
+    total_player = total_player.fetchone()
+    temp = f"SELECT max(moneyMade) FROM Statistics;"
+    biggest_win = cur.execute(temp)
+    biggest_win = biggest_win.fetchone()
+
+
+    print(type(casino_money))
+    print(casino_money)
+    tk.Label(stat_win, text= "~~~Total Casino Money~~~").grid(row=0, column=0)
+    tk.Label(stat_win, text= str(casino_money[0])).grid(row=1,column=0)
+    tk.Label(stat_win, text= "~~~Total Player Winnings~~~").grid(row=0, column=1)
+    tk.Label(stat_win, text = str(total_player[0])).grid(row=1, column=1)
+    tk.Label(stat_win, text="~~~Today's Biggest Win~~~").grid(row=0, column=2)
+    tk.Label(stat_win, text=str(biggest_win[0])).grid(row=1, column=2)
+    con.commit()
+
+
 def my_login(first):
     print("doing the login ")
 
@@ -180,19 +209,21 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+    b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette()).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
-    b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
     b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
 
     if status == 'Y':
-        b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+        b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
+
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
-    b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+    # b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
 def removePlayer(manager):
     remplayer_win = Toplevel(my_w)
@@ -226,7 +257,6 @@ def blackJack():
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
 
-
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
@@ -248,6 +278,22 @@ def slots():
     inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
     from peruzzislots import my_mainloop
     my_mainloop()
+
+def baccarat():
+    print(os.path.abspath(__file__))
+    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+
+
+def solitaire():
+    dir = os.path.join(BASE_DIR, "Games/Solitair/solitair.py")
+    game_dir = os.path.join(dir, 'Games/Solitair')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Solitair/solitair.py"])
 
 def Roulette():
     roulette_topWIN = tk.Tk()
