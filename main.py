@@ -322,15 +322,13 @@ def solitaire():
     subprocess.run(["python", "Games/Solitair/solitair.py"])
 
 def Roulette(player):
-    my_w.destroy()
-    #from Games.Roulette_UI.roulette import Roulette
-    #p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
-                  #player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
-    #p1.mainloop()
-    from Games.Roulette.roulette_ import mainloop
-    newWindow = tk.Toplevel(my_w)
-    app = Roulette(newWindow)
-    mainloop()
+    #my_w.destroy()
+
+    from Games.Roulette_UI.roulette import Roulette
+    p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
+    p1.mainloop()
+    #from Games.Roulette.roulette_ import mainloop
     main()
 
 

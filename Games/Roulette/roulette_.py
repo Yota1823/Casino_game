@@ -158,12 +158,13 @@ def clear_betAmount():
 
 def end():
     global pWin, pLost, p_money_lost, p_money_made, casino_balance
+    global p_username, curr_game
 
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
     #print(current_time)
 
-    cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (p_username, curr_game, p_money_made, p_money_lost, pWin, pLost, current_time))
+    cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?)", (p_username, curr_game, p_money_made, p_money_lost, pWin, pLost, current_time))
     
     '''
     insert_stats = "INSERT INTO Statistics (playerUserName, gamePlayed, moneyMade, moneyLost, playerWin, playerLost, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s);"
