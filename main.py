@@ -143,7 +143,9 @@ def stats():
     temp = f"SELECT max(moneyMade) FROM Statistics;"
     biggest_win = cur.execute(temp)
     biggest_win = biggest_win.fetchone()
-
+    temp = f"SELECT * FROM Statistics"
+    table = cur.execute(temp)
+    table = table.fetchall()
 
     print(type(casino_money))
     print(casino_money)
@@ -153,6 +155,13 @@ def stats():
     tk.Label(stat_win, text = str(total_player[0])).grid(row=1, column=1)
     tk.Label(stat_win, text="~~~Today's Biggest Win~~~").grid(row=0, column=2)
     tk.Label(stat_win, text=str(biggest_win[0])).grid(row=1, column=2)
+    # Trying to put into Tree
+    for row in table:
+        print(row)
+
+        tk.Treeview.insert("", tk.END, values=row)
+
+
     con.commit()
 
 
