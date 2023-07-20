@@ -136,36 +136,30 @@ b2.grid(row=4,column=1)
 
 def stats():
     stat_win = Toplevel(my_w)
-    stat_win.geometry("800x800")
+    stat_win.geometry("1700x800")
     stat_win.title("Casino Statistics")
 
-    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7","c8"), show='headings')
+    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7",), show='headings')
     tree.column("#1",anchor=tk.CENTER)
     tree.heading("#1",text="playerUserName")
 
     tree.column("#2",anchor=tk.CENTER)
-    tree.heading("#2",text="gamePlayed")
+    tree.heading("#2",text="currGame")
 
     tree.column("#3", anchor=tk.CENTER)
-    tree.heading("#3", text="buyInAmount")
+    tree.heading("#3", text="pMoneyMade")
 
     tree.column("#4", anchor=tk.CENTER)
-    tree.heading("#4", text="totalMoneyBet")
+    tree.heading("#4", text="pMoneyLost")
 
     tree.column("#5", anchor=tk.CENTER)
-    tree.heading("#5", text="MoneyMade")
+    tree.heading("#5", text="pWin")
 
     tree.column("#6", anchor=tk.CENTER)
-    tree.heading("#6", text="moneyLost")
+    tree.heading("#6", text="pLost")
 
     tree.column("#7", anchor=tk.CENTER)
-    tree.heading("#7", text="playerWin")
-
-    tree.column("#8", anchor=tk.CENTER)
-    tree.heading("#8", text="playerLoss")
-
-    tree.column("#8", anchor=tk.CENTER)
-    tree.heading("#8", text="timeStamp")
+    tree.heading("#7", text="timeStamp")
 
     tree.pack()
 
@@ -268,33 +262,12 @@ def removePlayer(manager):
 
 def blackJack():
 
-    #Create Window 
-    #blackj_win = Toplevel(my_w)
-    #blackj_win.geometry("700x500")
-    #blackj_win.title("Blackjack")
-
-    #Create Text box and run games through textbox
-    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    #print(os.path.abspath(__file__))
-    # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
-    # Import the specific functions or classes from the blackjack module
-    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
     main()
 
 
 def slots():
-    #slots = Toplevel(my_w)
-    #slots.geometry("700x500")
-    #slots.title("Slots")
-
-    #Create Text box and run games through textbox
-    #print(os.path.abspath(__file__))
-    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    # game_dir = os.path.join(blackjack_dir, 'Games')
-    # sys.path.append(game_dir)
+    
 
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
@@ -302,12 +275,14 @@ def slots():
     my_mainloop()
 
 def baccarat():
-    print(os.path.abspath(__file__))
-    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
-    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
-    sys.path.append(game_dir)
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    #game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    #sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.sln"])
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+    from Games.Baccarat.Casino_project_Baccarat_game import Cli
+    Cli.run()
 
 
 def solitaire():
