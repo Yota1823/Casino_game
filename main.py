@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter as tk
 import subprocess
 
@@ -71,6 +72,7 @@ class Player(User):
         return self.lossCount
     def getCredit(self):
         return self.creditAmount
+    
     
 class Manager(User):
     def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
@@ -274,15 +276,9 @@ def blackJack():
     #Create Text box and run games through textbox
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     print(os.path.abspath(__file__))
-
-    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    game_dir = os.path.join(blackjack_dir, 'Games')
-    sys.path.append(game_dir)
-
     # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
-
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
@@ -290,7 +286,18 @@ def blackJack():
 
 
 def slots():
-    print(os.path.abspath(__file__))
+    slots = Toplevel(my_w)
+    slots.geometry("700x500")
+    slots.title("Slots")
+
+    #Create Text box and run games through textbox
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
+
+    # Import the specific functions or classes from the blackjack module
+    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
     from peruzzislots import my_mainloop
     my_mainloop()
 
@@ -300,7 +307,7 @@ def baccarat():
     game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
     sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.sln"])
 
 
 def solitaire():
@@ -315,7 +322,7 @@ def Roulette(player):
     from Games.Roulette_UI.roulette import Roulette
     p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
                   player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
-
+    
     p1.mainloop()
     main()
 
@@ -341,10 +348,12 @@ def my_open():
 
     l1 = tk.Label(my_w_child,  textvariable=my_str1 )
     l1.grid(row=1,column=2)
+    my_str1.set("User Name")
+    l2 = tk.Label(my_w_child, text="First Name")
     my_str1.set("Username")
     l2 = tk.Label(my_w_child, text="Firstname")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "Lastname")
+    l3 = tk.Label(my_w_child, text= "User Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
