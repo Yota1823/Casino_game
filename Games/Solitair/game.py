@@ -24,6 +24,7 @@ while(1):
     print("\t")
     Table_foundation.display_unfipped()
     Table_foundation.display_c()
+    
     Player_card=input("Enter column of card to play:")
     Card_cl=int(Player_card)
     Bet_round=input(f"After how many move will the {Table_foundation.flip[Card_cl][-1]} ")
