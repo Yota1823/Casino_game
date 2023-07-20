@@ -26,15 +26,15 @@ class Player:
         self.loss = pLoss
         self.curr = 'Slots'
         self.casinoMoney = casinoMoney
+        self.betamount = 0
 
 
  
-        # pbalance = 0
-        # balance = pcredit
-    balance = 1000
-    balance == int(balance)
-    winnings = 0
-    winnings == int(winnings)
+        
+    # pCredit = 1000
+    # pCredit == int(pCredit)
+    # pMadeMoney = 0
+    # pMadeMoney == int(pMadeMoney)
 
     Symbols = ["Leopard", "wit shield", "W lines", "Big W", "7"]
 
@@ -45,13 +45,13 @@ class Player:
             rightbet = True
         else: 
             rightbet = False
-            print("Please enter a whole number, no decimals and a bet on or below the balance.")
+            print("Please enter a whole number, no decimals and a bet on or below the pCredit.")
         return rightbet
 
     # Limiting the bet
     def betlimit(betamount):
-        if betamount > balance:
-            goodlimit = balance
+        if betamount > pCredit:
+            goodlimit = pCredit
             print("That bet is too high! Bet adjusted to ", goodlimit)
         else:
             goodlimit = betamount
@@ -69,50 +69,50 @@ class Player:
     # Printing and sorting symbols.
     def spinning(reels, betamount):
         reelone, reeltwo, reelthree = reels[0], reels[1], reels[2]
-        global balance
-        winnings = 0
+        global pCredit
+        pMadeMoney = 0
         if reelone[0] == "Leopard" and reeltwo[0] == "Leopard" and reelthree[0] == "Leopard":
-            winnings = (int(balance) - int(betamount)) + int(betamount)* 10
-            print("You won 10 times your money! Congragulations! This is how much your account contains $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount)* 10
+            print("You won 10 times your money! Congragulations! This is how much your account contains $", pMadeMoney)
         elif reelone[0] == "wit shield" and reeltwo[0] == "wit shield" and reelthree[0] == "wit shield":
-            winnings = (int(balance) - int(betamount)) + int(betamount) * 25
-            print("You won 25 times your money! Awesome! Your balance and wins are $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount) * 25
+            print("You won 25 times your money! Awesome! Your pCredit and wins are $", pMadeMoney)
         elif reelone[0] == "W lines" and reeltwo[0] == "W lines" and reelthree[0] == "W lines":
-            winnings = (int(balance) - int(betamount)) + int(betamount) * 50
-            print("You won 50 times your money! This is all of your money total $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount) * 50
+            print("You won 50 times your money! This is all of your money total $", pMadeMoney)
         elif reelone[0] == "Big W" and reeltwo[0] == "Big W" and reelthree[0] == "Big W":
-            winnings = (int(balance) - int(betamount)) + int(betamount) * 75
-            print("You won 75 times your money! You rewards are $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount) * 75
+            print("You won 75 times your money! You rewards are $", pMadeMoney)
         elif reelone[0] == "7" and reeltwo[0] == "7" and reelthree[0] == "7":
-            winnings = (int(balance) - int(betamount)) + 1000000
-            print("You  the ulimate Jackpot! You rewards are $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + 1000000
+            print("You  the ulimate Jackpot! You rewards are $", pMadeMoney)
         elif reelone[0] == "7" and (reeltwo[0] == "7" or reelthree[0] == "7"):
-            winnings = (int(balance) - int(betamount)) + int(betamount) * 2
-            print("You won 2 times your money! You rewards are $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount) * 2
+            print("You won 2 times your money! You rewards are $", pMadeMoney)
         elif (reelone[0] == "7" or reeltwo[0] == "7") and reelthree[0] == "7":
-            winnings = (int(balance) - int(betamount)) + int(betamount) * 2
-            print("You won 2 times your money! You rewards are $", winnings)
+            pMadeMoney = (int(pCredit) - int(betamount)) + int(betamount) * 2
+            print("You won 2 times your money! You rewards are $", pMadeMoney)
         else:
-            winnings = int(balance) - int(betamount)
-            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", winnings)
-            print(winnings)
-        balance = winnings
-        return reels,winnings
+            pMoneyLost = int(pCredit) - int(betamount)
+            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", pMoneyLost)
+            print(pMoneyLost)
+        pCredit = pMoneyLost
+        return reels
 
     # If you have no money
-    def rebalance(startagain):        
-        while balance < 1 and startagain == True:
-            unbalance = True
-            print(winnings)
+    def repCredit(startagain):        
+        while pCredit < 1 and startagain == True:
+            unpCredit = True
+            print(pMadeMoney)
             print("You ran out of money, go refill at main screen")
         else:
-            unbalance = False
+            unpCredit = False
             print("You still have money.")
-            return winnings
+            return pMadeMoney
 
     # Leads to Bet input check. 
     def my_mainloop():
-        global balance
+        global pCredit
         
         while True:
             Validbet = False
@@ -147,14 +147,14 @@ class Player:
                 pass
             elif answerinput == "No" or answerinput == "no" or answerinput == "n":
                 startagain = False
-                balance = winnings
+                pCredit = pMadeMoney
                 print("You ended the game with", c_win)
                 break
             else:
                 print("This is an incorrect input, please answer yes or no.")
 
-            # Leads to rebalance
-            if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and balance <= 0:
+            # Leads to repCredit
+            if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" and pCredit <= 0:
                 break
 
     if __name__ == "__main__":
