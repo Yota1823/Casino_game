@@ -239,7 +239,6 @@ def deal_dealers_hand(player1,dealer,shuffled_deck):
 
 
 # ###################### Main piece of code ######################
-<<<<<<< HEAD
 
 game_on = "Y"
 while game_on == "Y":
@@ -313,28 +312,6 @@ while game_on == "Y":
         game_on = input("\nYou want to play again? (Y/N): ").upper()
         if game_on == "Y" or game_on == "N":
             money = player1.money
-=======
-def main():
-    game_on = "Y"
-    while game_on == "Y":
-        os.system('cls')
-        print("\n\t\tWelcome to Blackjack!\n")
-        time.sleep(1)
-        # Creating an instance of a deck and shuffling it in case player is playing
-        # for the first time or if there are less than 10 cards available
-        if 'shuffled_deck' not in globals():
-            shuffled_deck = create_and_suffle_deck()
-        elif len(shuffled_deck) < 10:
-            print("Deck is almost over. We need to shuffle again!\n")
-            shuffled_deck = create_and_suffle_deck()
-        # Setting the default betting amount if player hasn't played before
-        if 'money' not in globals():
-            money = 100
-        # Check if user has enough money to bet (in case he has kept playing)
-        if money == 0:
-            print("You don't have any money left!\nGoodbye!")
-            game_on = "N"
->>>>>>> f44a27b57a253ae0b2dcbc05932dc2282590d637
             break
         # Ask for the betting amount
         player1 = Player(money=money)
