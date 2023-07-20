@@ -269,26 +269,26 @@ def removePlayer(manager):
 def blackJack():
 
     #Create Window 
-    blackj_win = Toplevel(my_w)
-    blackj_win.geometry("700x500")
-    blackj_win.title("Blackjack")
+    #blackj_win = Toplevel(my_w)
+    #blackj_win.geometry("700x500")
+    #blackj_win.title("Blackjack")
 
     #Create Text box and run games through textbox
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    print(os.path.abspath(__file__))
+    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    #print(os.path.abspath(__file__))
     # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
     # Import the specific functions or classes from the blackjack module
-    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
     main()
 
 
 def slots():
-    slots = Toplevel(my_w)
-    slots.geometry("700x500")
-    slots.title("Slots")
+    #slots = Toplevel(my_w)
+    #slots.geometry("700x500")
+    #slots.title("Slots")
 
     #Create Text box and run games through textbox
     #print(os.path.abspath(__file__))
@@ -315,7 +315,7 @@ def solitaire():
     game_dir = os.path.join(dir, 'Games/Solitair')
     sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Solitair/solitair.py"])
+    subprocess.run(["python", "Games/Solitair/game.py"])
 
 def Roulette(player):
     my_w.destroy()
