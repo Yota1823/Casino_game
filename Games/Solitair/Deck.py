@@ -3,8 +3,8 @@ from card import Solitair_card
 
 
 import random
-class Deck:
-     unshuf_deck=[Solitair_card(s,v) for v in range (1,14) for s in ["Club","Spade","Diamond","Heart"]]
+class Dek:
+     unshuf_deck=[Solitair_card(v,s) for v in range (1,14) for s in ["Club","Spade","Diamond","Heart"]]
 
      def __init__(self,num_deck):
         self.deck= self.unshuf_deck * num_deck
@@ -22,13 +22,15 @@ class Deck:
      def remainer(self):
         return[str(card)for card in self.deck]
 
-# deck=Deck(1)
+#deck=Dek(1)
 
-# c_distributed= deck.deal_c(1)
+#c_distributed= deck.deal_c(1)
 
-# for card in c_distributed:
-#     print(card)
-
+#for card in c_distributed:
+   #print(card)
+# Test_card=Solitair_card(3,"Club")
+# test= c_distributed[0].below(Test_card)
+# print(test)
 # card =deck.flip_C()
 # print(" ")
 # print(card)

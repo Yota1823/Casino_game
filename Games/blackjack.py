@@ -1,6 +1,24 @@
-
+#import ./main.py
 import os
 import time
+import sqlite3
+import os.path
+import subprocess
+import sys
+
+#sys.path.append('../main.py')
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+main_module_path = os.path.join(current_dir, "..", "main.py")
+sys.path.append(os.path.dirname(main_module_path))
+from main import User,Player #maybe i dont need this
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "../Casino.db")
+con = sqlite3.connect(db_path)
+cur = con.cursor()
+
 
 
 class Deck():
@@ -51,17 +69,43 @@ class Deck():
         deck_as_set = set(self.full_deck)
         return list(deck_as_set)
 
+# class User:
+#     def __init__(self,fName,lName,uName):
+#         self.name = fName
+#         self.last = lName
+#         self.user = uName
 
-class Player():
+#     def getFirst(self):
+#         return self.name
+#     def getLast(self):
+#         return self.last
+#     def getUser(self):
+#         return self.user
+    
+class Player(User):
     """
     Class that defines a Player that starts with $100 to bet
     """
-    def __init__(self, hand=[], bet=0, score=0, money=100):
-        # Hand should be a list of the cards taken from the deck
+    def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss,hand = [], bet = 0, score = 0):
+        User.__init__(self,fName,lName,uName)
+        
+        self.money = pCredit
+        self.moneyMade = pMoneyMade
+        self.moneyLost = pMoneyLost
+        self.currentGame = currGame
+        self.winCount = pWin
+        self.lossCount = pLoss
         self.hand = hand
         self.bet = bet
         self.score = score
-        self.money = money
+        
+    
+    # def __init__(self, hand=[], bet=0, score=0, money=100):
+    #     # Hand should be a list of the cards taken from the deck
+    #     self.hand = hand
+    #     self.bet = bet
+    #     self.score = score
+    #     self.money = money
 
     def set_betting_amount(self):
         while True:
@@ -117,12 +161,26 @@ class Player():
         Function that calculates the total amount of money after a win
         """
         self.money += win_amount
+        self.moneyMade = win_amount
 
     def calculate_loss(self, lost_amount):
         """
         Function that calculates the total amount of money after a loss
         """
         self.money -= lost_amount
+        self.moneyLost = lost_amount
+    
+    @staticmethod
+    def get_player_data(username):
+        conn = sqlite3.connect("Casino.db")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Player WHERE username=?", (username,))
+        player_data = cur.fetchone()
+        cur.close()
+        conn.close()
+        return player_data
+    
+    
 
 
 # ###################### Game's main functions ######################
@@ -162,9 +220,11 @@ def initial_deal(player1, shuffled_deck):
     return player1, dealer
 
 
-def deal_dealers_hand():
+def deal_dealers_hand(player1,dealer,shuffled_deck):
     """Function that will simulate the dealers play once the player stands
     """
+
+    
     print("[" + "'" + dealer.hand[0] + "'" + ", XX ]")
     time.sleep(1)
     print(dealer.hand)
@@ -236,11 +296,17 @@ while game_on == "Y":
             if dealer.score > player1.score and dealer.score <= 21:
                 print("Player 1 loses!")
                 player1.calculate_loss(player1.bet)
+                player1.lossCount += 1 #count loss number
             elif dealer.score == player1.score:
                 print("It's a tie!")
             else:
                 print("Player 1 wins!")
                 player1.calculate_win(player1.bet)
+                player1.winCount += 1 #count the winning number
+        query = "UPDATE Player SET pCredit = ?, pMoneyMade = ?, pMoneyLost = ?, pWin = ?, pLoss = ? WHERE username = ?"
+        cur.execute(query, (player1.money, player1.moneyMade, player1.moneyLost, player1.winCount, player1.lossCount, player1.user))
+        con.commit()
+        
     # Ask to the player if he would like to contine playing
     while True:
         game_on = input("\nYou want to play again? (Y/N): ").upper()
