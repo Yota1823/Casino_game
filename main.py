@@ -3,9 +3,9 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-import randomtimestamp
-from randomtimestamp import random_time
-import names
+#import randomtimestamp
+#from randomtimestamp import random_time
+#import names
 import sys
 import os
 import sqlite3 
