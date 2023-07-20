@@ -28,7 +28,8 @@ class Player:
         self.casinoMoney = casinoMoney
         self.betamount = 0
 
-
+    def getpCredit(self):
+        return self.pCredit
  
         
     # pCredit = 1000
@@ -39,7 +40,7 @@ class Player:
     Symbols = ["Leopard", "wit shield", "W lines", "Big W", "7"]
 
     # Checking the Bet input and amount
-    def betcheck(betamount):
+    def betcheck(self, betamount):
         if betamount.isdigit() == True:
             betamount = int(betamount)
             rightbet = True
@@ -49,16 +50,16 @@ class Player:
         return rightbet
 
     # Limiting the bet
-    def betlimit(betamount):
-        if betamount > pCredit:
-            goodlimit = pCredit
+    def betlimit(self, betamount):
+        if betamount > self.getpCredit:
+            goodlimit = self.getpCredit
             print("That bet is too high! Bet adjusted to ", goodlimit)
         else:
             goodlimit = betamount
         return goodlimit
 
     # Checking the 'Ask' input to play the machine.
-    def askinputcheck(answerinput):
+    def askinputcheck(self, answerinput):
         if answerinput == "Yes" or answerinput == "yes" or answerinput == "y" or answerinput == "No" or answerinput == "no" or answerinput == "n":
             rightanswerinput = True
         else:
@@ -67,7 +68,7 @@ class Player:
         return rightanswerinput
 
     # Printing and sorting symbols.
-    def spinning(reels, betamount):
+    def spinning(self, reels, betamount):
         reelone, reeltwo, reelthree = reels[0], reels[1], reels[2]
         global pCredit
         pMadeMoney = 0
@@ -100,7 +101,7 @@ class Player:
         return reels
 
     # If you have no money
-    def repCredit(self,startagain):        
+    def repCredit(self, startagain):        
         while pCredit < 1 and startagain == True:
             unpCredit = True
             print(self.pMadeMoney)
