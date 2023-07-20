@@ -1,8 +1,11 @@
+import random
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-
+import randomtimestamp
+from randomtimestamp import random_time
+import names
 import sys
 import os
 import sqlite3 
@@ -175,6 +178,31 @@ def stats():
     con.commit()
 
 
+def generate():
+    games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
+    x = 0
+
+
+    for x in range(100):
+        fname = names.get_first_name()
+        lname = names.get_last_name()
+        uname = fname[0] + lname
+        game = games[random.randrange(0,4,1)]
+        buyin = random.randrange(10, 2000, 5)
+        made = random.randrange(0, 2000, 5)
+        lost = random.randrange(0, 2000, 5)
+        win = random.randrange(0, 10, 1)
+        losses = random.randrange(0, 10, 1)
+        time = str(random_time(text=True, pattern='%I:%M'))
+        print(type(fname))
+        print(type(losses))
+        print(type(time))
+        print(time)
+
+        cur.execute("INSERT INTO Statistics VALUES ( ?, ?, ?,  ?, ?, ?, ?)",(uname, game,made,lost,win,losses,time) )
+
+        con.commit()
+
 def my_login(first):
     print("doing the login ")
 
@@ -235,7 +263,7 @@ def gameScreen(player,status): #Pass player
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
-
+        b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
