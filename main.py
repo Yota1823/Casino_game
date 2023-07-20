@@ -52,7 +52,9 @@ class Player(User):
                 self.lossCount+");")#","+self.creditAmount+");")
 
 
-
+    def refillMoney(self):
+        self.creditAmount = self.creditAmount + 500
+        cur.execute("INSERT INTO Player pCredit('" +self.creditAmount+ "');")
     def getMoneyMade(self):
         return self.moneyMade
     def getMoneyLost(self):
@@ -178,11 +180,11 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette()).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
-    b6 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+    b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
@@ -224,6 +226,7 @@ def blackJack():
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
 
+
     # Import the specific functions or classes from the blackjack module
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
@@ -245,6 +248,21 @@ def slots():
     inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
     from peruzzislots import my_mainloop
     my_mainloop()
+
+def Roulette():
+    roulette_topWIN = tk.Tk()
+    #from Games.Roulette_UI.roulette import main_roulette
+    #main_roulette()
+    #my_w.destroy()
+    from Games.Roulette_UI.roulette import Roulette
+    p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000) ## CUSTOMIZE FOR USER 
+    p1.mainloop()
+    #p1.withdraw()
+
+    
+    #my_w = tk.Tk()
+
+    main()
 
 
 def my_open():
@@ -270,8 +288,10 @@ def my_open():
     l1.grid(row=1,column=2)
     my_str1.set("User Name")
     l2 = tk.Label(my_w_child, text="First Name")
+    my_str1.set("Username")
+    l2 = tk.Label(my_w_child, text="Firstname")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "Last Name")
+    l3 = tk.Label(my_w_child, text= "User Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
