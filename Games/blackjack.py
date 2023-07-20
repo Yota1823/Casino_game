@@ -307,6 +307,7 @@ while game_on == "Y":
         cur.execute(query, (player1.money, player1.moneyMade, player1.moneyLost, player1.winCount, player1.lossCount, player1.user))
         con.commit()
         
+
     # Ask to the player if he would like to contine playing
     while True:
         game_on = input("\nYou want to play again? (Y/N): ").upper()
