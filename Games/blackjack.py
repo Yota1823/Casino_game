@@ -1,14 +1,22 @@
-
+#import ./main.py
 import os
 import time
 import sqlite3
 import os.path
 import subprocess
+import sys
+import main
+
+#sys.path.append('../main.py')
+from main import Player
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "../Casino.db")
 con = sqlite3.connect(db_path)
 cur = con.cursor()
+
+
 
 class Deck():
     """
@@ -58,11 +66,32 @@ class Deck():
         deck_as_set = set(self.full_deck)
         return list(deck_as_set)
 
+# class User:
+#     def __init__(self,fName,lName,uName):
+#         self.name = fName
+#         self.last = lName
+#         self.user = uName
 
-class Player():
+#     def getFirst(self):
+#         return self.name
+#     def getLast(self):
+#         return self.last
+#     def getUser(self):
+#         return self.user
+    
+class Player(User):
     """
     Class that defines a Player that starts with $100 to bet
     """
+    # def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
+    #     User.__init__(self,fName,lName,uName)
+        
+    #     self.creditAmount = pCredit
+    #     self.moneyMade = pMoneyMade
+    #     self.moneyLost = pMoneyLost
+    #     self.currentGame = currGame
+    #     self.winCount = pWin
+    #     self.lossCount = pLoss
     
     def __init__(self, hand=[], bet=0, score=0, money=100):
         # Hand should be a list of the cards taken from the deck
@@ -131,19 +160,18 @@ class Player():
         Function that calculates the total amount of money after a loss
         """
         self.money -= lost_amount
-        
+    
     @staticmethod
-    def get_player_data():
-        """
-        Static method to retrieve player data from the database
-        """
-        conn = sqlite3.connect("Casino.db") 
+    def get_player_data(username):
+        conn = sqlite3.connect("Casino.db")
         cur = conn.cursor()
-        cur.execute("SELECT * FROM Player")
-        player_data = cur.fetchall()
+        cur.execute("SELECT * FROM Player WHERE username=?", (username,))
+        player_data = cur.fetchone()
         cur.close()
         conn.close()
         return player_data
+    
+    
 
 
 # ###################### Game's main functions ######################
