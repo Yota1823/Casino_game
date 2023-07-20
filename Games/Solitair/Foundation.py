@@ -22,3 +22,9 @@ class foundation:
             return suit[0].upper()
         else:
             return self.foundation[suit][-1]
+
+test_card=Solitair_card(1,"Heart")
+Foundation=foundation()
+test=Foundation.Add_to_Foundation(test_card)
+if test:
+    print(".")
