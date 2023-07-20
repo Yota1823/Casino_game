@@ -3,7 +3,7 @@ from tkinter import *
 import tkinter as tk
 import tkinter.messagebox
 import random
-
+# from main import gameScreen
 
 class Roulette(tk.Tk):
     def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin, casinoMoney):
@@ -160,7 +160,9 @@ class Roulette(tk.Tk):
                                     "\n\nPlayer Lost: \t$" + str(self.pMoneyLost) +
                                     "\n\nPlayer Total Win: \t" + str(self.pWin) +
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
+        self.quit()
         self.destroy()
+        # gameScreen(self, Y)
 
     # button layout
     def buttons(self):
