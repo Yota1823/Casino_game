@@ -294,13 +294,17 @@ def blackJack():
     main()
 
 
-def slots():
+def slots(player):
     
 
     # Import the specific functions or classes from the blackjack module
-    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
-    from peruzzislots import my_mainloop
-    my_mainloop()
+    #inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
+
+    from peruzzislots import Player
+    p = Player(player.getUser(),player.getFirst(),player.getLast(),
+                  player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),player.getpWin(),player.getpLoss(),1000)
+    
+    p.my_mainloop()
 
 def baccarat():
     #print(os.path.abspath(__file__))
