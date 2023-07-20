@@ -88,7 +88,7 @@ class Player(User):
     """
     def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss,hand = [], bet = 0, score = 0):
         User.__init__(self,fName,lName,uName)
-        
+                
         self.money = pCredit
         self.moneyMade = pMoneyMade
         self.moneyLost = pMoneyLost
@@ -98,6 +98,15 @@ class Player(User):
         self.hand = hand
         self.bet = bet
         self.score = score
+        
+    def createPlayer(self):
+        con = sqlite3.connect("Casino.db")
+        cur = con.cursor()
+        cur.execute("INSERT INTO Player VALUES(?,?,?,?,?,?,?,?,?);",
+                    (self.uName, self.fName, self.lName, self.creditAmount, self.moneyMade, self.moneyLost,
+                     self.currentGame, self.winCount, self.lossCount))
+        con.commit()
+        con.close()
         
     
     # def __init__(self, hand=[], bet=0, score=0, money=100):
