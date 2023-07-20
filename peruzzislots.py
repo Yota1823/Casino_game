@@ -100,30 +100,30 @@ class Player:
         return reels
 
     # If you have no money
-    def repCredit(startagain):        
+    def repCredit(self,startagain):        
         while pCredit < 1 and startagain == True:
             unpCredit = True
-            print(pMadeMoney)
+            print(self.pMadeMoney)
             print("You ran out of money, go refill at main screen")
         else:
             unpCredit = False
             print("You still have money.")
-            return pMadeMoney
+            return self.pMadeMoney
 
     # Leads to Bet input check. 
-    def my_mainloop():
+    def my_mainloop(self):
         global pCredit
         
         while True:
             Validbet = False
             while Validbet == False:
                 betamount = input("Please enter amount you wish to bet: ")
-                Validbet = betcheck(betamount)
+                Validbet = self.betcheck(betamount)
 
             betamount = int(betamount)
 
             # Leads to betlimit
-            betamount = betlimit(betamount)
+            betamount = self.betlimit(betamount)
 
             # RandomSymbolGen + 3 reels
             if betamount > 0:
@@ -140,14 +140,14 @@ class Player:
             validask = False
             while validask == False:
                 answerinput = input("Would you like to play again?: ")
-                validask = askinputcheck(answerinput)
+                validask = self.askinputcheck(answerinput)
             if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
                 startagain = True
                 print("You have $", c_win)
                 pass
             elif answerinput == "No" or answerinput == "no" or answerinput == "n":
                 startagain = False
-                pCredit = pMadeMoney
+                pCredit = self.pMadeMoney
                 print("You ended the game with", c_win)
                 break
             else:
