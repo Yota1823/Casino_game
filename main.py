@@ -1,10 +1,14 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter as tk
+import subprocess
 
 import sys
 import os
 import sqlite3 
 import os.path
+import Games
+
 
 import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -41,7 +45,7 @@ class Player(User):
         self.currentGame = currGame
         self.winCount = pWin
         self.lossCount = pLoss
-
+        self.uName = uName
 
 
     def createPlayer(self):
@@ -52,7 +56,9 @@ class Player(User):
 
     def refillMoney(self):
         self.creditAmount = self.creditAmount + 500
-        cur.execute("INSERT INTO Player pCredit('" +self.creditAmount+ "');")
+        cur.execute("UPDATE PLayer SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        # Refill Gives Player more money, still needs to add the money to the casino profits
+        print("refill")
     def getMoneyMade(self):
         return self.moneyMade
     def getMoneyLost(self):
@@ -65,6 +71,7 @@ class Player(User):
         return self.lossCount
     def getCredit(self):
         return self.creditAmount
+    
     
 class Manager(User):
     def __init__(self,manUserN,pUserN,pMoneyMade,pMoneyLost,totalCasinoMoney,
@@ -114,11 +121,11 @@ input1.grid(row=2, column=1)
 # add one button
 b1 = tk.Button(my_w, text='Create New User',
                command=lambda:my_open())
-b1.grid(row=4,column=1)
+b1.grid(row=5,column=1)
 
 b2 = tk.Button(my_w, text='Login',
                command=lambda:my_login(input1.get()))
-b2.grid(row=5,column=1)
+b2.grid(row=4,column=1)
 
 #window = Tk()
 #mainWindow = Tk()
@@ -126,6 +133,52 @@ b2.grid(row=5,column=1)
 
 # input1= tk.Entry(window)
 # input2 = tk.Entry(window)
+
+def stats():
+    stat_win = Toplevel(my_w)
+    stat_win.geometry("800x800")
+    stat_win.title("Casino Statistics")
+
+    tree = ttk.Treeview(stat_win,columns=("c1","c2","c3","c4","c5","c6","c7","c8"), show='headings')
+    tree.column("#1",anchor=tk.CENTER)
+    tree.heading("#1",text="playerUserName")
+
+    tree.column("#2",anchor=tk.CENTER)
+    tree.heading("#2",text="gamePlayed")
+
+    tree.column("#3", anchor=tk.CENTER)
+    tree.heading("#3", text="buyInAmount")
+
+    tree.column("#4", anchor=tk.CENTER)
+    tree.heading("#4", text="totalMoneyBet")
+
+    tree.column("#5", anchor=tk.CENTER)
+    tree.heading("#5", text="MoneyMade")
+
+    tree.column("#6", anchor=tk.CENTER)
+    tree.heading("#6", text="moneyLost")
+
+    tree.column("#7", anchor=tk.CENTER)
+    tree.heading("#7", text="playerWin")
+
+    tree.column("#8", anchor=tk.CENTER)
+    tree.heading("#8", text="playerLoss")
+
+    tree.column("#8", anchor=tk.CENTER)
+    tree.heading("#8", text="timeStamp")
+
+    tree.pack()
+
+
+    cur.execute(f"SELECT * FROM Statistics;")
+    all_stats = cur.fetchall()
+
+    for stats in all_stats:
+        print(stats)
+        tree.insert("",tk.END,values=stats)
+
+    con.commit()
+
 
 def my_login(first):
     print("doing the login ")
@@ -143,7 +196,6 @@ def my_login(first):
 
             cur.execute(f"SELECT * from Player WHERE playerUserName='{first}';")
             playerData = cur.fetchall()
-            global p
             p = Player(playerData[0][0],playerData[0][1],playerData[0][2],playerData[0][3],
                    playerData[0][4],playerData[0][5],playerData[0][6],playerData[0][7],playerData[0][8])
         
@@ -179,19 +231,21 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:roulette()).grid(row=1,column=0)
+    b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
-    b5 = tk.Button(game_window, text=' Solitaire ',command= 0).grid(row=4,column=0)
+    b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
     b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
 
     if status == 'Y':
-        b7 =tk.Button(game_window, text=' Statistics ',command= 0).grid(row=5,column=0)
+        b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
+
     else:
         balance = tk.Label(game_window, text = str(player.getCredit())).grid(row=0,column=5) #GET THIS WORKING
 
-    b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
+    # b9 = tk.Button(game_window, text=' Refill ',command= 0).grid(row=1,column=20)
 
 def removePlayer(manager):
     remplayer_win = Toplevel(my_w)
@@ -220,33 +274,65 @@ def blackJack():
     blackj_win.title("Blackjack")
 
     #Create Text box and run games through textbox
+<<<<<<< HEAD
     inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     print(os.path.abspath(__file__))
-
-    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
-    game_dir = os.path.join(blackjack_dir, 'Games')
-    sys.path.append(game_dir)
-
     # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
+=======
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
 
-
+>>>>>>> f44a27b57a253ae0b2dcbc05932dc2282590d637
     # Import the specific functions or classes from the blackjack module
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
+    main()
 
 
 def slots():
-    print(os.path.abspath(__file__))
+    slots = Toplevel(my_w)
+    slots.geometry("700x500")
+    slots.title("Slots")
+
+    #Create Text box and run games through textbox
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
+
+    # Import the specific functions or classes from the blackjack module
+    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
     from peruzzislots import my_mainloop
     my_mainloop()
 
-
-def roulette():
+def baccarat():
     print(os.path.abspath(__file__))
-    #from Games.Roulette_UI import 
-    #p.mainloop()
+    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+
+
+def solitaire():
+    dir = os.path.join(BASE_DIR, "Games/Solitair/solitair.py")
+    game_dir = os.path.join(dir, 'Games/Solitair')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Solitair/solitair.py"])
+
+def Roulette(player):
+    my_w.destroy()
+    from Games.Roulette_UI.roulette import Roulette
+    p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
     
+    p1.mainloop()
+    main()
 
 
 def my_open():
@@ -270,10 +356,12 @@ def my_open():
 
     l1 = tk.Label(my_w_child,  textvariable=my_str1 )
     l1.grid(row=1,column=2)
+    my_str1.set("User Name")
+    l2 = tk.Label(my_w_child, text="First Name")
     my_str1.set("Username")
     l2 = tk.Label(my_w_child, text="Firstname")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "Lastname")
+    l3 = tk.Label(my_w_child, text= "User Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
