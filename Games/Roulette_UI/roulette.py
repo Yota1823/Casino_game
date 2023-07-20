@@ -3,6 +3,9 @@ from tkinter import *
 import tkinter as tk
 import tkinter.messagebox
 import random
+import time
+import sqlite3 
+import os.path
 
 
 class Roulette(tk.Tk):
@@ -150,8 +153,21 @@ class Roulette(tk.Tk):
                                         "\nNew balance: $" + str(self.userMoney))
 
     def end(self):
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(BASE_DIR, "Casino.db")
+        con = sqlite3.connect(db_path)
+        cur = con.cursor()
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        #print(current_time)
+
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
         print(f'Casino Money: ${self.casinoMoney}')
+        insert_stats = "INSERT INTO Statistics VALUES (%s, %s, %d, %d, %d, %d, %s) WHERE playerUserName = ?;"
+        insert_val = (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time)
+        cur.execute(insert_stats, insert_val)
+
+
         tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + self.pUserName +
                                     "\n\nPlayer Name: \t" + self.pLastName + " " + self.pFirstName +
                                     "\n\nCurrent Game: \t" + self.currGame +

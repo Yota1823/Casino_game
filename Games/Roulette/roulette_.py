@@ -3,6 +3,15 @@ from tkinter import *
 import tkinter as tk
 import tkinter.messagebox
 import random
+import time
+import os
+import sqlite3 
+import os.path
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "Casino.db")
+con = sqlite3.connect(db_path)
+cur = con.cursor()
 
 
 odd = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
@@ -149,6 +158,34 @@ def clear_betAmount():
 
 def end():
     global pWin, pLost, p_money_lost, p_money_made, casino_balance
+
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    #print(current_time)
+
+    cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (p_username, curr_game, p_money_made, p_money_lost, pWin, pLost, current_time))
+    
+    '''
+    insert_stats = "INSERT INTO Statistics (playerUserName, gamePlayed, moneyMade, moneyLost, playerWin, playerLost, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s);"
+    insert_val = (p_username, curr_game, p_money_made, p_money_lost, pWin, pLost, current_time)
+    cur.execute(insert_stats, insert_val)
+    '''
+
+    '''
+    insert_stats = ("INSERT INTO Statistics (playerUserName, gamePlayed, moneyMade, moneyLost, playerWin, playerLost, timeStamp) VALUES (%(playerUserName)s, %(gamePlayed)s, %(moneyMade)s, %(moneyLost)s, %(playerWin)s, %(playerLost)s, %(timeStamp)s);")
+    insert_val = {
+        'playerUserName' : p_username,
+        'gamePlayer' : curr_game,
+        'moneyMade' : p_money_made,
+        'moneyLost' : p_money_lost,
+        'playerWin' : pWin,
+        'playerLost' : pLost,
+        'timeStamp' : current_time}
+    cur.execute(insert_stats, insert_val)
+    '''
+    
+
+    
     casino_balance = casino_balance + p_money_made - p_money_lost
     print(f'Casino Money: ${casino_balance}')
     tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + p_username +
