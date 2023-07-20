@@ -3,8 +3,9 @@
     "",
     "\\Games",
     "\\Games\\Baccarat",
+    "\\Games\\Roulette",
     "\\Games\\Roulette_UI"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\Games\\Roulette\\roulette_.py",
   "PreviewInSolutionExplorer": false
 }
