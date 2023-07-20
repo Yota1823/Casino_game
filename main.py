@@ -244,8 +244,8 @@ def slots():
 
 def roulette():
     print(os.path.abspath(__file__))
-    from Games.Roulette_UI import 
-    p.mainloop()
+    #from Games.Roulette_UI import 
+    #p.mainloop()
     
 
 
