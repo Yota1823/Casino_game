@@ -54,9 +54,11 @@ class Player(User):
                 self.lossCount+");")#","+self.creditAmount+");")
 
 
-    def refillMoney(self):
+    def refillMoney(self,window):
+        window.destroy()
         self.creditAmount = self.creditAmount + 500
         cur.execute("UPDATE PLayer SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        con.commit()
         # Refill Gives Player more money, still needs to add the money to the casino profits
         print("refill")
     def getMoneyMade(self):
@@ -228,9 +230,9 @@ def gameScreen(player,status): #Pass player
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
-    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
-    b6 = tk.Button(game_window, text=' Refill ',command= lambda:player.refillMoney()).grid(row=1,column=20)
+    b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window),gameScreen(player,status)]).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
@@ -266,13 +268,17 @@ def blackJack():
     main()
 
 
-def slots():
+def slots(player):
     
 
     # Import the specific functions or classes from the blackjack module
-    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
-    from peruzzislots import my_mainloop
-    my_mainloop()
+    #inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
+
+    from peruzzislots import Player
+    p = Player(player.getUser(),player.getFirst(),player.getLast(),
+                  player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),player.getpWin(),player.getpLoss(),1000)
+    
+    p.my_mainloop()
 
 def baccarat():
     #print(os.path.abspath(__file__))
