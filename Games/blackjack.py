@@ -313,52 +313,5 @@ while game_on == "Y":
         if game_on == "Y" or game_on == "N":
             money = player1.money
             break
-        # Ask for the betting amount
-        player1 = Player(money=money)
-        player1.set_betting_amount()
-        time.sleep(1)
-        # Deal cards and assign each hand to the player and dealer
-        player1, dealer = initial_deal(player1, shuffled_deck)
-        # Variable that will contain the response from the user to hit or stand
-        move = ""
-        while move != "S":
-            move = input("Press enter to hit, enter 'S' to stand: ").upper()
-            if move == "":  # User chose to hit
-                print("User chose to hit")
-                # A card is then removed from the shuffled deck,
-                # appended to the player's hand and then printed
-                player1.hand.append(shuffled_deck.pop())
-                print(f"Player 1: {player1.hand}\n")
-                # Now the score needs to be calculated and printed as well
-                player1.score = player1.calculate_hand_score(player1.hand)
-                print(f"Score: {player1.score}")
-                # Validates if player exceeded 21 (Busted)
-                if player1.score > 21:
-                    print("Busted!")
-                    print(f"Bet was: {player1.bet}")
-                    player1.calculate_loss(player1.bet)
-                    print(f"Money: {player1.money}")
-                    break
-                elif player1.score == 21:
-                    print("Blackjack!")
-            elif move == "S":
-                # Add a call to a function that will play the dealer's hand and
-                # then checks who wins or if there is a tie
-                print("User chose to stand")
-                deal_dealers_hand(player1,dealer)
-                if dealer.score > player1.score and dealer.score <= 21:
-                    print("Player 1 loses!")
-                    player1.calculate_loss(player1.bet)
-                elif dealer.score == player1.score:
-                    print("It's a tie!")
-                else:
-                    print("Player 1 wins!")
-                    player1.calculate_win(player1.bet)
-        # Ask to the player if he would like to contine playing
-        while True:
-            game_on = input("\nYou want to play again? (Y/N): ").upper()
-            if game_on == "Y" or game_on == "N":
-                money = player1.money
-                break
-            else:
-                continue
+        else:
+            continue
