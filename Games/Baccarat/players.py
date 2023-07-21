@@ -104,6 +104,9 @@ class Player:
         if self.is_valid_bet():
             if self._hand_bet == 'player':
                 self._balance += int(self._amount_bet * 1)
+                #add money made 
+                #add the pWin
+
             elif self._hand_bet == 'banker':
                 self._balance += int(self._amount_bet * 0.95)
             elif self._hand_bet == 'tie':
@@ -120,6 +123,8 @@ class Player:
             InvalidBet: If the player does not have a valid bet.
         """
         if self.is_valid_bet():
+            # add player money lost
+
             self._balance -= self._amount_bet
             self._hand_bet = None
             self._amount_bet = 0
