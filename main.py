@@ -5,9 +5,9 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-#import randomtimestamp
-#from randomtimestamp import random_time
-#import names
+import randomtimestamp
+from randomtimestamp import random_time
+import names
 import sys
 import os
 import sqlite3 
@@ -180,21 +180,27 @@ def stats():
     con.commit()
 
 
-def statGraph():
+def barGraph():
     statgraph_win = Toplevel(my_w)
-    fig = Figure(figsize = (5, 5),
-                 dpi = 100)
+
   
     # list of squares
-    y = [i**2 for i in range(101)]
+    # y = [i**2 for i in range(101)]
     # adding the subplot
-    plot1 = fig.add_subplot(111)
+
     # plotting the graph
-    plot1.plot(y)
+    #plot1.plot(y)
+    cur.execute(f"SELECT SUM(pWin) FROM Statistics")
+    winSum = cur.fetchall()
+    cur.execute(f"SELECT SUM(pLoss) FROM Statistics")
+    lossSum = cur.fetchall()
+
+
+    fig = Figure(figsize=(5, 5), dpi=100)
+
     # creating the Tkinter canvas
     # containing the Matplotlib figure
-    canvas = FigureCanvasTkAgg(fig,
-                               master = statgraph_win)  
+    canvas = FigureCanvasTkAgg(fig, master = statgraph_win)
     canvas.draw()
   
     # placing the canvas on the Tkinter window
@@ -204,8 +210,15 @@ def statGraph():
     toolbar = NavigationToolbar2Tk(canvas,
                                    statgraph_win)
     toolbar.update()
-  
+    plot1 = fig.add_subplot()
     # placing the toolbar on the Tkinter window
+    print(type(lossSum), type(winSum))
+    plot1.bar('Losses', lossSum[0])
+    plot1.bar('Wins', winSum[0])
+    plot1.set_title("Casino Wins Vs Losses")
+    plot1.set_ylabel("Amount")
+
+
     canvas.get_tk_widget().pack()
 
      
@@ -294,7 +307,8 @@ def gameScreen(player,status): #Pass player
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
-        tk.Button(game_window, text = 'Statistics Graph', command=lambda:statGraph()).grid(row= 8, column=0)
+        tk.Button(game_window, text = "Statistics Line Graph", command=lambda:statGraph()).grid(row=9, column=0)
+        tk.Button(game_window, text = 'Statistics Bar Graph', command=lambda:barGraph()).grid(row= 8, column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
         b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
