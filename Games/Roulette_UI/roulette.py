@@ -154,21 +154,16 @@ class Roulette(tk.Tk):
             tkinter.messagebox.showinfo("Result", "You Lost $" + str(self.bet_money) +
                                         "\nNew balance: $" + str(self.userMoney))
 
+    def insert_stat(self, cur):
+        cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
+
     def end(self):
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        db_path = os.path.join(BASE_DIR, "Casino.db")
-        con = sqlite3.connect(db_path)
-        cur = con.cursor()
         t = time.localtime()
         current_time = time.strftime("%H:%M:%S", t)
         #print(current_time)
 
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
-        print(f'Casino Money: ${self.casinoMoney}')
-        insert_stats = "INSERT INTO Statistics VALUES (%s, %s, %d, %d, %d, %d, %s) WHERE playerUserName = ?;"
-        insert_val = (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time)
-        cur.execute(insert_stats, insert_val)
-
+        #print(f'Casino Money: ${self.casinoMoney}')
 
         tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + self.pUserName +
                                     "\n\nPlayer Name: \t" + self.pLastName + " " + self.pFirstName +

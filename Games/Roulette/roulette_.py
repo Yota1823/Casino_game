@@ -8,10 +8,7 @@ import os
 import sqlite3 
 import os.path
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR, "Casino.db")
-con = sqlite3.connect(db_path)
-cur = con.cursor()
+
 
 
 odd = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
@@ -185,8 +182,6 @@ def end():
     cur.execute(insert_stats, insert_val)
     '''
     
-
-    
     casino_balance = casino_balance + p_money_made - p_money_lost
     print(f'Casino Money: ${casino_balance}')
     tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + p_username +
@@ -338,6 +333,22 @@ tkinter.Button(master=roulette_ui, text="Reset", width=10, height=1, fg="black",
 tkinter.Button(master=roulette_ui, text="Quit", width=10, height=1, fg="black", bg="light salmon",
                font="Times 12 bold", command=lambda: end()).place(x=1200, y=410)
 
+def insert_stat():
+    global pWin, pLost, p_money_lost, p_money_made
+    global p_username, curr_game
+
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print(current_time)
+    cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?)", (p_username, curr_game, p_money_made, p_money_lost, pWin, pLost, current_time))
+
 
 if __name__ == "__main__":
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "Casino.db")
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+
     roulette_ui.mainloop()
+    print("quit roulette, insert data")
+    insert_stat(con)

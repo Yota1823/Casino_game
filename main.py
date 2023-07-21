@@ -331,6 +331,7 @@ def Roulette(player):
                   player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
     
     p1.mainloop()
+    p1.insert_stat(cur)
     main()
 
 
