@@ -1,11 +1,14 @@
 import random
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-#import randomtimestamp
-#from randomtimestamp import random_time
-#import names
+import randomtimestamp
+from randomtimestamp import random_time
+import names
 import sys
 import os
 import sqlite3 
@@ -153,6 +156,93 @@ def stats():
     con.commit()
 
 
+def statGraph():
+    statgraph_win = Toplevel(my_w)
+    fig = Figure(figsize=(5, 5),
+                 dpi=100)
+
+    # list of squares
+
+    plot1 = fig.add_subplot(111)
+    cur.execute("SELECT pMoneyMade FROM Statistics")
+    points_mm = cur.fetchall()
+    cur.execute("SELECT pMoneyLost FROM Statistics")
+    points_ml = cur.fetchall()
+    print(type(points_mm[0][0]))
+
+    for i in range(len(points_mm)):
+        plot1.scatter(i, points_mm[i][0], color="g")
+        plot1.scatter(i, points_ml[i][0], color="r")
+    # for i in range(len(points_mm)):
+    #     plot1.plot(points_mm[i][0])
+    #     plot1.plot(points_ml[i][0])
+
+    # y = [i**2 for i in range(101)]
+    # adding the subplot
+    # plot1 = fig.add_subplot(111)
+    # plotting the graph
+    # plot1.plot(y)
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig,
+                               master=statgraph_win)
+    canvas.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
+    toolbar.update()
+
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+def barGraph():
+    statgraph_win = Toplevel(my_w)
+    fig = Figure(figsize = (5, 5),
+                 dpi = 100)
+  
+    # list of squares
+    y = [i**2 for i in range(101)]
+    # adding the subplot
+    plot1 = fig.add_subplot(111)
+    # plotting the graph
+    #plot1.plot(y)
+    cur.execute(f"SELECT SUM(pWin) FROM Statistics")
+    winSum = cur.fetchall()
+    cur.execute(f"SELECT SUM(pLoss) FROM Statistics")
+    lossSum = cur.fetchall()
+
+
+    fig = Figure(figsize=(5, 5), dpi=100)
+
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig, master = statgraph_win)
+    canvas.draw()
+  
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+  
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
+    toolbar.update()
+    plot1 = fig.add_subplot()
+    # placing the toolbar on the Tkinter window
+    print(type(lossSum), type(winSum))
+    plot1.bar('Losses', lossSum[0])
+    plot1.bar('Wins', winSum[0])
+    plot1.set_title("Casino Wins Vs Losses")
+    plot1.set_ylabel("Amount")
+
+
+    canvas.get_tk_widget().pack()
+
+     
+
 def generate():
     games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
     x = 0
@@ -237,6 +327,8 @@ def gameScreen(player,status): #Pass player
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
+        tk.Button(game_window, text = "Statistics Line Graph", command=lambda:statGraph()).grid(row=9, column=0)
+        tk.Button(game_window, text = 'Statistics Bar Graph', command=lambda:barGraph()).grid(row= 8, column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
         b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
@@ -288,8 +380,8 @@ def baccarat():
     #sys.path.append(game_dir)
 
     subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
-    from Games.Baccarat.Casino_project_Baccarat_game import Cli
-    Cli.run()
+    # from Games.Baccarat.Casino_project_Baccarat_game import Cli
+    # Cli.run()
 
 
 def solitaire():
@@ -308,9 +400,10 @@ def Roulette(player):
     p1.mainloop()
     #insert player stats to db
     #pass in cursor
-    p1.insert_stat(cur)
+    #p1.insert_stat(cur)
     #update player credit to db
-    p1.update_credit(cur)
+    #p1.update_credit(cur)
+    p1.update_player(cur)
     con.commit()
     main()
     my_login(player.getFirst())

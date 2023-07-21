@@ -1,22 +1,8 @@
-from cards import Card, Shoe
+from cards import Shoe
 from hands import Punto, Banco
 from players import Player
 
 class Game:
-    """Application of the rules of baccarat - punto banco variation. This class
-    manages only the card handling and its results.
-
-    Args:
-        num_decks: int, number of decks of the initial shoe. Optional, default
-            value 8.
-
-    Attributes:
-        punto_value: int, value of punto hand.
-        punto_cards: str, cards of punto hand.
-        banco_value: int, value of banco hand.
-        banco_cards: str, cards of banco hand.
-        num_decks: int, current number of decks in the shoe.
-    """
     def __init__(self, num_decks=8):
         self._game_running = False
         self._players = []
@@ -205,8 +191,7 @@ class Table(Game):
     """
     def __init__(self, num_decks=8):
         self._bets_open = True
-        Game.__init__(self, num_decks)
-
+        super().__init__(num_decks) 
     @property
     def num_players(self):
         """Retuns the total number of players."""
