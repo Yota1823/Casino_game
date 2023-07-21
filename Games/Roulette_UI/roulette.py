@@ -3,9 +3,15 @@ from tkinter import *
 import tkinter as tk
 import tkinter.messagebox
 import random
+import time
+import os
+import sqlite3
+from datetime import datetime
 
 
 # from main import gameScreen
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
 
 class Roulette(tk.Tk):
     def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin, casinoMoney):
@@ -147,13 +153,23 @@ class Roulette(tk.Tk):
             tkinter.messagebox.showwarning("Warning", "Please choose one bet option")
         else:
             self.pLost += 1
-            self.pMoneyLost -= self.bet_money
+            self.pMoneyLost += self.bet_money
             tkinter.messagebox.showinfo("Result", "You Lost $" + str(self.bet_money) +
                                         "\nNew balance: $" + str(self.userMoney))
+    
+    def insert_stat(self, cur):
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
+    
+
+    def update_credit(self, cur):
+        cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
 
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
-        print(f'Casino Money: ${self.casinoMoney}')
+        #print(f'Casino Money: ${self.casinoMoney}')
+
         tkinter.messagebox.showinfo("Player Summary", "Player username: \t" + self.pUserName +
                                     "\n\nPlayer Name: \t" + self.pLastName + " " + self.pFirstName +
                                     "\n\nCurrent Game: \t" + self.currGame +
@@ -293,6 +309,8 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.clear).place(x=1090, y=410)
         tkinter.Button(text="Quit", width=10, height=1, fg="black", bg="light salmon",
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
+
+
 
 
 # create player for testing
