@@ -12,14 +12,10 @@ Waste_foundation=Waste(Waste_card)
 Foundation=foundation()
 Stock_length=Waste_foundation.get_stock()
 Waste_length=Waste_foundation.get_waste()
-Player1=Player("Manuel","Choute","The Jack")
+
 
 while(1):
-    print(f'Player first name => {Player1.first_n}\t')
-    print(f'Player last name => {Player1.last_n}\t')
-    print(f'Player user name => {Player1.user_name}\t')
-    print(f'Game won : {Player1.game_one}\t')
-    print(f'Game lost : {Player1.game_lost}\n')
+    
     print("{}\t{}".format(Stock_length, Waste_length))
     print("\t")
     Table_foundation.display_unfipped()
