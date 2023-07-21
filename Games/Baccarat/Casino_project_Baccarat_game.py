@@ -1,5 +1,17 @@
 import time
 from rules import Table, GameError
+import os
+import sqlite3 
+import os.path
+
+BASE_DIR = os.path.dirname(os.path.abspath("main.py"))
+db_path = os.path.join(BASE_DIR, "Casino.db")
+con = sqlite3.connect(db_path)
+cur = con.cursor()
+
+cur.execute("SELECT * FROM Player")
+player = cur.fetchall()
+
 
 class Cli:
     """Command line interface of the game. Only interacts with Table object in
