@@ -1,6 +1,7 @@
 import random
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
@@ -182,12 +183,13 @@ def stats():
 
 def barGraph():
     statgraph_win = Toplevel(my_w)
-
+    fig = Figure(figsize = (5, 5),
+                 dpi = 100)
   
     # list of squares
-    # y = [i**2 for i in range(101)]
+    y = [i**2 for i in range(101)]
     # adding the subplot
-
+    plot1 = fig.add_subplot(111)
     # plotting the graph
     #plot1.plot(y)
     cur.execute(f"SELECT SUM(pWin) FROM Statistics")
