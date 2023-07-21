@@ -168,7 +168,7 @@ class Roulette(tk.Tk):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
 
     def update_player(self,cur):
-        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLost = ?, WHERE playerUserName= ? ;", 
+        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
                     (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
 
     def end(self):
