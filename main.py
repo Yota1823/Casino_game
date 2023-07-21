@@ -6,7 +6,6 @@ from tkinter import ttk
 import tkinter as tk
 import subprocess
 import randomtimestamp
-from matplotlib.figure import Figure
 from randomtimestamp import random_time
 import names
 import sys
@@ -253,7 +252,7 @@ def my_login(first):
                     managerData[0][5],managerData[0][6],managerData[0][7])
         gameScreen(m,'Y')
 
-
+    
 
 def create(first,last,user):
     print("database creating things")
@@ -352,6 +351,14 @@ def Roulette(player):
                   player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
     
     p1.mainloop()
+    #insert player stats to db
+    #pass in cursor
+    p1.insert_stat(cur)
+    #update player credit to db
+    p1.update_credit(cur)
+
+    con.commit()
+    cur.close()
     main()
 
 
