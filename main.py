@@ -5,9 +5,9 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-import randomtimestamp
-from randomtimestamp import random_time
-import names
+#import randomtimestamp
+#from randomtimestamp import random_time
+#import names
 import sys
 import os
 import sqlite3 
@@ -182,20 +182,33 @@ def stats():
 
 def statGraph():
     statgraph_win = Toplevel(my_w)
-    statgraph_win.geometry("1700x800")
-    statgraph_win.title("Statistics Graph")
-
-
-    fig = Figure(figsize = (5, 5), dpi = 100)
+    fig = Figure(figsize = (5, 5),
+                 dpi = 100)
+  
+    # list of squares
     y = [i**2 for i in range(101)]
+    # adding the subplot
     plot1 = fig.add_subplot(111)
+    # plotting the graph
     plot1.plot(y)
-    canvas = FigureCanvasTkAgg(fig, master= statgraph_win)
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig,
+                               master = statgraph_win)  
     canvas.draw()
-    canvas.get_tk_widget().pack
-    toolbar = NavigationToolbar2Tk(canvas, statgraph_win)
+  
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+  
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
     toolbar.update()
-    canvas.get_tk_widget().pack
+  
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+     
 
 def generate():
     games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
