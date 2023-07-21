@@ -1,14 +1,16 @@
 import time
-from rules import Table, GameError
+from rules import Table, GameError  # Import necessary modules
 import os
-import sqlite3 
+import sqlite3
 import os.path
 
+# Define the path to the SQLite database
 BASE_DIR = os.path.dirname(os.path.abspath("main.py"))
 db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
 cur = con.cursor()
 
+# Retrieve player data from the database
 cur.execute("SELECT * FROM Player")
 player = cur.fetchall()
 
@@ -18,19 +20,20 @@ class Cli:
     order to receive input from the game logic.
     """
     def __init__(self):
+        # Initialize the Cli object with a Table instance for the game and other variables
         self._game = Table()
         self._quit = False
         self._options = {
-            '1': self.status,
+            '1': self.status,      # Map user input to corresponding methods
             '2': self.add_player,
             '3': self.place_bets,
             '4': self.deal_hands,
             '5': self.create_shoe,
             '0': self.quit
-            }
+        }
 
     def run(self):
-        """Main menu of the game."""
+        """Main menu of the game. Displays options and takes user input."""
         print('Welcome to Baccarat')
         while not self._quit:
             print('''
@@ -45,11 +48,14 @@ Options:
             selection = input('Your selection: ')
             print()
             if selection and selection in self._options:
-                self._options.get(self._options[selection]())
+                # Call the corresponding function based on the user's input
+                self._options.get(self._options[selection])()
             else:
                 print('Selection not recognized.')
 
-    def status(self):          #option 1 Prints the players status and other in game information.
+    def status(self):
+        """Option 1: Prints the players' status and other in-game information."""
+        # Display the current shoe's details and available players with their balances
         print(f'Shoe with {self._game.num_decks} deck(s).')
         if self._game.available_players:
             print(f'{len(self._game.available_players)} player(s) in game:')
@@ -60,32 +66,29 @@ Options:
         input('Press <enter> to continue...')
 
     def add_player(self):
-        """Adds a new player to the game."""
+        """Option 2: Adds a new player to the game."""
+        # Ask the user to enter the initial balance for the new player
         balance_input = input('Initial balance for the new player or <c> to cancel: ')
         if balance_input.lower() in ['c', 'cancel']:
             return
         try:
-            # Try to convert to int but don't capture error
-            try:
-                balance_input = int(balance_input)
-            except:
-                pass
-            self._game.add_player(balance_input)
+            # Try to convert the input to an integer (player's initial balance)
+            balance_input = int(balance_input)
+            self._game.add_player(balance_input)  # Add the new player to the game
             print()
             print(f'Player added with {balance_input} balance.')
             input('Press <enter> to continue...')
         except (ValueError, TypeError) as error:
+            # If the input is not a valid integer, prompt the user again
             print()
             print(error)
             self.add_player()
 
     def place_bets(self):
-        """Loops through out all the available player to place the individual
-        bets.
-        """
+        """Option 3: Loops through all the available players to place individual bets."""
         if self._game.available_players:
             for player_i in self._game.available_players:
-                self.bet(player_i)
+                self.bet(player_i)  # Place a bet for each player
             print('All bets placed.')
         else:
             print('No players to place bets.')
@@ -93,6 +96,7 @@ Options:
 
     def bet(self, player_i):
         """Places an individual bet for player_i."""
+        # Define the available betting options and their corresponding input values
         hands = {
             'p': 'player',
             'player': 'player',
@@ -100,7 +104,7 @@ Options:
             'banker': 'banker',
             't': 'tie',
             'tie': 'tie'
-            }
+        }
         action = 'Replacing' if player_i in self._game.valid_bets else 'New'
         print(f'{action} bet for Player {player_i + 1}. Press <s> to skip.')
         hand_input = input('The hand to bet. <p> player, <b> banker, <t> tie: ')
@@ -112,24 +116,19 @@ Options:
             print()
             return
         try:
-            # Try to convert to int but don't capture error
-            try:
-                amount_input = int(amount_input)
-            except:
-                pass
+            # Try to convert the amount input to an integer (bet amount)
+            amount_input = int(amount_input)
             self._game.bet(player_i, hands.get(hand_input.lower()), amount_input)
             print()
         except (ValueError, TypeError, GameError) as error:
+            # If the input is not a valid integer or there is a game error, prompt the user again
             print()
             print(error)
             self.bet(player_i)
 
     def deal_hands(self):
-        """Deals both punto and banco hands and proceeds with the game itself.
-        Check if there is a natural, draws possible thrird cards and apply the
-        bet results.
-        """
-
+        """Option 4: Deals both punto and banco hands and proceeds with the game."""
+        # Inner functions to display game results and player hands
         def result_str():
             """Returns a string with the game result to be printed as output."""
             if self._game.game_result() != 'tie':
@@ -148,11 +147,10 @@ Options:
             print(f'Cards values: {banco_values}.')
             print(f'Total hand value: value: {self._game.banco_value}.')
 
-
         print('Dealing hands...')
         time.sleep(1)
-        self._game.deal_hands()
-        print_hands()
+        self._game.deal_hands()  # Deal punto and banco hands
+        print_hands()  # Display player hands and card values
         print()
         if self._game.is_natural():
             time.sleep(0.5)
@@ -179,34 +177,32 @@ Options:
                 print(f'Player {player_i + 1} {bet_result[0]}. Balance: {bet_result[1]}.')
                 time.sleep(0.5)
         else:
-            print('No bets no table.')
+            print('No bets on the table.')
         if self._game.open_bets():
             print('Bets are open.')
         print()
         input('Press <enter> to continue...')
 
     def create_shoe(self):
-        """Creates a new shoe. Replaces the previous one."""
+        """Option 5: Creates a new shoe with a specified number of decks."""
         shoe_input = input('The number of decks for the new shoe or <c> to cancel: ')
         if shoe_input.lower() in ['c', 'cancel']:
             return
         try:
-            # Try to convert to int but don't capture error
-            try:
-                shoe_input = int(shoe_input)
-            except:
-                pass
-            self._game.create_shoe(shoe_input)
+            # Try to convert the input to an integer (number of decks in the new shoe)
+            shoe_input = int(shoe_input)
+            self._game.create_shoe(shoe_input)  # Create a new shoe with the specified number of decks
             print()
-            print(f'A new shoe with {int(shoe_input)} deck(s) will be used on the game.')
+            print(f'A new shoe with {int(shoe_input)} deck(s) will be used in the game.')
             input('Press <enter> to continue...')
         except (ValueError, TypeError) as error:
+            # If the input is not a valid integer, prompt the user again
             print()
             print(error)
             self.create_shoe()
 
     def quit(self):
-        """Quits the game uppon confirmation from the user."""
+        """Option 0: Quits the game upon confirmation from the user."""
         quit_input = input('Do you really wish to quit? <y/n>: ')
         if quit_input.lower() in ['y', 'yes']:
             self._quit = True
@@ -216,5 +212,7 @@ Options:
             print('Invalid input.')
             self.quit()
 
+
 if __name__ == '__main__':
+    # Create a Cli object and start the game by calling the run() method
     Cli().run()
