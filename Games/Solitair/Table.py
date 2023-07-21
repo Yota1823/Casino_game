@@ -158,15 +158,15 @@ class Tableau:
 
 
 
-Test_Deck= Dek(1)
-Numb_Deck= Test_Deck.deal_c(28)
-Test_Tableau= Tableau(Numb_Deck)
-Foundation=foundation()
-Test_Tableau.display_c()
-card=int(input("Enter column :"))
-test2=Test_Tableau.add_T_F(Foundation,card)
-if test2:
-    print("...")
+# Test_Deck= Dek(1)
+# Numb_Deck= Test_Deck.deal_c(28)
+# Test_Tableau= Tableau(Numb_Deck)
+# Foundation=foundation()
+# Test_Tableau.display_c()
+# card=int(input("Enter column :"))
+# test2=Test_Tableau.add_T_F(Foundation,card)
+# if test2:
+#     print("...")
 # print(" This is the card in the deck ")
 # #for cards in Numb_Deck:
 #    # print(cards)
