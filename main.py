@@ -107,32 +107,7 @@ class Manager(User):
 
 
 
-my_w = tk.Tk()
-my_w.geometry("250x250")  # Size of the window
-my_w.title("WIT CASINO")  # Adding a title
 
-# create one lebel
-my_str = tk.StringVar()
-l1 = tk.Label(my_w,  textvariable=my_str )
-l1.grid(row=1,column=1)
-my_str.set("Welcome to the WIT Casino")
-tk.Label(my_w, text="Username").grid(row=2, column=2)
-
-
-
-input1 = tk.Entry(my_w)
-
-input1.grid(row=2, column=1)
-
-
-# add one button
-b1 = tk.Button(my_w, text='Create New User',
-               command=lambda:my_open())
-b1.grid(row=4,column=1)
-
-b2 = tk.Button(my_w, text='Login',
-               command=lambda:my_login(input1.get()))
-b2.grid(row=5,column=1)
 
 #window = Tk()
 #mainWindow = Tk()
@@ -428,10 +403,10 @@ def Roulette(player):
     p1.insert_stat(cur)
     #update player credit to db
     p1.update_credit(cur)
-
     con.commit()
-    cur.close()
     main()
+    my_login(player.getFirst())
+
 
 
 def my_open():
@@ -469,7 +444,35 @@ def my_open():
 
 
 def main():
+    global my_w
+    my_w = tk.Tk()
+    my_w.geometry("250x250")  # Size of the window
+    my_w.title("WIT CASINO")  # Adding a title
+
+    # create one lebel
+    my_str = tk.StringVar()
+    l1 = tk.Label(my_w,  textvariable=my_str )
+    l1.grid(row=1,column=1)
+    my_str.set("Welcome to the WIT Casino")
+    tk.Label(my_w, text="Username").grid(row=2, column=2)
+
+
+
+    input1 = tk.Entry(my_w)
+
+    input1.grid(row=2, column=1)
+
+
+    # add one button
+    b1 = tk.Button(my_w, text='Create New User',
+                   command=lambda:my_open())
+    b1.grid(row=4,column=1)
+
+    b2 = tk.Button(my_w, text='Login',
+                   command=lambda:my_login(input1.get()))
+    b2.grid(row=5,column=1)
     my_w.mainloop()
+
     
 
 
