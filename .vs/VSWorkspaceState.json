@@ -2,12 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\discord",
-    "\\discord\\modules",
     "\\Games",
-    "\\Games\\Baccarat",
     "\\Games\\Roulette",
     "\\Games\\Roulette_UI"
   ],
-  "SelectedNode": "\\Games\\Baccarat\\Casino_project_Baccarat_game.py",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }

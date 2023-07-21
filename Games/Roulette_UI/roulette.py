@@ -4,8 +4,6 @@ import tkinter as tk
 import tkinter.messagebox
 import random
 import time
-import sqlite3 
-import os.path
 
 
 # from main import gameScreen
@@ -155,12 +153,11 @@ class Roulette(tk.Tk):
                                         "\nNew balance: $" + str(self.userMoney))
 
     def insert_stat(self, cur):
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
         cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
 
     def end(self):
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        #print(current_time)
 
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
         #print(f'Casino Money: ${self.casinoMoney}')
@@ -304,6 +301,8 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.clear).place(x=1090, y=410)
         tkinter.Button(text="Quit", width=10, height=1, fg="black", bg="light salmon",
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
+
+
 
 
 # create player for testing
