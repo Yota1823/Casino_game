@@ -180,7 +180,12 @@ class Roulette(tk.Tk):
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
         self.quit()
         self.destroy()
+        #self.open_main_window()
         # gameScreen(self, Y)
+    '''
+    def open_main_window(self):
+        self.main_w = tk.Toplevel()
+        '''
 
     # button layout
     def buttons(self):
