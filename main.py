@@ -1,9 +1,12 @@
 import random
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
 import randomtimestamp
+from matplotlib.figure import Figure
 from randomtimestamp import random_time
 import names
 import sys
@@ -178,6 +181,23 @@ def stats():
     con.commit()
 
 
+def statGraph():
+    statgraph_win = Toplevel(my_w)
+    statgraph_win.geometry("1700x800")
+    statgraph_win.title("Statistics Graph")
+
+
+    fig = Figure(figsize = (5, 5), dpi = 100)
+    y = [i**2 for i in range(101)]
+    plot1 = fig.add_subplot(111)
+    plot1.plot(y)
+    canvas = FigureCanvasTkAgg(fig, master= statgraph_win)
+    canvas.draw()
+    canvas.get_tk_widget().pack
+    toolbar = NavigationToolbar2Tk(canvas, statgraph_win)
+    toolbar.update()
+    canvas.get_tk_widget().pack
+
 def generate():
     games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
     x = 0
@@ -233,7 +253,7 @@ def my_login(first):
                     managerData[0][5],managerData[0][6],managerData[0][7])
         gameScreen(m,'Y')
 
-    
+
 
 def create(first,last,user):
     print("database creating things")
@@ -254,14 +274,15 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette()).grid(row=1,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
-    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
+    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
     b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
+        tk.Button(game_window, text = 'Statistics Graph', command=lambda:statGraph()).grid(row= 8, column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
         b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
@@ -313,8 +334,8 @@ def baccarat():
     #sys.path.append(game_dir)
 
     subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
-    from Games.Baccarat.Casino_project_Baccarat_game import Cli
-    Cli.run()
+    # from Games.Baccarat.Casino_project_Baccarat_game import Cli
+    # Cli.run()
 
 
 def solitaire():
