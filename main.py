@@ -1,6 +1,7 @@
 import random
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
@@ -186,11 +187,27 @@ def statGraph():
                  dpi = 100)
   
     # list of squares
-    y = [i**2 for i in range(101)]
-    # adding the subplot
+    
     plot1 = fig.add_subplot(111)
+    cur.execute("SELECT pMoneyMade FROM Statistics")
+    points_mm = cur.fetchall()
+    cur.execute("SELECT pMoneyLost FROM Statistics")
+    points_ml = cur.fetchall()
+    print(type(points_mm[0][0]))
+
+    for i in range(len(points_mm)):
+        plot1.scatter(i,points_mm[i][0],color="g")
+        plot1.scatter(i,points_ml[i][0], color="r")
+    # for i in range(len(points_mm)):
+    #     plot1.plot(points_mm[i][0])
+    #     plot1.plot(points_ml[i][0])
+    
+
+    #y = [i**2 for i in range(101)]
+    # adding the subplot
+    #plot1 = fig.add_subplot(111)
     # plotting the graph
-    plot1.plot(y)
+    #plot1.plot(y)
     # creating the Tkinter canvas
     # containing the Matplotlib figure
     canvas = FigureCanvasTkAgg(fig,
@@ -294,7 +311,7 @@ def gameScreen(player,status): #Pass player
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
-        tk.Button(game_window, text = 'Statistics Graph', command=lambda:statGraph()).grid(row= 8, column=0)
+        tk.Button(game_window, text = 'MM vs ML Graph', command=lambda:statGraph()).grid(row= 8, column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
         b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
