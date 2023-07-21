@@ -11,7 +11,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 main_module_path = os.path.join(current_dir, "..", "main.py")
 sys.path.append(os.path.dirname(main_module_path))
-from main import User,Player #maybe i dont need this
+from main import User, Player #maybe i dont need this
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

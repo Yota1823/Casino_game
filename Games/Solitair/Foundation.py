@@ -28,3 +28,9 @@ Foundation=foundation()
 test=Foundation.Add_to_Foundation(test_card)
 if test:
     print(".")
+
+test_card=Solitair_card(1,"Heart")
+Foundation=foundation()
+test=Foundation.Add_to_Foundation(test_card)
+if test:
+    print(".")
