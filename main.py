@@ -400,9 +400,10 @@ def Roulette(player):
     p1.mainloop()
     #insert player stats to db
     #pass in cursor
-    p1.insert_stat(cur)
+    #p1.insert_stat(cur)
     #update player credit to db
-    p1.update_credit(cur)
+    #p1.update_credit(cur)
+    p1.update_player(cur)
     con.commit()
     main()
     my_login(player.getFirst())

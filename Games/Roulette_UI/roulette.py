@@ -1,3 +1,4 @@
+from pickle import OBJ
 import tkinter
 from tkinter import *
 import tkinter as tk
@@ -165,6 +166,10 @@ class Roulette(tk.Tk):
 
     def update_credit(self, cur):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
+
+    def update_player(self,cur):
+        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLost = ?, WHERE playerUserName= ? ;", 
+                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
 
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
