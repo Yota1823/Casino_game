@@ -12,7 +12,7 @@ Waste_foundation=Waste(Waste_card)
 Foundation=foundation()
 Stock_length=Waste_foundation.get_stock()
 Waste_length=Waste_foundation.get_waste()
-Player1=Player("Manuel","Choute","The Jack")
+
 
 while(1):
     
