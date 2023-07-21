@@ -181,6 +181,49 @@ def stats():
     con.commit()
 
 
+def statGraph():
+    statgraph_win = Toplevel(my_w)
+    fig = Figure(figsize=(5, 5),
+                 dpi=100)
+
+    # list of squares
+
+    plot1 = fig.add_subplot(111)
+    cur.execute("SELECT pMoneyMade FROM Statistics")
+    points_mm = cur.fetchall()
+    cur.execute("SELECT pMoneyLost FROM Statistics")
+    points_ml = cur.fetchall()
+    print(type(points_mm[0][0]))
+
+    for i in range(len(points_mm)):
+        plot1.scatter(i, points_mm[i][0], color="g")
+        plot1.scatter(i, points_ml[i][0], color="r")
+    # for i in range(len(points_mm)):
+    #     plot1.plot(points_mm[i][0])
+    #     plot1.plot(points_ml[i][0])
+
+    # y = [i**2 for i in range(101)]
+    # adding the subplot
+    # plot1 = fig.add_subplot(111)
+    # plotting the graph
+    # plot1.plot(y)
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig,
+                               master=statgraph_win)
+    canvas.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
+    toolbar.update()
+
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().pack()
+
 def barGraph():
     statgraph_win = Toplevel(my_w)
     fig = Figure(figsize = (5, 5),
