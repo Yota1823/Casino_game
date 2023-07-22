@@ -433,10 +433,10 @@ def my_open():
     l1.grid(row=1,column=2)
     my_str1.set("User Name")
     l2 = tk.Label(my_w_child, text="First Name")
-    my_str1.set("Username")
-    l2 = tk.Label(my_w_child, text="Firstname")
+    my_str1.set("User Name")
+    l2 = tk.Label(my_w_child, text="First Name")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "User Name")
+    l3 = tk.Label(my_w_child, text= "Last Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
