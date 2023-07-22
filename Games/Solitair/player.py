@@ -270,7 +270,7 @@ class Player:
 
 
 
-P1=Player("M","N","MN",500,0,0,0,0,0)
+P1=Player("P","N","MN",500,0,0,0,0,0)
 P1.Data()
 P1.info()
 while(1):
