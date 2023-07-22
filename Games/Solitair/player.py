@@ -231,6 +231,7 @@ class Player:
           self.game_lost=Result[8]
       else:
         print("Player not part of data base ")
+      self.connect.close()
 
 
       
