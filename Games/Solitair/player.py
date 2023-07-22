@@ -18,7 +18,6 @@ class Player:
       
     
     def main(self):
-
        from game import Dek
     
     def data(self):
@@ -43,8 +42,8 @@ class Player:
         self.connect.commit()
         self.connect.close()
 
-        
-       
+
+
 
 moneylost=0
 
