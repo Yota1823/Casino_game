@@ -64,6 +64,8 @@ class Player(User):
         window.destroy()
         self.creditAmount = self.creditAmount + 500
         cur.execute("UPDATE Player SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        cur.execute("UPDATE Manager SET totalCasinoMoney = totalCasinoMoney + 500;")
+        con.commit()
         # Refill Gives Player more money, still needs to add the money to the casino profits
         print("refill")
     def getMoneyMade(self):
