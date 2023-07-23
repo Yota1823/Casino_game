@@ -49,7 +49,7 @@ class Player:
 
     @hand_bet.setter
     def hand_bet(self, hand):
-        if hand not in ['punto', 'banco', 'tie']:
+        if hand not in ['player', 'banker', 'tie']:
             raise ValueError('Invalid hand.')
         self._hand_bet = hand
 
@@ -80,7 +80,7 @@ class Player:
         Returns:
             bol, True if the bet is valid, False otherwise.
         """
-        if self._hand_bet not in ['punto', 'banco', 'tie'] or self._amount_bet <= 0:
+        if self._hand_bet not in ['player', 'banker', 'tie'] or self._amount_bet <= 0:
             return False
         return True
 
