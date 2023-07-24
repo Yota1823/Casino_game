@@ -161,7 +161,7 @@ class Player:
                           else:
                                L=L-1
                                print(f"{Waste_foundation.waste[-1]} couldn't  been move from waste to {Val} " )
-                      if j==1:
+                      if j==0:
                                 V=Player_card
                                 v=int(V)
                                 test3=Table_foundation.add_T_F(Foundation,v)
@@ -266,7 +266,9 @@ class Player:
              return True
            else:
              return False
-       
+
+    
+          
 
 
 
@@ -274,10 +276,16 @@ P1=Player("P","N","MN",500,0,0,0,0,0)
 P1.Data()
 P1.info()
 while(1):
+  
   if P1.bet():
-       P1.main()
+   P1.main()
   else:
      print("You have no money left ")
+  answer=input("Do you want to play again:")
+  if (answer=="Yes"):
+     break
+  else:
+    print("Next game")
 
 
 
