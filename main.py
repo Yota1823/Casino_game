@@ -1,6 +1,7 @@
 import random
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
@@ -106,32 +107,7 @@ class Manager(User):
 
 
 
-my_w = tk.Tk()
-my_w.geometry("250x250")  # Size of the window
-my_w.title("WIT CASINO")  # Adding a title
 
-# create one lebel
-my_str = tk.StringVar()
-l1 = tk.Label(my_w,  textvariable=my_str )
-l1.grid(row=1,column=1)
-my_str.set("Welcome to the WIT Casino")
-tk.Label(my_w, text="Username").grid(row=2, column=2)
-
-
-
-input1 = tk.Entry(my_w)
-
-input1.grid(row=2, column=1)
-
-
-# add one button
-b1 = tk.Button(my_w, text='Create New User',
-               command=lambda:my_open())
-b1.grid(row=4,column=1)
-
-b2 = tk.Button(my_w, text='Login',
-               command=lambda:my_login(input1.get()))
-b2.grid(row=5,column=1)
 
 #window = Tk()
 #mainWindow = Tk()
@@ -182,20 +158,90 @@ def stats():
 
 def statGraph():
     statgraph_win = Toplevel(my_w)
-    statgraph_win.geometry("1700x800")
-    statgraph_win.title("Statistics Graph")
+    fig = Figure(figsize=(5, 5),
+                 dpi=100)
 
+    # list of squares
 
-    fig = Figure(figsize = (5, 5), dpi = 100)
-    y = [i**2 for i in range(101)]
     plot1 = fig.add_subplot(111)
-    plot1.plot(y)
-    canvas = FigureCanvasTkAgg(fig, master= statgraph_win)
+    cur.execute("SELECT pMoneyMade FROM Statistics")
+    points_mm = cur.fetchall()
+    cur.execute("SELECT pMoneyLost FROM Statistics")
+    points_ml = cur.fetchall()
+    print(type(points_mm[0][0]))
+
+    for i in range(len(points_mm)):
+        plot1.scatter(i, points_mm[i][0], color="g")
+        plot1.scatter(i, points_ml[i][0], color="r")
+    # for i in range(len(points_mm)):
+    #     plot1.plot(points_mm[i][0])
+    #     plot1.plot(points_ml[i][0])
+
+    # y = [i**2 for i in range(101)]
+    # adding the subplot
+    # plot1 = fig.add_subplot(111)
+    # plotting the graph
+    # plot1.plot(y)
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig,
+                               master=statgraph_win)
     canvas.draw()
-    canvas.get_tk_widget().pack
-    toolbar = NavigationToolbar2Tk(canvas, statgraph_win)
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
     toolbar.update()
-    canvas.get_tk_widget().pack
+
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+def barGraph():
+    statgraph_win = Toplevel(my_w)
+    fig = Figure(figsize = (5, 5),
+                 dpi = 100)
+  
+    # list of squares
+    y = [i**2 for i in range(101)]
+    # adding the subplot
+    plot1 = fig.add_subplot(111)
+    # plotting the graph
+    #plot1.plot(y)
+    cur.execute(f"SELECT SUM(pWin) FROM Statistics")
+    winSum = cur.fetchall()
+    cur.execute(f"SELECT SUM(pLoss) FROM Statistics")
+    lossSum = cur.fetchall()
+
+
+    fig = Figure(figsize=(5, 5), dpi=100)
+
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig, master = statgraph_win)
+    canvas.draw()
+  
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+  
+    # creating the Matplotlib toolbar
+    toolbar = NavigationToolbar2Tk(canvas,
+                                   statgraph_win)
+    toolbar.update()
+    plot1 = fig.add_subplot()
+    # placing the toolbar on the Tkinter window
+    print(type(lossSum), type(winSum))
+    plot1.bar('Losses', lossSum[0])
+    plot1.bar('Wins', winSum[0])
+    plot1.set_title("Casino Wins Vs Losses")
+    plot1.set_ylabel("Amount")
+
+
+    canvas.get_tk_widget().pack()
+
+     
 
 def generate():
     games = ["Solitaire", "Blackjack", "Baccarat", "Slots", "Roulette"]
@@ -281,7 +327,8 @@ def gameScreen(player,status): #Pass player
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
-        tk.Button(game_window, text = 'Statistics Graph', command=lambda:statGraph()).grid(row= 8, column=0)
+        tk.Button(game_window, text = "Statistics Line Graph", command=lambda:statGraph()).grid(row=9, column=0)
+        tk.Button(game_window, text = 'Statistics Bar Graph', command=lambda:barGraph()).grid(row= 8, column=0)
         b8 = tk.Button(game_window,text=' Remove Player ',command= lambda:removePlayer(player)).grid(row=6,column=0)
         b9 = tk.Button(game_window, text=' Generate ', command=lambda: generate()).grid(row=7, column=0)
     else:
@@ -355,11 +402,12 @@ def Roulette(player):
     #pass in cursor
     p1.insert_stat(cur)
     #update player credit to db
-    p1.update_credit(cur)
-
+    #p1.update_credit(cur)
+    p1.update_player(cur)
     con.commit()
-    cur.close()
     main()
+    my_login(player.getFirst())
+
 
 
 def my_open():
@@ -397,7 +445,35 @@ def my_open():
 
 
 def main():
+    global my_w
+    my_w = tk.Tk()
+    my_w.geometry("250x250")  # Size of the window
+    my_w.title("WIT CASINO")  # Adding a title
+
+    # create one lebel
+    my_str = tk.StringVar()
+    l1 = tk.Label(my_w,  textvariable=my_str )
+    l1.grid(row=1,column=1)
+    my_str.set("Welcome to the WIT Casino")
+    tk.Label(my_w, text="Username").grid(row=2, column=2)
+
+
+
+    input1 = tk.Entry(my_w)
+
+    input1.grid(row=2, column=1)
+
+
+    # add one button
+    b1 = tk.Button(my_w, text='Create New User',
+                   command=lambda:my_open())
+    b1.grid(row=4,column=1)
+
+    b2 = tk.Button(my_w, text='Login',
+                   command=lambda:my_login(input1.get()))
+    b2.grid(row=5,column=1)
     my_w.mainloop()
+
     
 
 
