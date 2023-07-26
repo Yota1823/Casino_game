@@ -1,10 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\discord",
     "\\Games",
     "\\Games\\Baccarat",
-    "\\Games\\Roulette_UI"
+    "\\Games\\Roulette_UI",
+    "\\Games\\Solitair"
   ],
   "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false

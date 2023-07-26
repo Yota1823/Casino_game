@@ -1,8 +1,13 @@
 import time
-from rules import Table, GameError
 import os
-import sqlite3 
+import sqlite3
 import os.path
+from players import Player  # Import the Player class from the players module
+from rules import Table
+from datetime import datetime
+
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
 
 BASE_DIR = os.path.dirname(os.path.abspath("main.py"))
 db_path = os.path.join(BASE_DIR, "Casino.db")
@@ -10,9 +15,10 @@ con = sqlite3.connect(db_path)
 cur = con.cursor()
 
 cur.execute("SELECT * FROM Player")
-player = cur.fetchall()
-
-class Cli:
+player_data = cur.fetchall()
+for x in player_data:
+    print (x)
+class Cli(Player):
     """Command line interface of the game. Only interacts with Table object in
     order to receive input from the game logic.
     """
@@ -21,10 +27,9 @@ class Cli:
         self._quit = False
         self._options = {
             '1': self.status,
-            '2': self.add_player,
-            '3': self.place_bets,
-            '4': self.deal_hands,
-            '5': self.create_shoe,
+            '2': self.place_bets,
+            '3': self.deal_hands,
+            '4': self.create_shoe,
             '0': self.quit
             }
 
@@ -35,18 +40,18 @@ class Cli:
             print('''
 Options:
 1: Status
-2: Add player
-3: Place bets
-4: Deal cards
-5: Change shoe
+2: Place bets
+3: Deal cards
+4: Change shoe
 0: Quit''')
             print()
             selection = input('Your selection: ')
             print()
             if selection and selection in self._options:
-                self._options.get(self._options[selection]())
+                self._options[selection]()
             else:
                 print('Selection not recognized.')
+
 
     def status(self):          #option 1 Prints the players status and other in game information.
         print(f'Shoe with {self._game.num_decks} deck(s).')
@@ -57,26 +62,6 @@ Options:
         else:
             print('No players present on the table.')
         input('Press <enter> to continue...')
-
-    def add_player(self):
-        """Adds a new player to the game."""
-        balance_input = input('Initial balance for the new player or <c> to cancel: ')
-        if balance_input.lower() in ['c', 'cancel']:
-            return
-        try:
-            # Try to convert to int but don't capture error
-            try:
-                balance_input = int(balance_input)
-            except:
-                pass
-            self._game.add_player(balance_input)
-            print()
-            print(f'Player added with {balance_input} balance.')
-            input('Press <enter> to continue...')
-        except (ValueError, TypeError) as error:
-            print()
-            print(error)
-            self.add_player()
 
     def place_bets(self):
         """Loops through out all the available player to place the individual
@@ -205,15 +190,12 @@ Options:
             self.create_shoe()
 
     def quit(self):
-        """Quits the game uppon confirmation from the user."""
+        """Quits the game upon confirmation from the user."""
         quit_input = input('Do you really wish to quit? <y/n>: ')
         if quit_input.lower() in ['y', 'yes']:
-            '''
-            cur.execute(f"INSERT INTO Statistics VALUES (?,?,?,?,?,?,?);",(self.Uname,self.curr,self.pMadeMoney,self.MoneyLost,self.win,self.loss,current_time))
+            cur.execute(f"INSERT INTO Statistics VALUES (?,?,?,?,?,?,?);",(self._pUsername,self._currGame,self._pMadeMoney,self._moneyLost,self._winCount,self._lossCopunt,current_time))
             cur.execute(f"UPDATE Player SET pCredit='{self.pCredit}' WHERE playerUserName='{self.Uname}';")
             con.commit()
-            cur.close()
-            '''
             self._quit = True
         elif quit_input.lower() in ['n', 'no']:
             return
