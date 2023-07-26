@@ -3,8 +3,9 @@
     "",
     "\\discord",
     "\\Games",
+    "\\Games\\Baccarat",
     "\\Games\\Roulette_UI"
   ],
-  "SelectedNode": "\\Games\\blackjack.py",
+  "SelectedNode": "\\Games\\Baccarat\\cards.py",
   "PreviewInSolutionExplorer": false
 }

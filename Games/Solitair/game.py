@@ -70,7 +70,11 @@ while(1):
                     print(card_value)
                     j=j+1
                     if j== Round:
+<<<<<<< HEAD
                       game_one = game_one+1
+=======
+                      Player1.game_one=Player1.game_won+1
+>>>>>>> main
                       print(" Great you won ")
                       break
                     
@@ -86,7 +90,11 @@ while(1):
             Table_foundation.display_c()
             if (j>Round):
                 print(" You are out of move ")
+<<<<<<< HEAD
                 game_lost=game_lost+1
+=======
+                self.game_lost=self.game_lost+1
+>>>>>>> main
             if(L>4):
                 print(" You are out of tries ")
                 game_lost=game_lost+1

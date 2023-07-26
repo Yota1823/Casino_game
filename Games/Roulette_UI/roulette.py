@@ -325,5 +325,5 @@ class Roulette(tk.Tk):
 
 # create player for testing
 def main_roulette():
-    p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
+    p1 = Roulette(100, " ", " ", " ", 0, 0, 0, 0, 1000)
     p1.mainloop()

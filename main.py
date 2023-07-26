@@ -8,7 +8,11 @@ import tkinter as tk
 import subprocess
 #import randomtimestamp
 #from randomtimestamp import random_time
+<<<<<<< HEAD
 #import names
+=======
+import names
+>>>>>>> main
 import sys
 import os
 import sqlite3 
@@ -64,6 +68,8 @@ class Player(User):
         window.destroy()
         self.creditAmount = self.creditAmount + 500
         cur.execute("UPDATE Player SET pCredit = ? WHERE playerUserName = ?;", (self.creditAmount, self.uName))
+        cur.execute("UPDATE Manager SET totalCasinoMoney = totalCasinoMoney + 500;")
+        con.commit()
         # Refill Gives Player more money, still needs to add the money to the casino profits
         print("refill")
     def getMoneyMade(self):
@@ -318,12 +324,13 @@ def gameScreen(player,status): #Pass player
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
 
-    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
-    b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
-    b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
-    b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
-    b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
+    if status == 'N':
+        b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+        b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
+        b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
+        b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
+        b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
+        b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
 
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
@@ -433,10 +440,10 @@ def my_open():
     l1.grid(row=1,column=2)
     my_str1.set("User Name")
     l2 = tk.Label(my_w_child, text="First Name")
-    my_str1.set("Username")
-    l2 = tk.Label(my_w_child, text="Firstname")
+    my_str1.set("User Name")
+    l2 = tk.Label(my_w_child, text="First Name")
     l2.grid(row=2,column=2)
-    l3 = tk.Label(my_w_child, text= "User Name")
+    l3 = tk.Label(my_w_child, text= "Last Name")
     l3.grid(row=3,column=2)
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
