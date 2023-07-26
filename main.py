@@ -8,11 +8,8 @@ import tkinter as tk
 import subprocess
 #import randomtimestamp
 #from randomtimestamp import random_time
-<<<<<<< HEAD
 #import names
-=======
 import names
->>>>>>> main
 import sys
 import os
 import sqlite3 
