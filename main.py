@@ -376,15 +376,18 @@ def slots(player):
     
     p.my_mainloop()
 
-def baccarat():
+def baccarat(player):
     #print(os.path.abspath(__file__))
     #blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
     #game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
     #sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+    #subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
     # from Games.Baccarat.Casino_project_Baccarat_game import Cli
     # Cli.run()
+    from Games.Baccarat.Baccarat import Baccarat
+    p1 = Baccarat(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin())
 
 
 def solitaire():

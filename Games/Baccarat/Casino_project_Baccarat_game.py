@@ -9,14 +9,10 @@ db_path = os.path.join(BASE_DIR, "Casino.db")
 con = sqlite3.connect(db_path)
 cur = con.cursor()
 
-cur.execute(f"SELECT * FROM Player;")
+cur.execute("SELECT * FROM Player")
 player = cur.fetchall()
-for x in player:
-    print(x)
 
-#cur.execute(f"INSERT INTO Player VALUES (?,?,?,?,?,?,?,?,?);", ('huy', 'huy', 'phan', 200, 100, 0, 'Baccarat', 1, 1))
-con.commit()
-class Cli():
+class Cli:
     """Command line interface of the game. Only interacts with Table object in
     order to receive input from the game logic.
     """
@@ -33,7 +29,6 @@ class Cli():
             }
 
     def run(self):
-        
         """Main menu of the game."""
         print('Welcome to Baccarat')
         while not self._quit:
@@ -213,11 +208,6 @@ Options:
         """Quits the game uppon confirmation from the user."""
         quit_input = input('Do you really wish to quit? <y/n>: ')
         if quit_input.lower() in ['y', 'yes']:
-            '''
-            cur.execute(f"INSERT INTO Statistics VALUES (?,?,?,?,?,?,?);",(self.Uname,self.curr,self.pMadeMoney,self.MoneyLost,self.win,self.loss,current_time))
-            cur.execute(f"UPDATE Player SET pCredit='{self.pCredit}' WHERE playerUserName='{self.Uname}';")
-            con.commit()
-            '''
             self._quit = True
         elif quit_input.lower() in ['n', 'no']:
             return
