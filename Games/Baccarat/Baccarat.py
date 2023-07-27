@@ -133,6 +133,7 @@ Options:
 
 
     def status(self):
+
         if self.currPlayer is None:
             print("No player selected. Please select a player first.")
             return
