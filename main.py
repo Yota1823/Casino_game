@@ -388,6 +388,7 @@ def baccarat(player):
     from Games.Baccarat.Baccarat import Baccarat
     p1 = Baccarat(player.getCredit(),player.getLast(),player.getFirst(),
                   player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin())
+    p1.run()
 
 
 def solitaire():

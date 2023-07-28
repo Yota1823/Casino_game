@@ -260,8 +260,8 @@ Options:
 
     def run(self):
         while True:
-            baccarat.option()
-            if baccarat.option == 0:
+            self.option()
+            if self.option == 0:
                 break
     '''
     def update_credit(self, cur):
@@ -273,6 +273,8 @@ Options:
         '''
         
 # Run the Baccarat game
+'''
 baccarat = Baccarat(100, "Bob", "Bob", "bob1", 0, 0, 0, 0)
 print("Welcome to Baccarat")
 baccarat.run()
+'''
