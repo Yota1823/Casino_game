@@ -1,6 +1,15 @@
 import random
 import sys
+import os
+import sqlite3
+from datetime import datetime
 
+BASE_DIR = os.path.dirname(os.path.abspath("main.py"))
+db_path = os.path.join(BASE_DIR, "Casino.db")
+con = sqlite3.connect(db_path)
+cur = con.cursor()
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
 
 SUITS = ['hearts', 'spades', 'clubs', 'diamonds']
 RANKS = ['ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'jack', 'queen', 'king']
@@ -70,11 +79,19 @@ class Hand:
         return ', '.join(str(card) for card in self._cards)
 
 class Baccarat:
-    def __init__(self):
-        self.players = {
-            "Player 1": BaccaratPlayer(500, "", "", "Player 1", 300, 100, 1, 1)
-        }
-        self.currPlayer = None
+    def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin):
+        self.userMoney = userMoney
+        self.pLastName = pLastName
+        self.pFirstName = pFirstName
+        self.pUserName = pUserName
+        self.pMoneyMade = pMoneyMade
+        self.pMoneyLost = pMoneyLost
+        self.pLost = pLost
+        self.pWin = pWin
+        self.currGame = 'Baccarat'
+        self.bet_hand = None
+        self.bet_amount = 0
+        self.bet_result = None
         self.shoe = Shoe(6)  # Create a shoe with 6 decks
         self._quit = False
 
@@ -90,7 +107,6 @@ Options:
         if choice == 1:
             self.status()
         elif choice == 2:
-            self.select_player()
             self.place_bets()
         elif choice == 3:
             self.deal_cards()
@@ -105,6 +121,11 @@ Options:
     def quit(self):
         quit_input = input('Do you really wish to quit? <y/n>: ')
         if quit_input.lower() in ['y', 'yes']:
+            '''Update Player table and Insert data to statistics table'''
+            cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
+            cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
+                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
+            con.commit()
             self._quit = True
             print("Quitting the game.")
             sys.exit(0)  # Exit the script with a successful status code (0)
@@ -114,6 +135,7 @@ Options:
             print('Invalid input.')
             self.quit()
 
+    '''
     def select_player(self):
         if not self.players:
             print("No players found. Please add a player first.")
@@ -130,28 +152,23 @@ Options:
 
         player_names = list(self.players.keys())
         self.currPlayer = self.players[player_names[selection - 1]]
+        '''
 
 
     def status(self):
 
-        if self.currPlayer is None:
-            print("No player selected. Please select a player first.")
-            return
-
-        print(f"Player Name: {self.currPlayer.pUserName}")
-        print(f"Money: {self.currPlayer.userMoney}")
-        print(f"Total Money Made: {self.currPlayer.pMoneyMade}")
-        print(f"Total Money Lost: {self.currPlayer.pMoneyLost}")
-        print(f"Total Games Won: {self.currPlayer.pWin}")
-        print(f"Total Games Lost: {self.currPlayer.pLost}")
-        print(f"Current Game: {self.currPlayer.currGame}")
+        print(f'Player username: {self.pUserName}')
+        print(f'Player Name: {self.pLastName} {self.pFirstName}')
+        print(f"Money: {self.userMoney}")
+        print(f"Total Money Made: {self.pMoneyMade}")
+        print(f"Total Money Lost: {self.pMoneyLost}")
+        print(f"Total Games Won: {self.pWin}")
+        print(f"Total Games Lost: {self.pLost}")
+        print(f"Current Game: {self.currGame}")
 
     def place_bets(self):
-        if self.currPlayer is None:
-            print("No player selected. Please select a player first.")
-            return
 
-        print(f"New bet for {self.currPlayer.pUserName}. Press <s> to skip.")
+        print(f"New bet for {self.pUserName}. Press <s> to skip.")
         bet_hand = input("The hand to bet. <p> player, <b> banker, <t> tie: ")
 
         if bet_hand in ['p', 'b', 't']:
@@ -160,12 +177,12 @@ Options:
                 if bet_amount <= 0:
                     print("Invalid bet amount. Bet amount must be greater than 0.")
                     return
-                if bet_amount > self.currPlayer.userMoney:
+                if bet_amount > self.userMoney:
                     print("Insufficient balance. Bet amount exceeds your available credit.")
                     return
-                self.currPlayer.bet_hand = bet_hand
-                self.currPlayer.bet_amount = bet_amount
-                self.currPlayer.userMoney -= bet_amount
+                self.bet_hand = bet_hand
+                self.bet_amount = bet_amount
+                self.userMoney -= bet_amount
                 print("Bet placed successfully.")
             except ValueError:
                 print("Invalid input. Bet amount must be a positive integer.")
@@ -216,51 +233,46 @@ Options:
         # Determine the winner
         if player_value > banker_value:
             print("Player win.")
-            self.currPlayer.bet_result = "win" if self.currPlayer.bet_hand == 'p' else "lose"
+            self.bet_result = "win" if self.bet_hand == 'p' else "lose"
         elif player_value < banker_value:
             print("Banker win.")
-            self.currPlayer.bet_result = "win" if self.currPlayer.bet_hand == 'b' else "lose"
+            self.bet_result = "win" if self.bet_hand == 'b' else "lose"
         else:
             print("Tie.")
-            self.currPlayer.bet_result = "win" if self.currPlayer.bet_hand == 't' else "lose"
+            self.bet_result = "win" if self.bet_hand == 't' else "lose"
 
         # Show the bet result
         print(f"\nChecking bets...")
-        bet_amount = self.currPlayer.bet_amount
-        if self.currPlayer.bet_result == "win":
-            print(f"{self.currPlayer.pUserName} win. Balance: {self.currPlayer.userMoney + bet_amount}.")
-            self.currPlayer.userMoney += bet_amount
-            self.currPlayer.pMoneyMade += bet_amount
-            self.currPlayer.pWin += 1
+        bet_amount = self.bet_amount
+        if self.bet_result == "win":
+            print(f"{self.pUserName} win. Balance: {self.userMoney + bet_amount}.")
+            self.userMoney += bet_amount
+            self.pMoneyMade += bet_amount
+            self.pWin += 1
         else:
-            print(f"{self.currPlayer.pUserName} lose. Balance: {self.currPlayer.userMoney - bet_amount}.")
-            self.currPlayer.userMoney -= bet_amount
-            self.currPlayer.pMoneyLost += bet_amount
-            self.currPlayer.pLost += 1
+            print(f"{self.pUserName} lose. Balance: {self.userMoney - bet_amount}.")
+            self.userMoney -= bet_amount
+            self.pMoneyLost += bet_amount
+            self.pLost += 1
 
         input("\nBets are open.\n\nPress <enter> to continue...")
 
 
-class BaccaratPlayer:
-    def __init__(self, userMoney, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin):
-        self.userMoney = userMoney
-        self.pLastName = pLastName
-        self.pFirstName = pFirstName
-        self.pUserName = pUserName
-        self.pMoneyMade = pMoneyMade
-        self.pMoneyLost = pMoneyLost
-        self.pLost = pLost
-        self.pWin = pWin
-        self.currGame = 'Baccarat'
-        self.bet_hand = None
-        self.bet_amount = 0
-        self.bet_result = None
+    def run(self):
+        while True:
+            baccarat.option()
+            if baccarat.option == 0:
+                break
+    '''
+    def update_credit(self, cur):
+        cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
 
+    def update_player(self,cur):
+        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
+                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
+        '''
+        
 # Run the Baccarat game
-baccarat = Baccarat()
+baccarat = Baccarat(100, "Bob", "Bob", "bob1", 0, 0, 0, 0)
 print("Welcome to Baccarat")
-
-while True:
-    baccarat.option()
-    if baccarat.option == 0:
-        break
+baccarat.run()
