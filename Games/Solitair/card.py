@@ -49,16 +49,16 @@ class Solitair_card:
  
  
  
-card1= Solitair_card(11,"Heart") 
-card2=Solitair_card(8,"Club")
-card3=Solitair_card(12,"Spade")
+# card1= Solitair_card(11,"Heart") 
+# card2=Solitair_card(8,"Club")
+# card3=Solitair_card(12,"Spade")
 
-C=[card1,card3]
-C2=[card3,card2,card1]
+# C=[card1,card3]
+# C2=[card3,card2,card1]
 
 # test= card1.below(card2)
 # test2=card1.Opposite(card2)
-test3= C[0].Attach(C2[-1])
+# test3= C[0].Attach(C2[-1])
 # print(test)
 # print(test2)
 # print(test3)
@@ -82,9 +82,33 @@ test3= C[0].Attach(C2[-1])
 
 # print(f"{update}") 
 
+# array=[["Blue","Yellow","Red"]
+# ["Green","Black","Orange","Gray"]]
+# array2=["Green","Black","Orange","Gray"]
+# t=len(array2)
+# t2=len(array)
+# width=8
+# for i in range (max(t,t2)):
+#    a=array[i].ljust(width) if i<t2 else "".ljust(width)
+#    b=array2[i].ljust(width) if i<t else"".ljust(width)
+#    print(f"|{a}| |{b}|")
 
 
-
-
-  
+# c1=Solitair_card(1,"Heart")
+# c2=Solitair_card(12,"Spade")
+# C3=Solitair_card(4,"Diamond")
+# c4=Solitair_card(9,"Club")
+# card1=str(c1)
+# card2=str(c2)
+# card3=str(C3)
+# card4=str(c4)
+# array=[card1,card2]
+# array2=[card3,card4]
+# t=len(array2)
+# t2=len(array)
+# width=8
+# for i in range (max(t,t2)):
+#    a=array[i].ljust(width) if i<t2 else "".ljust(width)
+#    b=array2[i].ljust(width) if i<t else"".ljust(width)
+#    print(f"|{a}| |{b}|")
    

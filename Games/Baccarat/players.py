@@ -15,18 +15,10 @@ class Player:
         ValueError: if the balance is not positive.
     """
     _pid = 1  # Class variable to assign sequential player IDs
-    def __init__(self, balance, pLastName, pFirstName, pUserName, pMoneyMade, pMoneyLost, pLost, pWin):
+    def __init__(self, balance):
         self._balance = balance
         self._hand_bet = None
         self._amount_bet = None
-        self.pLastName = pLastName
-        self.pFirstName = pFirstName
-        self.pUserName = pUserName
-        self.pMoneyMade = pMoneyMade
-        self.pMoneyLost = pMoneyLost
-        self.pLost = pLost
-        self.pWin = pWin
-        self.currGame = 'Baccarat'
         if not isinstance(balance, int):
             raise TypeError('Balance must be an integer.')
         elif balance < 1:
@@ -104,6 +96,9 @@ class Player:
         if self.is_valid_bet():
             if self._hand_bet == 'player':
                 self._balance += int(self._amount_bet * 1)
+                #add money made 
+                #add the pWin
+
             elif self._hand_bet == 'banker':
                 self._balance += int(self._amount_bet * 0.95)
             elif self._hand_bet == 'tie':
@@ -120,6 +115,8 @@ class Player:
             InvalidBet: If the player does not have a valid bet.
         """
         if self.is_valid_bet():
+            # add player money lost
+
             self._balance -= self._amount_bet
             self._hand_bet = None
             self._amount_bet = 0
