@@ -230,8 +230,7 @@ def gameScreen(player,status): #Pass player
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
 
-    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack())
-    b1.grid(row=0,column=0)
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
@@ -360,6 +359,7 @@ def my_open():
     b3 = tk.Button(my_w_child, text=' Create ',
                    command= lambda:[create(inFirstName.get(),inLastName.get(),inUserName.get()),my_w_child.destroy()])
     b3.grid(row=4,column=1)
+    
 
 
 
