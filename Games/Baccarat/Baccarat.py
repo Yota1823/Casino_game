@@ -103,20 +103,6 @@ Options:
 3: Deal cards
 4: Change shoe
 0: Quit''')
-        choice = int(input("Your selection: "))
-        if choice == 1:
-            self.status()
-        elif choice == 2:
-            self.place_bets()
-        elif choice == 3:
-            self.deal_cards()
-        elif choice == 4:
-            decks = int(input("Enter the number of decks for the new shoe: "))
-            self.change_shoe(decks)
-        elif choice == 0:
-            self.quit()
-        else:
-            print("Invalid choice. Please try again.")
 
     def quit(self):
         quit_input = input('Do you really wish to quit? <y/n>: ')
@@ -259,10 +245,30 @@ Options:
 
 
     def run(self):
-        while True:
+        while self.userMoney > 0:
             self.option()
-            if self.option == 0:
-                break
+            choice = int(input("Your selection: "))
+            if choice == 1:
+                self.status()
+            elif choice == 2:
+                self.place_bets()
+            elif choice == 3:
+                self.deal_cards()
+            elif choice == 4:
+                decks = int(input("Enter the number of decks for the new shoe: "))
+                self.change_shoe(decks)
+            elif choice == 0:
+                '''Update Player table and Insert data to statistics table'''
+                cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
+                cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
+                        (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
+                con.commit()
+                self._quit = True
+                print("Quitting the game.")
+                break  # Exit the script with a successful status code (0)
+            else:
+                print("Invalid choice. Please try again.")
+            
     '''
     def update_credit(self, cur):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
@@ -273,8 +279,8 @@ Options:
         '''
         
 # Run the Baccarat game
-'''
+
 baccarat = Baccarat(100, "Bob", "Bob", "bob1", 0, 0, 0, 0)
 print("Welcome to Baccarat")
 baccarat.run()
-'''
+
