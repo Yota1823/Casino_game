@@ -12,14 +12,9 @@ Waste_foundation=Waste(Waste_card)
 Foundation=foundation()
 Stock_length=Waste_foundation.get_stock()
 Waste_length=Waste_foundation.get_waste()
-Player1=Player("Manuel","Choute","The Jack")
+
 
 while(1):
-    print(f'Player first name => {Player1.first_n}\t')
-    print(f'Player last name => {Player1.last_n}\t')
-    print(f'Player user name => {Player1.user_name}\t')
-    print(f'Game won : {Player1.game_one}\t')
-    print(f'Game lost : {Player1.game_lost}\n')
     print("{}\t{}".format(Stock_length, Waste_length))
     print("\t")
     Table_foundation.display_unfipped()
@@ -75,7 +70,11 @@ while(1):
                     print(card_value)
                     j=j+1
                     if j== Round:
-                      Player1.game_one=Player1.game_one+1
+<<<<<<< HEAD
+                      game_one = game_one+1
+=======
+                      Player1.game_one=Player1.game_won+1
+>>>>>>> main
                       print(" Great you won ")
                       break
                     
@@ -91,8 +90,12 @@ while(1):
             Table_foundation.display_c()
             if (j>Round):
                 print(" You are out of move ")
-                Player1.game_lost=Player1.game_lost+1
+<<<<<<< HEAD
+                game_lost=game_lost+1
+=======
+                self.game_lost=self.game_lost+1
+>>>>>>> main
             if(L>4):
                 print(" You are out of tries ")
-                Player1.game_lost=Player1.game_lost+1
+                game_lost=game_lost+1
                 break
