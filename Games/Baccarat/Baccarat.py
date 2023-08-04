@@ -168,7 +168,6 @@ Options:
                     return
                 self.bet_hand = bet_hand
                 self.bet_amount = bet_amount
-                self.userMoney -= bet_amount
                 print("Bet placed successfully.")
             except ValueError:
                 print("Invalid input. Bet amount must be a positive integer.")
