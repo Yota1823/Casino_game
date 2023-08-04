@@ -168,7 +168,6 @@ Options:
                     return
                 self.bet_hand = bet_hand
                 self.bet_amount = bet_amount
-                self.userMoney -= bet_amount
                 print("Bet placed successfully.")
             except ValueError:
                 print("Invalid input. Bet amount must be a positive integer.")
@@ -280,7 +279,9 @@ Options:
         
 # Run the Baccarat game
 
+'''
 baccarat = Baccarat(100, "Bob", "Bob", "bob1", 0, 0, 0, 0)
 print("Welcome to Baccarat")
 baccarat.run()
+'''
 
