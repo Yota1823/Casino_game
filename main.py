@@ -230,7 +230,7 @@ def gameScreen(player,status): #Pass player
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
 
-    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda p=player:blackjack(p)).grid(row=0,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
     b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
@@ -266,8 +266,7 @@ def removePlayer(manager):
 
 
 
-def blackJack():
-    
+def blackjack():
     #Create Window 
     #blackj_win = Toplevel(my_w)
     #blackj_win.geometry("700x500")
@@ -282,7 +281,14 @@ def blackJack():
     # Import the specific functions or classes from the blackjack module
     #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
+    p1 = Player(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
+    p1.mainoop()
+    p1.insert_stat(cur)
+    p1.update_player(cur)
+    con.commit()
     main()
+    my_login(player.getFirst())
 
 
 
