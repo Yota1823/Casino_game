@@ -84,7 +84,14 @@ class Roulette(tk.Tk):
     def start(self):
         roll_result = random.randint(0, 36)
         # roll_result = 1
-        self.roll_number.configure(text=roll_result)
+        if self.bet_option != "" and self.bet_money > 0:
+            self.roll_number.configure(text=roll_result)
+        elif self.bet_option == "":
+            self.roll_number.configure(text="")
+            tkinter.messagebox.showwarning("Warning", "Please choose one of the bet options")
+        else:
+            self.roll_number.configure(text="")
+            tkinter.messagebox.showwarning("Warning", "Please enter the bet money")
 
         self.userMoney -= self.bet_money
 
@@ -150,8 +157,6 @@ class Roulette(tk.Tk):
             tkinter.messagebox.showinfo("Result", "You Won $" + str(self.bet_money * 35) +
                                         "\nNew balance: $" + str(self.userMoney))
             # print(self.userMoney)
-        elif self.bet_option == "":
-            tkinter.messagebox.showwarning("Warning", "Please choose one bet option")
         else:
             self.pLost += 1
             self.pMoneyLost += self.bet_money
