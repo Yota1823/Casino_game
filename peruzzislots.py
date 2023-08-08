@@ -88,41 +88,41 @@ class Player:
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount)* 10
             print("You won 10 times your money! Congragulations! This is how much your account contains $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney  
         elif reelone[0] == "wit shield" and reeltwo[0] == "wit shield" and reelthree[0] == "wit shield":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 25
             print("You won 25 times your money! Awesome! Your self.pCredit and wins are $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney 
         elif reelone[0] == "W lines" and reeltwo[0] == "W lines" and reelthree[0] == "W lines":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 50
             print("You won 50 times your money! This is all of your money total $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney  
         elif reelone[0] == "Big W" and reeltwo[0] == "Big W" and reelthree[0] == "Big W":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 75
             print("You won 75 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney  
         elif reelone[0] == "7" and reeltwo[0] == "7" and reelthree[0] == "7":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + 1000000
             print("You  the ulimate Jackpot! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney 
         elif reelone[0] == "7" and (reeltwo[0] == "7" or reelthree[0] == "7"):
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 2
             print("You won 2 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney  
         elif (reelone[0] == "7" or reeltwo[0] == "7") and reelthree[0] == "7":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 2
             print("You won 2 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            self.pMadeMoney = pMadeMoney  - betamount
+            self.pMadeMoney = pMadeMoney 
         else:
             self.loss = self.loss +1
             pMoneyLost = int(self.pCredit) - int(betamount)
-            self.MoneyLost = self.MoneyLost + betamount
+            self.MoneyLost = self.MoneyLost 
             print("Bad luck! Maybe next time you'll win! Your remaining cash is $", pMoneyLost)
             print(pMoneyLost)
             # self.pCredit = pMoneyLost
@@ -141,7 +141,7 @@ class Player:
 
     # Leads to Bet input check. 
     def my_mainloop(self):
-        global pCredit
+        # global pCredit
         
         while True:
             Validbet = False
