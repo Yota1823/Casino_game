@@ -148,6 +148,7 @@ class Player:
             while Validbet == False:
                 betamount = input("Please enter amount you wish to bet: ")
                 Validbet = self.betcheck(betamount)
+                self.pCredit = self.pCredit - Validbet
 
             betamount = int(betamount)
 
@@ -196,6 +197,7 @@ def main():
 
     p.my_mainloop()
 
+    
 if __name__ == "__main__":
         
 
