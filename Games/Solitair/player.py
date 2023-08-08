@@ -298,13 +298,8 @@ class Player:
            else:
              return False
 
-<<<<<<< HEAD
-
-
-=======
     
           
->>>>>>> main
 
 
 
