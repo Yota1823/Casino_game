@@ -1,13 +1,13 @@
 import random
-#from matplotlib.figure import Figure
-#from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
-#import numpy as np
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
-#import randomtimestamp
-#from randomtimestamp import random_time
+import randomtimestamp
+from randomtimestamp import random_time
 #import names
 import sys
 import os
