@@ -1,11 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+<<<<<<< HEAD
+    "\\Games"
+  ],
+  "SelectedNode": "\\Games\\Roulette",
+=======
     "\\discord",
     "\\Games",
     "\\Games\\Roulette_UI",
     "\\pictures"
   ],
   "SelectedNode": "\\Games\\blackjack.py",
+>>>>>>> 890b1ef904246411d431e5cd142a4fc57663edf5
   "PreviewInSolutionExplorer": false
 }

@@ -84,56 +84,48 @@ class Player:
         reelone, reeltwo, reelthree = reels[0], reels[1], reels[2]
         #global self.pCredit
         pMadeMoney = 0
-        pCredit = 0
         if reelone[0] == "Leopard" and reeltwo[0] == "Leopard" and reelthree[0] == "Leopard":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount)* 10
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 10 times your money! Congragulations! This is how much your account contains $", pCredit)
+            print("You won 10 times your money! Congragulations! This is how much your account contains $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif reelone[0] == "wit shield" and reeltwo[0] == "wit shield" and reelthree[0] == "wit shield":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 25
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 25 times your money! Awesome! Your self.pCredit and wins are $", pCredit)
+            print("You won 25 times your money! Awesome! Your self.pCredit and wins are $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif reelone[0] == "W lines" and reeltwo[0] == "W lines" and reelthree[0] == "W lines":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 50
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 50 times your money! This is all of your money total $", pCredit)
+            print("You won 50 times your money! This is all of your money total $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif reelone[0] == "Big W" and reeltwo[0] == "Big W" and reelthree[0] == "Big W":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 75
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 75 times your money! You rewards are $", pCredit)
+            print("You won 75 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif reelone[0] == "7" and reeltwo[0] == "7" and reelthree[0] == "7":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + 1000000
-            self.pCredit = pMadeMoney  - betamount
-            print("You  the ulimate Jackpot! You rewards are $", pCredit)
+            print("You  the ulimate Jackpot! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif reelone[0] == "7" and (reeltwo[0] == "7" or reelthree[0] == "7"):
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 2
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 2 times your money! You rewards are $", pCredit)
+            print("You won 2 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         elif (reelone[0] == "7" or reeltwo[0] == "7") and reelthree[0] == "7":
             pMadeMoney = (int(self.pCredit) - int(betamount)) + int(betamount) * 2
-            self.pCredit = pMadeMoney  - betamount
-            print("You won 2 times your money! You rewards are $", pCredit)
+            print("You won 2 times your money! You rewards are $", pMadeMoney)
             self.win = self.win +1
-            
+            self.pMadeMoney = pMadeMoney  - betamount
         else:
             self.loss = self.loss +1
             pMoneyLost = int(self.pCredit) - int(betamount)
-            self.pCredit = self.MoneyLost + betamount
-            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", self.pCredit)
-            print(pCredit)
-           # self.pCredit = pMoneyLost 
+            self.MoneyLost =self.MoneyLost + betamount
+            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", pMoneyLost)
+            print(pMoneyLost)
+            self.pCredit = pMoneyLost
         return reels
 
     # If you have no money
@@ -182,7 +174,7 @@ class Player:
                 validask = self.askinputcheck(answerinput)
             if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
                 startagain = True
-                print("You have $", self.pCredit)
+                print("You have $", c_win)
                 pass
             elif answerinput == "No" or answerinput == "no" or answerinput == "n":
                 startagain = False
