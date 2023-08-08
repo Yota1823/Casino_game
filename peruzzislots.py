@@ -148,7 +148,7 @@ class Player:
             while Validbet == False:
                 betamount = input("Please enter amount you wish to bet: ")
                 Validbet = self.betcheck(betamount)
-                self.pCredit = self.pCredit - Validbet
+                #self.pCredit = self.pCredit - Validbet
 
             betamount = int(betamount)
 
