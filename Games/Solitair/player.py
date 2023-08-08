@@ -63,6 +63,9 @@ class Player:
     
     
     def main(self):
+<<<<<<< HEAD
+       from game import Dek
+=======
         from card import Solitair_card
         from Deck import Dek
         from Waste_pile import Waste
@@ -235,6 +238,7 @@ class Player:
 
 
       
+>>>>>>> main
     
     def data(self):
         import sqlite3
@@ -267,8 +271,7 @@ class Player:
            else:
              return False
 
-    
-          
+
 
 
 
@@ -282,9 +285,9 @@ while(1):
   else:
      print("You have no money left ")
   answer=input("Do you want to play again:")
-  if (answer=="Yes"):
+  if (answer=="No"):
      break
-  else:
+  elif (answer=="Yes"):
     print("Next game")
 
 

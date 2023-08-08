@@ -1,4 +1,3 @@
-from pickle import OBJ
 import tkinter
 from tkinter import *
 import tkinter as tk
@@ -167,10 +166,6 @@ class Roulette(tk.Tk):
     def update_credit(self, cur):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
 
-    def update_player(self,cur):
-        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
-                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
-
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
         #print(f'Casino Money: ${self.casinoMoney}')
@@ -185,12 +180,7 @@ class Roulette(tk.Tk):
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
         self.quit()
         self.destroy()
-        #self.open_main_window()
         # gameScreen(self, Y)
-    '''
-    def open_main_window(self):
-        self.main_w = tk.Toplevel()
-        '''
 
     # button layout
     def buttons(self):
@@ -325,5 +315,5 @@ class Roulette(tk.Tk):
 
 # create player for testing
 def main_roulette():
-    p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
+    p1 = Roulette(100, " ", " ", " ", 0, 0, 0, 0, 1000)
     p1.mainloop()

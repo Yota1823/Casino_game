@@ -1,14 +1,14 @@
 import random
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
-import numpy as np
+#from matplotlib.figure import Figure
+#from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,NavigationToolbar2Tk)
+#import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import subprocess
 #import randomtimestamp
 #from randomtimestamp import random_time
-import names
+#import names
 import sys
 import os
 import sqlite3 
@@ -323,7 +323,7 @@ def gameScreen(player,status): #Pass player
     if status == 'N':
         b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
         b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
-        b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
+        b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat(player)).grid(row=2,column=0)
         b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
         b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
         b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
@@ -376,15 +376,19 @@ def slots(player):
     
     p.my_mainloop()
 
-def baccarat():
+def baccarat(player):
     #print(os.path.abspath(__file__))
     #blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
     #game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
     #sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
+    #subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
     # from Games.Baccarat.Casino_project_Baccarat_game import Cli
     # Cli.run()
+    from Games.Baccarat.Baccarat import Baccarat
+    p1 = Baccarat(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin())
+    p1.run()
 
 
 def solitaire():
