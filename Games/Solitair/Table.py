@@ -99,7 +99,7 @@ class Tableau:
         t5=len(self.unfliped[4])
         t6=len(self.unfliped[5])
         t7=len(self.unfliped[6])
-        print("Column 1  Column 2  Column 3  Column 4  Column 5  Column6  Column 7")
+        print("Column 0  Column 1  Column 2  Column 3  Column 4  Column 5  Column 6")
         print(f"{t1}          {t2}         {t3}          {t4}          {t5}         {t6}          {t7}")
     def display_flip(self):   
         for Col, Cards in self.flip.items():

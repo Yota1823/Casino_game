@@ -43,46 +43,6 @@ class Solitair_card:
     def __str__(self):
         return self.card
 
-#unshuf_deck=[Solitair_card(s,v) for v in range (1,14) for s in ["Club","Spade","Diamond","Heart"]]
-#random.shuffle(unshuf_deck)
-#for card in unshuf_deck :
- 
- 
- 
-card1= Solitair_card(11,"Heart") 
-card2=Solitair_card(8,"Club")
-card3=Solitair_card(12,"Spade")
-
-C=[card1,card3]
-C2=[card3,card2,card1]
-
-# test= card1.below(card2)
-# test2=card1.Opposite(card2)
-test3= C[0].Attach(C2[-1])
-# print(test)
-# print(test2)
-# print(test3)
-# print("\t")
-
-# for i in range (max (len(C),len (C2))):
-#     card=C[i] if i<len(C) else ""
-#     card3=C2[i] if i<len(C2) else ""
-#     card4=C[i] if i<len(C) else ""
-#    # print("{}\t{}\t{}\t".format(card1,card3,card4))
-
-# row=["Black","Yellow"]
-# row2=["Red","Orange"]
-# row3=["Green","Violet"]
-# update='\n'.join(row)
-# update2='\n'.join(row2)
-# update3='\n'.join(row3)
-
-# a="Light,Dark"
-# b="Pale,Bright"
-
-# print(f"{update}") 
-
-
 
 
 
