@@ -71,10 +71,14 @@ while(1):
                     j=j+1
                     if j== Round:
 <<<<<<< HEAD
+                      Playe.game_one=Player1.game_won+1
+=======
+<<<<<<< HEAD
                       game_one = game_one+1
 =======
                       Player1.game_one=Player1.game_won+1
 >>>>>>> main
+>>>>>>> ac51d98eae70a6b7ed60d8417b339c3217451e87
                       print(" Great you won ")
                       break
                     
