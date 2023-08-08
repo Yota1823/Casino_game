@@ -1,3 +1,8 @@
+import sys
+import os
+from datetime import datetime
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
 class Player:
     def __init__(self,first_name,last_name,user_name,p_Cred,win,made,lost,m_lost,current):
         self.first_n=first_name
@@ -14,6 +19,8 @@ class Player:
       print(f'Player first name => {self.first_n}\t')
       print(f'Player last name => {self.last_n}\t')
       print(f'Player user name => {self.user_name}\t')
+      print(f'Player current game => {self.current}\t')
+      print(f'Player credit => {self.credit}\t')
       print(f'Game won : {self.game_won}\t')
       print(f'Game lost : {self.game_lost}\n')
       
@@ -205,6 +212,7 @@ class Player:
                                   self.money_made=self.money_made + self.Bet
                                   print("You're the lucky winner !!! ")
                                   self.data()
+                                  self.Stat()
                                   break 
                                 else:   
                                   print(" You are out of move ")
@@ -218,6 +226,7 @@ class Player:
                           self.credit=self.credit-self.Bet
                           self.money_lost=self.money_lost+ self.Bet
                           self.data()
+                          self.Stat()
                           break
                       
                       
@@ -233,6 +242,7 @@ class Player:
                       
                       if (j==0):
                            self.data()
+                           self.Stat()
 
                       if(L==0):
                           print(" You are out of tries ")
@@ -240,6 +250,8 @@ class Player:
                           self.credit=self.credit-self.Bet
                           self.money_lost=self.money_lost+ self.Bet
                           self.data()
+                          self.Stat()
+
                           break
     def Data(self):
       import sqlite3
@@ -277,19 +289,31 @@ class Player:
         Change3="UPDATE Player SET pMoneyLost=? WHERE playerUserName=?"
         Change4="UPDATE Player SET pWin=? WHERE playerUserName=?"
         Change5="UPDATE Player SET pLoss=? WHERE playerUserName=?"
+        Chang6="UPDATE Player SET currGame=? WHERE playerUserName=?"
         value=self.credit
         value2=self.money_made
         value3=self.money_lost
         value4=self.game_won
         value5=self.game_lost
+        value6="Solitaire_card "
         self.cursor.execute(Change,(value,self.user_name,))
         self.cursor.execute(Change2,(value2,self.user_name,))
         self.cursor.execute(Change3,(value3,self.user_name,))
         self.cursor.execute(Change4,(value4,self.user_name,))
         self.cursor.execute(Change5,(value5,self.user_name,))
+        self.cursor.execute(Chang6,(value6,self.user_name,))
         self.connect.commit()
         self.connect.close()
     
+    def Stat(self):
+        import sqlite3
+        self.connect=sqlite3.connect("Casino.db")
+        self.cursor=self.connect.cursor()
+        Val=("""INSERT INTO  Statistics VALUES(?, ?, ?, ?, ?, ?, ? );""")
+        Value=(self.user_name,"Solitaire",self.money_made,self.money_lost,self.game_won,self.game_lost,current_time,)
+        self.cursor.execute(Val,(Value))
+        self.connect.commit()
+
     def  bet(self):
            bet=input("Enter your bet: ")
            self.Bet=int(bet)
@@ -303,20 +327,24 @@ class Player:
 
 
 
-P1=Player("P","N","Kaleb",500,0,0,0,0,0)
-P1.Data()
-P1.info()
 while(1):
-  P1.info()
-  if P1.bet():
-   P1.main()
-  else:
+   User=input("Enter your username: ")
+   P1=Player("P","N",User,500,0,0,0,0,"Solitair")
+   P1.Data()
+   P1.info()
+   if P1.bet():
+    P1.main()
+   else:
      print("You have no money left ")
-  answer=input("Do you want to play again:")
-  if (answer=="Yes"):
+   answer=input("Do you want to play again:")
+   if (answer=="No"):
+     print("See you next time ")
      break
-  else:
+   elif(answer=="Yes"):
     print("Next game")
+   else:
+    print("Command not found")
+    answer=input("Do you want to play again:")
 
 
 

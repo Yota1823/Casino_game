@@ -122,7 +122,7 @@ class Tableau:
         t5=len(self.flip[4])
         t6=len(self.flip[5])
         t7=len(self.flip[6])
-        w=8
+        w=7
         row=[]
         row2=[]
         row3=[]
