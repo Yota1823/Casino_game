@@ -203,7 +203,9 @@ Options:
             self.pLost += 1
 
         input("\nBets are open.\n\nPress <enter> to continue...")
-
+    def change_shoe(self,num_decks):
+        self.shoe = Shoe(num_decks)
+        print (f"Changed to a new shoe with {num_decks} decks.")
 
     def run(self):
         while self.userMoney > 0:
