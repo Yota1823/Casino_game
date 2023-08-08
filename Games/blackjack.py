@@ -4,6 +4,18 @@ import time
 import sqlite3
 import os.path
 import subprocess
+import sys
+import tkinter as tk
+from tkinter.simpledialog import askinteger
+
+#sys.path.append('../main.py')
+
+#current_dir = os.path.dirname(os.path.abspath(__file__))
+#main_module_path = os.path.join(current_dir, "..", "main.py")
+#sys.path.append(os.path.dirname(main_module_path))
+#from main import User,Player #maybe i dont need this
+
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "../Casino.db")
@@ -60,19 +72,50 @@ class Deck():
         deck_as_set = set(self.full_deck)
         return list(deck_as_set)
 
+# class User:
+#     def __init__(self,fName,lName,uName):
+#         self.name = fName
+#         self.last = lName
+#         self.user = uName
 
+#     def getFirst(self):
+#         return self.name
+#     def getLast(self):
+#         return self.last
+#     def getUser(self):
+#         return self.user
+    
 class Player():
     """
     Class that defines a Player that starts with $500 to bet
     """
-    
-    def __init__(self, hand=[], bet=0, score=0, money=100):
-        # Hand should be a list of the cards taken from the deck
-        self.hand = hand
-        self.bet = bet
-        self.score = score
-        self.money = money
+    def __init__(self,pUserName="", pCredit=500,pMoneyMade=0,pMoneyLost=0,currGame="",pWin=0,pLoss=0):
 
+        self.pUserName = pUserName
+        self.moneyMade = pMoneyMade
+        self.moneyLost = pMoneyLost
+        self.currentGame = currGame
+        self.winCount = pWin
+        self.lossCount = pLoss
+#        self.hand = hand
+#        self.bet = bet
+#        self.score = score
+        self.pCredit = pCredit
+        self.currGame = "Blackjack"
+        self.bet = 0
+        self.score = 0
+        
+    def set_hand(self, hand):
+        self.hand = hand
+
+
+    # def __init__(self, hand=[], bet=0, score=0, money=100):
+    #     # Hand should be a list of the cards taken from the deck
+    #     self.hand = hand
+    #     self.bet = bet
+    #     self.score = score
+    #     self.money = money
+    
     def set_betting_amount(self):
         while True:
             try:
@@ -147,26 +190,27 @@ class Player():
         """
         Function that calculates the total amount of money after a win
         """
-        self.money += win_amount
+        self.pCredit += win_amount
+        self.moneyMade = win_amount
 
     def calculate_loss(self, lost_amount):
         """
         Function that calculates the total amount of money after a loss
         """
-        self.money -= lost_amount
-        
-    @staticmethod
-    def get_player_data():
-        """
-        Static method to retrieve player data from the database
-        """
-        conn = sqlite3.connect("Casino.db") 
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM Player")
-        player_data = cur.fetchall()
-        cur.close()
-        conn.close()
-        return player_data
+        self.pCredit -= lost_amount
+        self.moneyLost = lost_amount
+    
+    # @staticmethod
+    # def get_player_data(username):
+    #     conn = sqlite3.connect("Casino.db")
+    #     cur = conn.cursor()
+    #     cur.execute("SELECT * FROM Player WHERE username=?", (username,))
+    #     player_data = cur.fetchone()
+    #     cur.close()
+    #     conn.close()
+    #     return player_data
+    
+    
 
 
 # ###################### Game's main functions ######################
@@ -212,9 +256,9 @@ def main():
         return player1, dealer
 
 
-def deal_dealers_hand():
-    """Function that will simulate the dealers play once the player stands
-    """
+    def deal_dealers_hand(player1,dealer,shuffled_deck):
+        """Function that will simulate the dealers play once the player stands
+        """
 
     
         print("[" + "'" + dealer.hand[0] + "'" + ", XX ]")
@@ -232,72 +276,92 @@ def deal_dealers_hand():
 
     # ###################### Main piece of code ######################
 
-game_on = "Y"
-while game_on == "Y":
-    os.system('cls')
-    print("\n\t\tWelcome to Blackjack!\n")
-    time.sleep(1)
-    # Creating an instance of a deck and shuffling it in case player is playing
-    # for the first time or if there are less than 10 cards available
-    if 'shuffled_deck' not in globals():
-        shuffled_deck = create_and_suffle_deck()
-    elif len(shuffled_deck) < 10:
-        print("Deck is almost over. We need to shuffle again!\n")
-        shuffled_deck = create_and_suffle_deck()
-    # Setting the default betting amount if player hasn't played before
-    if 'money' not in globals():
-        money = 100
-    # Check if user has enough money to bet (in case he has kept playing)
-    if money == 0:
-        print("You don't have any money left!\nGoodbye!")
-        game_on = "N"
-        break
-    # Ask for the betting amount
-    player1 = Player(money=money)
-    player1.set_betting_amount()
-    time.sleep(1)
-    # Deal cards and assign each hand to the player and dealer
-    player1, dealer = initial_deal(player1, shuffled_deck)
-    # Variable that will contain the response from the user to hit or stand
-    move = ""
-    while move != "S":
-        move = input("Press enter to hit, enter 'S' to stand: ").upper()
-        if move == "":  # User chose to hit
-            print("User chose to hit")
-            # A card is then removed from the shuffled deck,
-            # appended to the player's hand and then printed
-            player1.hand.append(shuffled_deck.pop())
-            print(f"Player 1: {player1.hand}\n")
-            # Now the score needs to be calculated and printed as well
-            player1.score = player1.calculate_hand_score(player1.hand)
-            print(f"Score: {player1.score}")
-            # Validates if player exceeded 21 (Busted)
-            if player1.score > 21:
-                print("Busted!")
-                print(f"Bet was: {player1.bet}")
-                player1.calculate_loss(player1.bet)
-                print(f"Money: {player1.money}")
-                break
-            elif player1.score == 21:
-                print("Blackjack!")
-        elif move == "S":
-            # Add a call to a function that will play the dealer's hand and
-            # then checks who wins or if there is a tie
-            print("User chose to stand")
-            deal_dealers_hand()
-            if dealer.score > player1.score and dealer.score <= 21:
-                print("Player 1 loses!")
-                player1.calculate_loss(player1.bet)
-            elif dealer.score == player1.score:
-                print("It's a tie!")
-            else:
-                print("Player 1 wins!")
-                player1.calculate_win(player1.bet)
-    # Ask to the player if he would like to contine playing
-    while True:
-        game_on = input("\nYou want to play again? (Y/N): ").upper()
-        if game_on == "Y" or game_on == "N":
-            money = player1.money
+    game_on = "Y"
+    while game_on == "Y":
+        os.system('cls')
+        print("\n\t\tWelcome to Blackjack!\n")
+        time.sleep(1)
+        # Creating an instance of a deck and shuffling it in case player is playing
+        # for the first time or if there are less than 10 cards available
+        if 'shuffled_deck' not in globals():
+            shuffled_deck = create_and_suffle_deck()
+        elif len(shuffled_deck) < 10:
+            print("Deck is almost over. We need to shuffle again!\n")
+            shuffled_deck = create_and_suffle_deck()
+        # Setting the default betting amount if player hasn't played before
+        # if 'player1' not in globals():
+        #     player1 = Player(uName, fName, lName, 100, 0, 0, 0, 0, 0)
+            
+        if 'pCredit' not in globals():
+            pCredit = 500
+        # Check if user has enough money to bet (in case he has kept playing)
+        if pCredit == 0:
+            print("You don't have any money left!\nGoodbye!")
+            game_on = "N"
             break
-        else:
-            continue
+        # Ask for the betting amount
+        player1 = Player(pCredit=pCredit)
+        player1.set_betting_amount()
+        time.sleep(1)
+        # Deal cards and assign each hand to the player and dealer
+        player1, dealer = initial_deal(player1, shuffled_deck)
+        # Variable that will contain the response from the user to hit or stand
+        move = ""
+        while move != "S":
+            move = input("Press enter to hit, enter 'S' to stand: ").upper()
+            if move == "":  # User chose to hit
+                print("User chose to hit")
+                # A card is then removed from the shuffled deck,
+                # appended to the player's hand and then printed
+                player1.hand.append(shuffled_deck.pop())
+                print(f"Player 1: {player1.hand}\n")
+                # Now the score needs to be calculated and printed as well
+                player1.score = player1.calculate_hand_score(player1.hand)
+                print(f"Score: {player1.score}")
+                # Validates if player exceeded 21 (Busted)
+                if player1.score > 21:
+                    print("Busted!")
+                    print(f"Bet was: {player1.bet}")
+                    player1.calculate_loss(player1.bet)
+                    print(f"money: {player1.pCredit}")
+                    break
+                elif player1.score == 21:
+                    print("Blackjack!")
+            elif move == "S":
+                # Add a call to a function that will play the dealer's hand and
+                # then checks who wins or if there is a tie
+                print("User chose to stand")
+                deal_dealers_hand(player1, dealer, shuffled_deck) #delete player1, dealer, shuffled_deck if not needed
+                if dealer.score > player1.score and dealer.score <= 21:
+                    print("Player 1 loses!")
+                    player1.calculate_loss(player1.bet)
+                    player1.lossCount += 1 #count loss number
+                elif dealer.score == player1.score:
+                    print("It's a tie!")
+                else:
+                    print("Player 1 wins!")
+                    player1.calculate_win(player1.bet)
+                    player1.winCount += 1 #count the winning number
+            #query = "UPDATE Player SET pCredit = ?, pMoneyMade = ?, pMoneyLost = ?, pWin = ?, pLoss = ? WHERE username = ?"
+            #cur.execute(query, (player1.money, player1.moneyMade, player1.moneyLost, player1.winCount, player1.lossCount, player1.pUserName))
+            #con.commit()
+        
+
+        # Ask to the player if he would like to contine playing
+        while True:
+            print(f"Your credit is {player1.pCredit}\n")
+            game_on = input("\nYou want to play again? (Y/N): ").upper()
+            if game_on == "Y":
+                pCredit = player1.pCredit
+                break
+            if game_on == "N":
+                pCredit = player1.pCredit
+                break
+            else:
+                continue
+# def main_blackjack():
+#     p1 = Player("",500, 0, 0,"", 0, 0)
+#     p1.mainloop()
+
+if __name__ == "__main__":
+    main()
