@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tkinter as tk
 from tkinter.simpledialog import askinteger
+import random
 
 #sys.path.append('../main.py')
 
@@ -215,6 +216,7 @@ class Player():
 
 # ###################### Game's main functions ######################
 def main():
+
     def create_and_suffle_deck():
         """ Function that creates an instance of a Deck and then shuffles it
         """
@@ -276,8 +278,8 @@ def main():
 
     # ###################### Main piece of code ######################
 
-    game_on = "Y"
-    while game_on == "Y":
+
+    while True:
         os.system('cls')
         print("\n\t\tWelcome to Blackjack!\n")
         time.sleep(1)
@@ -348,17 +350,19 @@ def main():
         
 
         # Ask to the player if he would like to contine playing
-        while True:
-            print(f"Your credit is {player1.pCredit}\n")
-            game_on = input("\nYou want to play again? (Y/N): ").upper()
-            if game_on == "Y":
-                pCredit = player1.pCredit
-                break
-            if game_on == "N":
-                pCredit = player1.pCredit
-                break
-            else:
-                continue
+        print(f"Your credit is {player1.pCredit}\n")
+        game_on = input("\nYou want to play again? (Y/N): ").upper()
+        if game_on == "Y":
+            pCredit = player1.pCredit
+            main()
+            break
+        elif game_on == "N":
+            pCredit = player1.pCredit
+            print(f"Quiting blackjack game\n")
+
+            break
+        else:
+            continue
 # def main_blackjack():
 #     p1 = Player("",500, 0, 0,"", 0, 0)
 #     p1.mainloop()
