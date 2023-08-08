@@ -3,9 +3,9 @@
     "",
     "\\discord",
     "\\Games",
-    "\\Games\\Roulette",
-    "\\Games\\Roulette_UI"
+    "\\Games\\Roulette_UI",
+    "\\pictures"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\Games\\blackjack.py",
   "PreviewInSolutionExplorer": false
 }
