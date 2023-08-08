@@ -211,7 +211,9 @@ Options:
     def run(self):
         while self.userMoney > 0:
             self.option()
-            choice = int(input("Your selection: "))
+            choice = (input("Your selection: "))
+            if choice.isdigit():
+               choice = int(choice)
             if choice == 1:
                 self.status()
             elif choice == 2:
@@ -219,8 +221,13 @@ Options:
             elif choice == 3:
                 self.deal_cards()
             elif choice == 4:
-                decks = int(input("Enter the number of decks for the new shoe: "))
-                self.change_shoe(decks)
+                decks_input = (input("Enter the number of decks for the new shoe: "))
+                if decks_input.isdigit():
+                    decks = int(decks-input)
+                    self.change_shoe(decks)
+                else:
+                    print("Invalid input. Decks must be a number.")
+
             elif choice == 0:
                 '''Update Player table and Insert data to statistics table'''
                 cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
