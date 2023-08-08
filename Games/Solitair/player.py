@@ -63,45 +63,46 @@ class Player:
     
     
     def main(self):
-<<<<<<< HEAD
-       from game import Dek
-=======
-        from card import Solitair_card
-        from Deck import Dek
-        from Waste_pile import Waste
-        from Foundation import foundation
-        from Table import Tableau
+
+       
+
+       from card import Solitair_card
+       from Deck import Dek
+       from Waste_pile import Waste
+       from Foundation import foundation
+       from Table import Tableau
         
-        Card_Deck=Dek(2)
-        Table_Card=Card_Deck.deal_c(28)
-        Table_foundation=Tableau(Table_Card)
-        Waste_card=Card_Deck.deal_c(28)
-        Waste_foundation=Waste(Waste_card)
-        Foundation=foundation()
-        Stock_length=Waste_foundation.get_stock()
-        Waste_length=Waste_foundation.get_waste()
-        print("{}\t{}".format(Stock_length, Waste_length))
-        print("\t")
-        Table_foundation.display_unfipped()
-        Table_foundation.display_c()
-              
-        Player_card=input("Enter column of card to play:")
-        Card_cl=int(Player_card)
-        index=0
-        Card_played=Table_foundation.flip[Card_cl][index]
-        Bet_round=input(f"After how many move will the {Card_played} be moved to the foundation  ")
-        Round=int(Bet_round)
-        j=Round
-        L=4
+       Card_Deck=Dek(2)
+       Table_Card=Card_Deck.deal_c(28)
+       Table_foundation=Tableau(Table_Card)
+       Waste_card=Card_Deck.deal_c(28)
+       Waste_foundation=Waste(Waste_card)
+       Foundation=foundation()
+       Stock_length=Waste_foundation.get_stock()
+       Waste_length=Waste_foundation.get_waste()
+       print("{}\t{}".format(Stock_length, Waste_length))
+       print("\t")
+       Table_foundation.display_unfipped()
+       Table_foundation.display_c()
+       print("\n")
+       Player_card=input("What column you wish to play :")
+       Card_cl=int(Player_card)
+       index=0
+       Card_played=Table_foundation.flip[Card_cl][index]
+       Bet_round=input(f"Guess after how many  {Card_played} will go to foundation   ")
+       Round=int(Bet_round)
+       j=Round
+       L=4
          
               
-        while(j>0):
+       while(j>0):
                       F=Foundation.get_last_card("Heart")
                       F2=Foundation.get_last_card("Diamond")
                       F3=Foundation.get_last_card("Spade")
                       F4=Foundation.get_last_card("Club")
                       print(f"{F}   {F2}   {F3}   {F4}")
-                      print("\n")
+                      print("\t")
+                      
                       print(f"card bet on: {Card_played}\n")
                       print(f'Round left : {j}')
                       print(f"Try left: {L}")
@@ -110,32 +111,33 @@ class Player:
                           Waste_foundation.stock_waste()
                       else:
                           print(f"Waste_card {Waste_foundation.waste[-1]}")
-                      print('''Command 1: move card from column to column \t
-                      command 2: move card from pile to table \t
-                      command 3: move card from table to foundation\t
-                      command 4: display help menu \t''')
+                          print("\t")
+                      print('''Command 1: move card from column to column 
+                      command 2: move card from pile to table 
+                      command 3: move card from table to foundation
+                      command 4: display help menu ''')
                       command=input("Enter a command: ")
                       if command=="1":
                   
                           Player_card=Card_cl
                          
-                          choice=input("wich card do you want to use ")
+                          choice=input("Select card to move  ")
                           v_choice=int(choice)
                           if v_choice==Player_card:
-                            value2=input("Enter column 2 : ")
+                            value2=input("Where card is going : ")
                             val2=int(value2)
                             index=input("Enter an index : ")
                             i=int(index)
                             test1=Table_foundation.add_C_T(Player_card,val2,i)
                             if test1:
-                               print(f"Card has been succefully moved from {Player_card} to {val2}")
+                               print(f"One step closer  {Player_card}  has been move to  {val2}")
                                j=j-1
                                Player_card=val2
                                index=i
-                               Table_foundation.table_check(Player_card,val2)
+                               
                                print("\t")
                             else:
-                                print(" Card couldn't be moved ")
+                                print("Bad luck card couldn't be moved  ")
                                 L=L-1
                           else:
                                 
@@ -146,40 +148,25 @@ class Player:
                                 i=int(index)
                                 test1=Table_foundation.add_C_T(Val1,val2,i)
                                 if test1:
-                                   print(f"Card has been succefully moved from {Player_card} to {val2}")
+                                   print(f"Card has been succefully moved from {Val1} to {val2}")
                                    j=j-1
                                    Player_card=val2
-                                   Table_foundation.table_check(Player_card,val2)
+                                   
                                    print("\t")
                                 else:
-                                  print(" Card couldn't be moved ")
+                                  print("  Bad luck Card couldn't be moved ")
                                   L=L-1
                       elif command=="2":
-                          Value=input("Enter a column from 0 to 6 : ")
+                          Value=input("Select column from 0 to 6 : ")
                           Val=int(Value)
                           test2=Table_foundation.add_W_T(Waste_foundation,Val)
                           if test2:
-                              print(f"{Waste_foundation.waste[-1]} has succesfully been moved from waste to {Val} ")
+                              print(f" Nice one {Waste_foundation.waste[-1]} has succesfully been moved from waste to {Val} ")
                               j=j-1
                           else:
                                L=L-1
-                               print(f"{Waste_foundation.waste[-1]} couldn't  been move from waste to {Val} " )
-                      if j==0:
-                                V=Player_card
-                                v=int(V)
-                                test3=Table_foundation.add_T_F(Foundation,v)
-                                if test3:
-                                  self.game_won=self.game_won+1
-                                  self.credit=self.credit+self.Bet
-                                  self.money_made=self.money_made + self.Bet
-                                  print(" Great you won ")
-                                  self.data()
-                                  break 
-                                else:   
-                                  print(" You are out of move ")
-                                  self.game_lost=self.game_lost+1
-                                  self.credit=self.credit-self.Bet
-                                  self.money_lost=self.money_lost+ self.Bet
+                               print(f" Better luck next time {Waste_foundation.waste[-1]} couldn't  been move from waste to {Val} " )
+                    
 
                       elif command=="3":
                                 
@@ -193,18 +180,38 @@ class Player:
                                 if not test3:
                                   print(" Card couldn't be move to foundation ")
                                   L=L-1
-                          
+                                if test3 and j==0:
+                                   self.game_won=self.game_won+1
+                                   self.credit=self.credit+self.Bet
+                                   self.money_made=self.money_made + self.Bet
+                                   print("You're the lucky winner !!! ")
+                                   
+                                   print("\t")
+                                   self.data()
+                                   break
                       elif command=="4":
                            rule=P1.rules()
                            print(rule)
                            print("\n")
                       else:
-                          print(" This move couldn't be made ")
-                      print("{}\t{}".format(Stock_length, Waste_length))
-                      Table_foundation.display_unfipped()
-                      Table_foundation.display_c()
+                        print("Command don't exist")  
+                      if j==0:
+                                V=Player_card
+                                v=int(V)
+                                test3=Table_foundation.add_T_F(Foundation,v)
+                                if test3:
+                                  self.game_won=self.game_won+1
+                                  self.credit=self.credit+self.Bet
+                                  self.money_made=self.money_made + self.Bet
+                                  print("You're the lucky winner !!! ")
+                                  self.data()
+                                  break 
+                                else:   
+                                  print(" You are out of move ")
+                                  self.game_lost=self.game_lost+1
+                                  self.credit=self.credit-self.Bet
+                                  self.money_lost=self.money_lost+ self.Bet
                       
-                          
                       if(L==0):
                           print(" You are out of tries ")
                           self.game_lost=self.game_lost+1
@@ -212,14 +219,34 @@ class Player:
                           self.money_lost=self.money_lost+ self.Bet
                           self.data()
                           break
+                      
+                      
+                       
+                      print("{}\t{}".format(Stock_length, Waste_length))
+                      print("\t")
+                      Table_foundation.display_unfipped()
+                      Table_foundation.display_c()
+                      print("\t")
                 
+    
+                      
+                      
+                      if (j==0):
+                           self.data()
 
+                      if(L==0):
+                          print(" You are out of tries ")
+                          self.game_lost=self.game_lost+1
+                          self.credit=self.credit-self.Bet
+                          self.money_lost=self.money_lost+ self.Bet
+                          self.data()
+                          break
     def Data(self):
       import sqlite3
       self.connect=sqlite3.connect("Casino.db")
       self.cursor=self.connect.cursor()
       Select="SELECT * FROM Player WHERE playerUserName=? "
-      self.cursor.execute(Select,(self.first_n))
+      self.cursor.execute(Select,(self.user_name,))
       Selected=self.cursor.fetchall()
       if Selected:
         for Result in Selected:
@@ -238,7 +265,7 @@ class Player:
 
 
       
->>>>>>> main
+
     
     def data(self):
         import sqlite3
@@ -271,21 +298,16 @@ class Player:
            else:
              return False
 
-<<<<<<< HEAD
-
-
-=======
     
           
->>>>>>> main
 
 
 
-P1=Player("P","N","MN",500,0,0,0,0,0)
+P1=Player("P","N","Kaleb",500,0,0,0,0,0)
 P1.Data()
 P1.info()
 while(1):
-  
+  P1.info()
   if P1.bet():
    P1.main()
   else:

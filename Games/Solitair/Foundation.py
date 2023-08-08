@@ -9,11 +9,12 @@ class foundation:
         }
     
     def Add_to_Foundation(self,card):
-        stack=self.foundation[card.suit]
-        if card.value==1 or  stack[-1].below(card):
+         stack=self.foundation[card.suit]
+         
+         if (len(stack)==0 and card.value==1) or (len(stack)>0 and stack[-1].below(card)):
           stack.append(card)
           return True
-        else:
+         else:
             return False
 
     def get_last_card(self,suit):
@@ -23,14 +24,14 @@ class foundation:
         else:
             return self.foundation[suit][-1]
 
-test_card=Solitair_card(1,"Heart")
-Foundation=foundation()
-test=Foundation.Add_to_Foundation(test_card)
-if test:
-    print(".")
+# test_card=Solitair_card(1,"Heart")
+# Foundation=foundation()
+# test=Foundation.Add_to_Foundation(test_card)
+# if test:
+#     print(".")
 
-test_card=Solitair_card(1,"Heart")
-Foundation=foundation()
-test=Foundation.Add_to_Foundation(test_card)
-if test:
-    print(".")
+# test_card=Solitair_card(1,"Heart")
+# Foundation=foundation()
+# test=Foundation.Add_to_Foundation(test_card)
+# if test:
+#     print(".")

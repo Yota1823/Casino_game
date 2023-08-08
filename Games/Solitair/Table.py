@@ -122,16 +122,34 @@ class Tableau:
         t5=len(self.flip[4])
         t6=len(self.flip[5])
         t7=len(self.flip[6])
+        w=8
+        row=[]
+        row2=[]
+        row3=[]
+        row4=[]
+        row5=[]
+        row6=[]
+        row7=[]
         max_card=max(t1,t2,t3,t4,t5,t6,t7)
         for i in range (max_card):
-         card1=self.flip[0][i] if i<t1 else ""
-         card2=self.flip[1][i] if i<t2 else ""
-         card3=self.flip[2][i] if i<t3 else ""
-         card4=self.flip[3][i] if i<t4 else ""
-         card5=self.flip[4][i] if i<t5 else ""
-         card6=self.flip[5][i] if i<t6 else ""
-         card7=self.flip[6][i] if i<t7 else ""
-         print(f"{card1}   {card2}   {card3}   {card4}   {card5}   {card6}   {card7}")
+         row.append(str(self.flip[0][i])) if i<t1 else ""
+         row2.append(str(self.flip[1][i])) if i<t2 else ""
+         row3.append(str(self.flip[2][i])) if i<t3 else ""
+         row4.append(str(self.flip[3][i])) if i<t4 else ""
+         row5.append(str(self.flip[4][i])) if i<t5 else ""
+         row6.append(str(self.flip[5][i])) if i<t6 else ""
+         row7.append(str(self.flip[6][i])) if i<t7 else ""
+        max_c=max(len(row),len(row2),len(row3),len(row4),
+        len(row5),len(row6),len(row7))
+        for i in range (max_c):
+         Card=row[i].ljust(w) if i<t1 else "".ljust(w)
+         Card2=row2[i].ljust(w) if i<t2 else "".ljust(w)
+         Card3=row3[i].ljust(w) if i<t3 else "".ljust(w)
+         Card4=row4[i].ljust(w) if i<t4 else "".ljust(w)
+         Card5=row5[i].ljust(w) if i<t5 else "".ljust(w)
+         Card6=row6[i].ljust(w) if i<t6 else "".ljust(w)
+         Card7=row7[i].ljust(w) if i<t7 else "".ljust(w)
+         print(f"|{Card}| |{Card2}| |{Card3}| |{Card4}| |{Card5}| |{Card6}| |{Card7}|")
         
     def table_check(self,t1,t2):
         T=len(self.unfliped[t1])
@@ -158,15 +176,15 @@ class Tableau:
 
 
 
-Test_Deck= Dek(1)
-Numb_Deck= Test_Deck.deal_c(28)
-Test_Tableau= Tableau(Numb_Deck)
-Foundation=foundation()
-Test_Tableau.display_c()
-card=int(input("Enter column :"))
-test2=Test_Tableau.add_T_F(Foundation,card)
-if test2:
-    print("...")
+# Test_Deck= Dek(1)
+# Numb_Deck= Test_Deck.deal_c(28)
+# Test_Tableau= Tableau(Numb_Deck)
+# Foundation=foundation()
+# Test_Tableau.display_c()
+# card=int(input("Enter column :"))
+# test2=Test_Tableau.add_T_F(Foundation,card)
+# if test2:
+#     print("...")
 # print(" This is the card in the deck ")
 # #for cards in Numb_Deck:
 #    # print(cards)
