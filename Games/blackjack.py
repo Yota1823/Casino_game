@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tkinter as tk
 from tkinter.simpledialog import askinteger
+import random
 
 #sys.path.append('../main.py')
 
@@ -214,7 +215,7 @@ class Player():
 
 
 # ###################### Game's main functions ######################
-def main():
+def main(): 
     def create_and_suffle_deck():
         """ Function that creates an instance of a Deck and then shuffles it
         """
@@ -236,7 +237,7 @@ def main():
         # Creating an instance of a player for Dealer, assigning 2 cards from the
         # deck
         #dealer = Player(hand=[shuffled_deck.pop(), shuffled_deck.pop()]) #initial code
-        dealer = Player()  # Create dealer object without specifying hand
+        dealer = Player()  # Create dealer object without specifying hand\
         dealer.set_hand([shuffled_deck.pop(), shuffled_deck.pop()])
 
         player1.set_hand([shuffled_deck.pop(), shuffled_deck.pop()])
@@ -275,9 +276,8 @@ def main():
 
 
     # ###################### Main piece of code ######################
-
-    game_on = "Y"
-    while game_on == "Y":
+  
+    while True:
         os.system('cls')
         print("\n\t\tWelcome to Blackjack!\n")
         time.sleep(1)
@@ -297,7 +297,6 @@ def main():
         # Check if user has enough money to bet (in case he has kept playing)
         if pCredit == 0:
             print("You don't have any money left!\nGoodbye!")
-            game_on = "N"
             break
         # Ask for the betting amount
         player1 = Player(pCredit=pCredit)
@@ -348,17 +347,16 @@ def main():
         
 
         # Ask to the player if he would like to contine playing
-        while True:
-            print(f"Your credit is {player1.pCredit}\n")
-            game_on = input("\nYou want to play again? (Y/N): ").upper()
-            if game_on == "Y":
-                pCredit = player1.pCredit
-                break
-            if game_on == "N":
-                pCredit = player1.pCredit
-                break
-            else:
-                continue
+        print(f"Your credit is {player1.pCredit}\n")
+        game_on = input("\nYou want to play again? (Y/N): ").upper()
+        if game_on == "Y":
+            pCredit = player1.pCredit
+            main()
+            break
+        elif game_on == "N":
+            pCredit = player1.pCredit
+            print("Quitting the Blackjack")
+            break
 # def main_blackjack():
 #     p1 = Player("",500, 0, 0,"", 0, 0)
 #     p1.mainloop()
