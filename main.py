@@ -68,6 +68,17 @@ class Player(User):
         con.commit()
         # Refill Gives Player more money, still needs to add the money to the casino profits
         print("refill")
+    def refresh(self, window):
+        window.destroy()
+        print("Refresh")
+        cur.execute(f"SELECT * from Player WHERE playerUserName='{self.uName}';")
+        playerData = cur.fetchall()
+        p = Player(playerData[0][0], playerData[0][1], playerData[0][2], playerData[0][3],
+                   playerData[0][4], playerData[0][5], playerData[0][6], playerData[0][7], playerData[0][8])
+
+        gameScreen(p, 'N')
+        # Refill Gives Player more money, still needs to add the money to the casino profits
+
     def getMoneyMade(self):
         return self.moneyMade
     def getMoneyLost(self):
@@ -312,13 +323,13 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     if status == 'N':
-        b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
-        b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
-        b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat(player)).grid(row=2,column=0)
-        b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots(player)).grid(row=3,column=0)
+        b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:[blackJack(), player.refresh(game_window)]).grid(row=0,column=0)
+        b2 = tk.Button(game_window, text=' Roulette ',command= lambda:[Roulette(player), player.refresh(game_window)]).grid(row=1,column=0)
+        b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:[baccarat(player), player.refresh(game_window)]).grid(row=2,column=0)
+        b4 = tk.Button(game_window, text=' Slots ',command= lambda:[slots(player), player.refresh(game_window)]).grid(row=3,column=0)
         b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
         b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
-
+        b6 = tk.Button(game_window, text=' Refresh ',command=lambda: player.refresh(game_window)).grid(row=1, column=21)
     if status == 'Y':
         b7 =tk.Button(game_window, text=' Statistics ',command= lambda:stats()).grid(row=5,column=0)
         tk.Button(game_window, text = "Statistics Line Graph", command=lambda:statGraph()).grid(row=9, column=0)
@@ -387,7 +398,7 @@ def solitaire():
     game_dir = os.path.join(dir, 'Games/Solitair')
     sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Solitair/game.py"])
+    subprocess.run(["python", "Games/Solitair/player.py"])
 
 def Roulette(player):
     my_w.destroy()
