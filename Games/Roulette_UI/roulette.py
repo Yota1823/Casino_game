@@ -162,14 +162,9 @@ class Roulette(tk.Tk):
         current_time = time.strftime("%H:%M:%S", t)
         cur.execute("INSERT INTO Statistics VALUES (?, ?, ?, ?, ?, ?, ?);", (self.pUserName, self.currGame, self.pMoneyMade, self.pMoneyLost, self.pWin, self.pLost, current_time))
     
-    '''
+
     def update_credit(self, cur):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
-        '''
-
-    def update_player(self,cur):
-        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
-                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
 
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
@@ -319,8 +314,6 @@ class Roulette(tk.Tk):
 
 
 # create player for testing
-'''
 def main_roulette():
     p1 = Roulette(100, " ", " ", " ", 0, 0, 0, 0, 1000)
     p1.mainloop()
-    '''

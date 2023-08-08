@@ -122,7 +122,7 @@ class Player:
         else:
             self.loss = self.loss +1
             pMoneyLost = int(self.pCredit) - int(betamount)
-            self.MoneyLost =self.MoneyLost + betamount
+            self.MoneyLost = self.MoneyLost + betamount
             print("Bad luck! Maybe next time you'll win! Your remaining cash is $", pMoneyLost)
             print(pMoneyLost)
             self.pCredit = pMoneyLost
@@ -173,7 +173,7 @@ class Player:
                 validask = self.askinputcheck(answerinput)
             if answerinput == "Yes" or answerinput == "yes" or answerinput == "y":
                 startagain = True
-                print("You have $", c_win)
+                print("You have $", self.pCredit)
                 pass
             elif answerinput == "No" or answerinput == "no" or answerinput == "n":
                 startagain = False

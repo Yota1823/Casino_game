@@ -271,13 +271,7 @@ class Player:
            else:
              return False
 
-<<<<<<< HEAD
 
-
-=======
-    
-          
->>>>>>> main
 
 
 
@@ -291,9 +285,9 @@ while(1):
   else:
      print("You have no money left ")
   answer=input("Do you want to play again:")
-  if (answer=="Yes"):
+  if (answer=="No"):
      break
-  else:
+  elif (answer=="Yes"):
     print("Next game")
 
 
