@@ -196,6 +196,7 @@ def main():
     p = Player("scottha", "Scott", "Ha", 1000, 0, 0, 0, 0, 0) 
 
     p.my_mainloop()
+    cur.close()
 
     
 if __name__ == "__main__":
