@@ -358,10 +358,30 @@ def removePlayer(manager):
 
 
 
-def blackJack():
+def blackjack(player):
+    my_w.destroy()
+    #Create Window 
+    #blackj_win = Toplevel(my_w)
+    #blackj_win.geometry("700x500")
+    #blackj_win.title("Blackjack")
 
+    #Create Text box and run games through textbox
+    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    #print(os.path.abspath(__file__))
+    # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
+    # Import the specific functions or classes from the blackjack module
+    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
+    p1 = Player(player.getCredit(),player.getLast(),player.getFirst(),
+                    player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
+    p1.mainoop()
+    p1.insert_stat(cur)
+    p1.update_player(cur)
+    con.commit()
     main()
+#    my_login(player.getFirst())
 
 
 def slots(player):
