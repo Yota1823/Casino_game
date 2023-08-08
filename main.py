@@ -327,7 +327,7 @@ def gameScreen(player,status): #Pass player
         b2 = tk.Button(game_window, text=' Roulette ',command= lambda:[Roulette(player), player.refresh(game_window)]).grid(row=1,column=0)
         b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:[baccarat(player), player.refresh(game_window)]).grid(row=2,column=0)
         b4 = tk.Button(game_window, text=' Slots ',command= lambda:[slots(player), player.refresh(game_window)]).grid(row=3,column=0)
-        b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
+        b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:[solitaire(), player.refresh(game_window)]).grid(row=4,column=0)
         b6 = tk.Button(game_window, text=' Refill ',command= lambda:[player.refillMoney(game_window), gameScreen(player,status)]).grid(row=1,column=20)
         b6 = tk.Button(game_window, text=' Refresh ',command=lambda: player.refresh(game_window)).grid(row=1, column=21)
     if status == 'Y':
