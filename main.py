@@ -230,9 +230,8 @@ def gameScreen(player,status): #Pass player
     game_window.geometry("250x250")
     game_window.title("Main Game Menu")
 
-    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda p=player:blackjack(p)).grid(row=0,column=0)
-    b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:baccarat()).grid(row=2,column=0)
-    b2 = tk.Button(game_window, text=' Roulette ',command= lambda:Roulette(player)).grid(row=1,column=0)
+    b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:blackJack()).grid(row=0,column=0)
+    b2 = tk.Button(game_window, text=' Roulette ',command= 0).grid(row=1,column=0)
     b3 = tk.Button(game_window, text=' Baccarat ',command= 0).grid(row=2,column=0)
     b4 = tk.Button(game_window, text=' Slots ',command= lambda:slots()).grid(row=3,column=0)
     b5 = tk.Button(game_window, text=' Solitaire ',command= lambda:solitaire()).grid(row=4,column=0)
@@ -274,24 +273,45 @@ def blackjack(player):
     #blackj_win.title("Blackjack")
 
     #Create Text box and run games through textbox
-    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
-    #print(os.path.abspath(__file__))
+    inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
+    print(os.path.abspath(__file__))
+<<<<<<<<< Temporary merge branch 1
     # blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
     # game_dir = os.path.join(blackjack_dir, 'Games')
     # sys.path.append(game_dir)
+=========
+    blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    game_dir = os.path.join(blackjack_dir, 'Games')
+    sys.path.append(game_dir)
+>>>>>>>>> Temporary merge branch 2
+
     # Import the specific functions or classes from the blackjack module
-    #inputTxt = tk.Text(blackj_win,height=20,width=80).grid(row=1,column=2)
     from Games.blackjack import main
-    p1 = Player(player.getCredit(),player.getLast(),player.getFirst(),
-                    player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
-    p1.mainoop()
-    p1.insert_stat(cur)
-    p1.update_player(cur)
-    con.commit()
-    main()
-#    my_login(player.getFirst())
 
 
+def slots():
+    slots = Toplevel(my_w)
+    slots.geometry("700x500")
+    slots.title("Slots")
+
+    #Create Text box and run games through textbox
+    #print(os.path.abspath(__file__))
+    #blackjack_dir = os.path.join(BASE_DIR, "Games/blackjack.py")
+    # game_dir = os.path.join(blackjack_dir, 'Games')
+    # sys.path.append(game_dir)
+
+    # Import the specific functions or classes from the blackjack module
+    inputTxt = tk.Text(slots,height=20,width=80).grid(row=1,column=2)
+    from peruzzislots import my_mainloop
+    my_mainloop()
+
+def baccarat():
+    print(os.path.abspath(__file__))
+    blackjack_dir = os.path.join(BASE_DIR, "Games/Baccarat/Casino_project_Baccarat_game.py")
+    game_dir = os.path.join(blackjack_dir, 'Games/Baccarat')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Baccarat/Casino_project_Baccarat_game.py"])
 
 def slots():
     #slots = Toplevel(my_w)
@@ -324,6 +344,22 @@ def solitaire():
     sys.path.append(game_dir)
 
     subprocess.run(["python", "Games/Solitair/game.py"])
+
+def Roulette(player):
+    my_w.destroy()
+    from Games.Roulette_UI.roulette import Roulette
+    p1 = Roulette(player.getCredit(),player.getLast(),player.getFirst(),
+                  player.getUser(),player.getMoneyMade(),player.getMoneyLost(),player.getpLoss(),player.getpWin(),1000)
+    
+    p1.mainloop()
+    main()
+
+def solitaire():
+    dir = os.path.join(BASE_DIR, "Games/Solitair/solitair.py")
+    game_dir = os.path.join(dir, 'Games/Solitair')
+    sys.path.append(game_dir)
+
+    subprocess.run(["python", "Games/Solitair/solitair.py"])
 
 def Roulette(player):
     my_w.destroy()

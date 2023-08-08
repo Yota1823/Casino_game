@@ -20,7 +20,7 @@ class Solitair_card:
     }
 
     def __init__(self,value,suit):
-        self.value= (value )
+        self.value= value
         self.suit = suit  
         self.card = str(self.suit) +" "+  str( self.value)
         
@@ -29,7 +29,7 @@ class Solitair_card:
       return self.value == card.value-1
 
     def Opposite(self,card):
-        if self.suit=="Club" or self.suit==" Spade":
+        if self.suit=="Club" or self.suit=="Spade":
             return card.suit == "Heart" or  card.suit=="Diamond"
         else:
             return card.suit == "Club" or card.suit=="Spade" 
@@ -49,13 +49,42 @@ class Solitair_card:
  
  
  
-card1= Solitair_card(3,"Club") 
-card2=Solitair_card(4,"Heart")
+card1= Solitair_card(11,"Heart") 
+card2=Solitair_card(8,"Club")
+card3=Solitair_card(12,"Spade")
 
-test= card1.below(card2)
-test2=card1.Opposite(card2)
-test3= card1.Attach(card2)
-print(test)
-print(test2)
-print(test3)
-   # print(card)
+C=[card1,card3]
+C2=[card3,card2,card1]
+
+# test= card1.below(card2)
+# test2=card1.Opposite(card2)
+test3= C[0].Attach(C2[-1])
+# print(test)
+# print(test2)
+# print(test3)
+# print("\t")
+
+# for i in range (max (len(C),len (C2))):
+#     card=C[i] if i<len(C) else ""
+#     card3=C2[i] if i<len(C2) else ""
+#     card4=C[i] if i<len(C) else ""
+#    # print("{}\t{}\t{}\t".format(card1,card3,card4))
+
+# row=["Black","Yellow"]
+# row2=["Red","Orange"]
+# row3=["Green","Violet"]
+# update='\n'.join(row)
+# update2='\n'.join(row2)
+# update3='\n'.join(row3)
+
+# a="Light,Dark"
+# b="Pale,Bright"
+
+# print(f"{update}") 
+
+
+
+
+
+  
+   

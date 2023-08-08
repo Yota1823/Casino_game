@@ -629,7 +629,7 @@ class Roulette(tk.Tk):
         self.resizable(width=False, height=False)
 
         # Table image
-        self.photo = PhotoImage(file="table.png")
+        self.photo = PhotoImage(file="Games/Roulette_UI/table.png")
         Label(image=self.photo).place(relx=1, rely=1, anchor=SE)
         # button layout
         self.buttons()
@@ -891,4 +891,3 @@ class Roulette(tk.Tk):
 # create player for testing
 p1 = Roulette(100, "Jone", "Mike", "mikej", 0, 0, 0, 0, 1000)
 p1.mainloop()
->>>>>>> 12e6bd4d1a1a994d54b6d0766e81b5e3ade5333b
