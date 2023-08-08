@@ -71,7 +71,7 @@ while(1):
                     print(card_value)
                     j=j+1
                     if j== Round:
-                      Player1.game_one=Player1.game_won+1
+                      Playe.game_one=Player1.game_won+1
                       print(" Great you won ")
                       break
                     
