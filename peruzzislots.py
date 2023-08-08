@@ -131,7 +131,7 @@ class Player:
             self.loss = self.loss +1
             pMoneyLost = int(self.pCredit) - int(betamount)
             self.pCredit = self.MoneyLost + betamount
-            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", pCredit)
+            print("Bad luck! Maybe next time you'll win! Your remaining cash is $", self.pCredit)
             print(pCredit)
            # self.pCredit = pMoneyLost 
         return reels
@@ -156,6 +156,7 @@ class Player:
             while Validbet == False:
                 betamount = input("Please enter amount you wish to bet: ")
                 Validbet = self.betcheck(betamount)
+                self.pCredit = self.pCredit - Validbet
 
             betamount = int(betamount)
 
@@ -204,6 +205,7 @@ def main():
 
     p.my_mainloop()
 
+    
 if __name__ == "__main__":
         
 
