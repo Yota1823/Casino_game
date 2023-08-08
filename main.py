@@ -387,7 +387,7 @@ def solitaire():
     game_dir = os.path.join(dir, 'Games/Solitair')
     sys.path.append(game_dir)
 
-    subprocess.run(["python", "Games/Solitair/game.py"])
+    subprocess.run(["python", "Games/Solitair/player.py"])
 
 def Roulette(player):
     my_w.destroy()
