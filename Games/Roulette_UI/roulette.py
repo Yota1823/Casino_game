@@ -1,3 +1,4 @@
+from pickle import OBJ
 import tkinter
 from tkinter import *
 import tkinter as tk
@@ -83,7 +84,14 @@ class Roulette(tk.Tk):
     def start(self):
         roll_result = random.randint(0, 36)
         # roll_result = 1
-        self.roll_number.configure(text=roll_result)
+        if self.bet_option != "" and self.bet_money > 0:
+            self.roll_number.configure(text=roll_result)
+        elif self.bet_option == "":
+            self.roll_number.configure(text="")
+            tkinter.messagebox.showwarning("Warning", "Please choose one of the bet options")
+        else:
+            self.roll_number.configure(text="")
+            tkinter.messagebox.showwarning("Warning", "Please enter the bet money")
 
         self.userMoney -= self.bet_money
 
@@ -149,8 +157,6 @@ class Roulette(tk.Tk):
             tkinter.messagebox.showinfo("Result", "You Won $" + str(self.bet_money * 35) +
                                         "\nNew balance: $" + str(self.userMoney))
             # print(self.userMoney)
-        elif self.bet_option == "":
-            tkinter.messagebox.showwarning("Warning", "Please choose one bet option")
         else:
             self.pLost += 1
             self.pMoneyLost += self.bet_money
@@ -166,6 +172,10 @@ class Roulette(tk.Tk):
     def update_credit(self, cur):
         cur.execute(f"UPDATE Player SET pCredit = ? WHERE playerUserName= ? ;", (self.userMoney, self.pUserName))
 
+    def update_player(self,cur):
+        cur.execute(f"UPDATE Player SET playerUserName = ?, playerFirstName = ?, playerLastName = ?, pCredit = ?, pMoneyMade = ?, pMoneyLost = ?,  currGame = ?, pWIn = ?, pLoss = ? WHERE playerUserName= ? ;", 
+                    (self.pUserName, self.pFirstName, self.pLastName, self.userMoney, self.pMoneyMade, self.pMoneyLost, self.currGame, self.pWin, self.pLost, self.pUserName))
+
     def end(self):
         self.casinoMoney = self.casinoMoney + self.pMoneyLost - self.pMoneyMade
         #print(f'Casino Money: ${self.casinoMoney}')
@@ -180,7 +190,12 @@ class Roulette(tk.Tk):
                                     "\n\nPlayer Total Lost: \t" + str(self.pLost))
         self.quit()
         self.destroy()
+        #self.open_main_window()
         # gameScreen(self, Y)
+    '''
+    def open_main_window(self):
+        self.main_w = tk.Toplevel()
+        '''
 
     # button layout
     def buttons(self):
@@ -309,11 +324,3 @@ class Roulette(tk.Tk):
                        font="Times 12 bold", command=self.clear).place(x=1090, y=410)
         tkinter.Button(text="Quit", width=10, height=1, fg="black", bg="light salmon",
                        font="Times 12 bold", command=self.end).place(x=1200, y=410)
-
-
-
-
-# create player for testing
-def main_roulette():
-    p1 = Roulette(100, " ", " ", " ", 0, 0, 0, 0, 1000)
-    p1.mainloop()
