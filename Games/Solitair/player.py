@@ -63,6 +63,9 @@ class Player:
     
     
     def main(self):
+<<<<<<< HEAD
+       from game import Dek
+=======
         from card import Solitair_card
         from Deck import Dek
         from Waste_pile import Waste
@@ -235,6 +238,7 @@ class Player:
 
 
       
+>>>>>>> main
     
     def data(self):
         import sqlite3
@@ -267,8 +271,13 @@ class Player:
            else:
              return False
 
+<<<<<<< HEAD
+
+
+=======
     
           
+>>>>>>> main
 
 
 
