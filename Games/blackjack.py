@@ -9,6 +9,13 @@ import tkinter as tk
 from tkinter.simpledialog import askinteger
 import random
 
+
+from datetime import datetime
+
+now = datetime.now()
+
+current_time = now.strftime("%H:%M:%S")
+
 #sys.path.append('../main.py')
 
 #current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -358,6 +365,10 @@ def main(player1):
         elif game_on == "N":
             pCredit = player1.pCredit
             print(f"Quiting blackjack game\n")
+            cur.execute(f"INSERT INTO Statistics VALUES (?,?,?,?,?,?,?);",(player1.uName,player1.currGame,player1.moneyMade,player1.moneyLost,player1.winCount,player1.lossCount,current_time))
+            cur.execute(f"UPDATE Player SET pCredit='{player1.pCredit}' WHERE playerUserName='{player1.uName}';")
+            con.commit()
+            cur.close()
 
             break
         else:

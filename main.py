@@ -363,7 +363,7 @@ def removePlayer(manager):
 def blackJack(player):
     from Games.blackjack import Player
     p = Player(player.getUser(),player.getFirst(),player.getLast(),
-                  player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),player.getpWin(),player.getpLoss(),1000)
+               player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),"Black Jack",player.getpWin(),player.getpLoss())
     from Games.blackjack import main
     main(p)
 
