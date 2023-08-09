@@ -90,14 +90,14 @@ class Player():
     """
     Class that defines a Player that starts with $500 to bet
     """
-    def __init__(self,pUserName="", pCredit=500,pMoneyMade=0,pMoneyLost=0,currGame="",pWin=0,pLoss=0):
-
-        self.pUserName = pUserName
+    def __init__(self,uName,fName,lName,pCredit,pMoneyMade,pMoneyLost,currGame,pWin,pLoss):
+        self.creditAmount = pCredit
         self.moneyMade = pMoneyMade
         self.moneyLost = pMoneyLost
         self.currentGame = currGame
         self.winCount = pWin
         self.lossCount = pLoss
+        self.uName = uName
 #        self.hand = hand
 #        self.bet = bet
 #        self.score = score
@@ -211,11 +211,10 @@ class Player():
     #     conn.close()
     #     return player_data
     
-    
 
 
 # ###################### Game's main functions ######################
-def main():
+def main(player1):
 
     def create_and_suffle_deck():
         """ Function that creates an instance of a Deck and then shuffles it
@@ -238,7 +237,7 @@ def main():
         # Creating an instance of a player for Dealer, assigning 2 cards from the
         # deck
         #dealer = Player(hand=[shuffled_deck.pop(), shuffled_deck.pop()]) #initial code
-        dealer = Player()  # Create dealer object without specifying hand
+        dealer = Player("Dealer","0","0",500,0,0,0,0,0)  # Create dealer object without specifying hand
         dealer.set_hand([shuffled_deck.pop(), shuffled_deck.pop()])
 
         player1.set_hand([shuffled_deck.pop(), shuffled_deck.pop()])
@@ -281,7 +280,7 @@ def main():
 
     while True:
         os.system('cls')
-        print("\n\t\tWelcome to Blackjack!\n")
+        print(f"\n\t\tWelcome to Blackjack {player1.uName}!\n")
         time.sleep(1)
         # Creating an instance of a deck and shuffling it in case player is playing
         # for the first time or if there are less than 10 cards available
@@ -302,7 +301,7 @@ def main():
             game_on = "N"
             break
         # Ask for the betting amount
-        player1 = Player(pCredit=pCredit)
+        #player1 = Player()
         player1.set_betting_amount()
         time.sleep(1)
         # Deal cards and assign each hand to the player and dealer
@@ -314,7 +313,7 @@ def main():
             if move == "":  # User chose to hit
                 print("User chose to hit")
                 # A card is then removed from the shuffled deck,
-                # appended to the player's hand and then printed
+                # appended to the player's hand and then printeds
                 player1.hand.append(shuffled_deck.pop())
                 print(f"Player 1: {player1.hand}\n")
                 # Now the score needs to be calculated and printed as well
@@ -354,7 +353,7 @@ def main():
         game_on = input("\nYou want to play again? (Y/N): ").upper()
         if game_on == "Y":
             pCredit = player1.pCredit
-            main()
+            main(player1)
             break
         elif game_on == "N":
             pCredit = player1.pCredit
@@ -363,9 +362,10 @@ def main():
             break
         else:
             continue
-# def main_blackjack():
-#     p1 = Player("",500, 0, 0,"", 0, 0)
-#     p1.mainloop()
+    # def main_blackjack():
+    #     p1 = Player("",500, 0, 0,"", 0, 0)
+    #     p1.mainloop()
 
 if __name__ == "__main__":
-    main()
+    p1 = Player("pppp",500, 0, 0,"", 0,0,0, 0)
+    main(p1)

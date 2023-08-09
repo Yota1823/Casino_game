@@ -323,7 +323,7 @@ def gameScreen(player,status): #Pass player
     game_window.title("Main Game Menu")
 
     if status == 'N':
-        b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:[blackJack(), player.refresh(game_window)]).grid(row=0,column=0)
+        b1 = tk.Button(game_window, text=' Blackjack ',command= lambda:[blackJack(player), player.refresh(game_window)]).grid(row=0,column=0)
         b2 = tk.Button(game_window, text=' Roulette ',command= lambda:[Roulette(player), player.refresh(game_window)]).grid(row=1,column=0)
         b3 = tk.Button(game_window, text=' Baccarat ',command= lambda:[baccarat(player), player.refresh(game_window)]).grid(row=2,column=0)
         b4 = tk.Button(game_window, text=' Slots ',command= lambda:[slots(player), player.refresh(game_window)]).grid(row=3,column=0)
@@ -360,10 +360,12 @@ def removePlayer(manager):
 
 
 
-def blackJack():
-
+def blackJack(player):
+    from Games.blackjack import Player
+    p = Player(player.getUser(),player.getFirst(),player.getLast(),
+                  player.getCredit(),player.getMoneyMade(),player.getMoneyLost(),player.getpWin(),player.getpLoss(),1000)
     from Games.blackjack import main
-    main()
+    main(p)
 
 
 def slots(player):
