@@ -260,6 +260,7 @@ def generate():
         buyin = random.randrange(10, 2000, 5)
         made = random.randrange(0, 2000, 5)
         lost = random.randrange(0, 2000, 5)
+        money = random.randrange(0, 1500, 5)
         win = random.randrange(0, 10, 1)
         losses = random.randrange(0, 10, 1)
         time = str(random_time(text=True, pattern='%I:%M'))
@@ -269,6 +270,7 @@ def generate():
         print(time)
 
         cur.execute("INSERT INTO Statistics VALUES ( ?, ?, ?,  ?, ?, ?, ?)",(uname, game,made,lost,win,losses,time) )
+        cur.execute("INSERT INTO Player VALUES ( ?, ?, ?,  ?, ?, ?, ?, ?, ?)",(uname, fname, lname, money, made, lost, game, win, losses))
 
         con.commit()
 
