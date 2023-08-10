@@ -317,7 +317,7 @@ class Player:
     def  bet(self):
            bet=input("Enter your bet: ")
            self.Bet=int(bet)
-           if self.Bet<self.credit:
+           if self.Bet<self.credit and self.Bet>0:
              return True
            else:
              return False
