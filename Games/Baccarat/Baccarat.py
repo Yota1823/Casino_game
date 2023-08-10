@@ -223,7 +223,7 @@ Options:
             elif choice == 4:
                 decks_input = (input("Enter the number of decks for the new shoe: "))
                 if decks_input.isdigit():
-                    decks = int(decks-input)
+                    decks = int(decks_input)
                     self.change_shoe(decks)
                 else:
                     print("Invalid input. Decks must be a number.")
