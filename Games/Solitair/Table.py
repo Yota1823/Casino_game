@@ -52,25 +52,6 @@ class Tableau:
         else:
             return False
 
-    
-
-
-
-    
-    # def Tableau_to_Tableau(self,CL1,CL2,x):
-    #     C_pile1= self.flip[CL1]
-    #     C_pile2=self.flip[CL2]
-        
-        
-    #     if x <= len(C_pile1):
-    #         if self.add_C(C_pile1[-1],C_pile2[-1]):
-    #          self.flip[CL2].append(C_pile1[x:])
-    #          del C_pile1[x:]
-    #          if x==0:
-    #              self.flip_Card(CL1)
-    #              return True
-    #     return False    
-    
     def add_T_F(self,foundation,column):
         card_column= self.flip[column]
         if len(card_column)==0:
@@ -122,7 +103,7 @@ class Tableau:
         t5=len(self.flip[4])
         t6=len(self.flip[5])
         t7=len(self.flip[6])
-        w=7
+        w=8
         row=[]
         row2=[]
         row3=[]
