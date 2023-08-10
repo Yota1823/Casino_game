@@ -77,8 +77,10 @@ class Deck():
         """
         Function that shuffles the deck
         """
-        deck_as_set = set(self.full_deck)
-        return list(deck_as_set)
+        random.shuffle(self.full_deck)
+        return self.full_deck
+        # deck_as_set = set(self.full_deck)
+        # return list(deck_as_set)
 
 # class User:
 #     def __init__(self,fName,lName,uName):
@@ -317,7 +319,7 @@ def main(player1):
         move = ""
         while move != "S":
             move = input("Press enter to hit, enter 'S' to stand: ").upper()
-            if move == "":  # User chose to hit
+            if move == "H":  # User chose to hit
                 print("User chose to hit")
                 # A card is then removed from the shuffled deck,
                 # appended to the player's hand and then printeds
